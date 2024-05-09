@@ -1,15 +1,18 @@
 #ifndef SERVER_HPP
-# include SERVER_HPP
+# define SERVER_HPP
+
+# include "Socket.hpp"
 
 class Server
 {
-private:
-
 public:
 	Server(char *port, char *password);
 	~Server();
 
 	void run();
-}
+
+private:
+	char *password;
+};
 
 #endif
