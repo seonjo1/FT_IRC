@@ -3,18 +3,17 @@
 
 # include <sys/socket.h>
 # include <arpa/inet.h>
-# include <exception>
+# include <stdexcept>
 
 class Socket
 {
 public:
 	static int servSocket;
 	static struct sockaddr_in addr;
-	static int addrLen;
+	static socklen_t addrLen;
 
-	static void Init();
-	static void makeServerSocket();
+	static void makeServerSocket(char *port);
 	static int makeClientSocket();
-}
+};
 
 #endif
