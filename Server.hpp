@@ -6,7 +6,10 @@ class Server
 private:
 
 public:
-    void run();
+	Server(char *port, char *password);
+	~Server();
+
+	void run();
 }
 
 #endif
