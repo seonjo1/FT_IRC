@@ -1,21 +1,16 @@
-#ifndef ASOCKET_HPP
-# define ASOCKET_HPP
+#ifndef SERVERSOCKET_HPP
+# define SERVERSOCKET_HPP
 
-# include <sys/socket.h>
+# include "ASocket.hpp"
 
-class ASocket
+class ServerSocket : public ASocket
 {
 public:
-	ASocket();
-	~ASocket();
-	ASocket(const ASocket& copy);
-	ASocket& operator=(const ASocket& copy);
-	virtual void create() = 0;
-
-private:
-	int _socket;
-	struct sockaddr_in _addr;
-	int _addrLen;
+	ServerSocket();
+	~ServerSocket();
+	ServerSocket(const ServerSocket& copy);
+	ServerSocket& operator=(const ServerSocket& copy);
+	virtual void create();
 }
 
 #endif
