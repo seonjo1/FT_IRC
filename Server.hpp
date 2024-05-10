@@ -15,14 +15,14 @@ public:
 	Server(char *port, char *password);
 	~Server();
 
+	Kqueue kq; // kqueue 관리 객체
+	std::map<int, Client> clientList; // 클라이언트 배열
+	// std::map<std::string, Channel> channelList; // 채널 배열
 
-	Kqueue kq;
-	std::map<int, Client> clientList;
-	// std::map<std::string, Channel> channelList;
+	void run(); // 서버 실행
 
-	void run();
-	void receiveClientRequest(int fd);
-	void removeSocket(int fd);
+	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
+	void removeSocket(int fd); // 연결 종료된 소켓 정리 함수
 
 private:
 	char *password;
