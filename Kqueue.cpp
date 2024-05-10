@@ -6,33 +6,34 @@ Kqueue::Kqueue()
 	if (fd == -1) throw std::runtime_error("kqueue() error");
 }
 
-Kqueue::Kqueue(const Kqueue& copy)
-{
-}
+Kqueue::~Kqueue() {};
 
-Kqueue::~Kqueue()
-{
-}
-
-Kqueue& Kqueue::operator=(const Kqueue& copy)
-{
-}
-
-void Kqueue::socketAdd(int socket)
+void Kqueue::addSocket(int socket)
 {
 	struct kevent tmp;
 	EV_SET(&tmp, socket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, 0);
 	changeList.push_back(tmp);
 }
 
-int Kqueue::event()
+void Kqueue::removeSocket(int socket)
 {
-	int eventNum = kevent(fd, &changeList[0], changeList.size(), eventList, EVENTLISTSIZE, 0);
-	if (eventNum == -1) throw std::runtime_error("kevent() error");
-	return (eventNum);
+	std::vector<struct kevent>::iterator iter = changeList.begin();
+	for (; iter != changeList.end(); iter++)
+	{
+		if (iter->ident == socket)
+			break;
+	}
+	changeList.erase(iter);
 }
 
-bool Kqueue::flagCheck(int idx)
+int Kqueue::event()
+{
+	int eventCnt = kevent(fd, &changeList[0], changeList.size(), eventList, EVENTLISTSIZE, 0);
+	if (eventCnt == -1) throw std::runtime_error("kevent() error");
+	return (eventCnt);
+}
+
+bool Kqueue::isEventTriggered(int idx)
 {
 	if (eventList[idx].flags == EV_ERROR)
 		return (false);
