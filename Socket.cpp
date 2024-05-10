@@ -13,7 +13,7 @@ void Socket::makeServerSocket(char *port)
 	if (servSocket == -1) throw std::runtime_error("socket() error");
 
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(inet_addr(port));
+	servAddr.sin_port = htons(irc_atoi(port));
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	// 소켓 바인드
