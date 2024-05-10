@@ -23,16 +23,26 @@ void Socket::makeServerSocket(char *port)
 	// 듣기 소켓으로 변경
 	if (listen(servSocket, 10) == -1)
 		throw std::runtime_error("listen() error");
+
+	// 소켓 비동기화
+	int flag = fcntl(servSocket, F_GETFL);
+	fcntl(servSocket, F_SETFL, flag | O_NONBLOCK);
 }
 
 int Socket::makeClientSocket()
 {
-	int ClientSocket;
+	int clientSocket;
 
 	// 클라이언트와 연결을 위한 소켓 생성
-	ClientSocket = accept(servSocket, reinterpret_cast<sockaddr *>(&addr), &addrLen);
-	if (ClientSocket == -1)
+	clientSocket = accept(servSocket, reinterpret_cast<sockaddr *>(&addr), &addrLen);
+	if (clientSocket == -1)
 		throw std::runtime_error("accept() error");
-	
-	return (ClientSocket);
+
+	// 소켓 비동기화
+	int flag = fcntl(clientSocket, F_GETFL);
+	fcntl(clientSocket, F_SETFL, flag | O_NONBLOCK);
+	// 비동기화 구분법 (read 오류가 아닌 읽을 게 없는 것) 
+	// read == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)
+
+	return (clientSocket);
 }
