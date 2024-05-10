@@ -1,6 +1,6 @@
 #include "Client.hpp"
 
-Client::Client(int fd) : msg(fd), isRegist(false), fd(fd) {};
+Client::Client(int fd) : msg(fd) {};
 
 Client::~Client() {};
 

@@ -16,8 +16,6 @@ public:
 
 private:
 	Message msg;
-	int fd;
-	int isRegist;
 };
 
 #endif
