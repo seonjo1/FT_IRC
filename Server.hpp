@@ -2,10 +2,12 @@
 # define SERVER_HPP
 
 # include <map>
+# include <unistd.h>
 # include "Socket.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Kqueue.hpp"
+# include "Executor.hpp"
 
 class Server
 {
@@ -20,6 +22,7 @@ public:
 
 	void run();
 	void receiveClientRequest(int fd);
+	void removeSocket(int fd);
 
 private:
 	char *password;
