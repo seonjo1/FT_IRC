@@ -6,12 +6,12 @@ socklen_t Socket::addrLen = sizeof(addr);
 
 void Socket::makeServerSocket(char *port)
 {
-	struct sockaddr_in servAddr;
-
 	// 서버 소켓 생성 (IPv4, TCP/IP)
 	servSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (servSocket == -1) throw std::runtime_error("socket() error");
 
+	// 서버 소켓 정보 구조체에 저장
+	struct sockaddr_in servAddr;
 	servAddr.sin_family = AF_INET;
 	servAddr.sin_port = htons(irc_atoi(port));
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -31,10 +31,8 @@ void Socket::makeServerSocket(char *port)
 
 int Socket::makeClientSocket()
 {
-	int clientSocket;
-
-	// 클라이언트와 연결을 위한 소켓 생성
-	clientSocket = accept(servSocket, reinterpret_cast<sockaddr *>(&addr), &addrLen);
+	// 클라이언트와 통신을 위한 소켓 생성
+	int clientSocket = accept(servSocket, reinterpret_cast<sockaddr *>(&addr), &addrLen);
 	if (clientSocket == -1)
 		throw std::runtime_error("accept() error");
 
