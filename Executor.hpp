@@ -11,7 +11,7 @@ public:
 	Executor();
 	~Executor();
 
-	static void execute(std::string msg);
+	static void execute(std::string msg, char *password);
 };
 
 #endif
