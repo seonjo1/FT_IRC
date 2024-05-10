@@ -1,16 +1,17 @@
 #ifndef EXECUTOR_HPP
 # define EXECUTOR_HPP
 
+# include <string>
+
+
+# include <iostream>
 class Executor
 {
-private:
-
 public:
 	Executor();
-	Executor(const Executor& copy);
 	~Executor();
-	Executor&	operator=(const Executor& copy);
 
+	static void execute(std::string msg);
 };
 
 #endif

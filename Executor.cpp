@@ -1,17 +1,12 @@
 #include "Executor.hpp"
 
-Executor::Executor()
+Executor::Executor() {};
+
+Executor::~Executor() {};
+
+void Executor::execute(std::string msg)
 {
+	std::cout << "<excute msg!!>\n";
+	std::cout << msg << "\n";
 }
 
-Executor::Executor(const Executor& copy)
-{
-}
-
-Executor::~Executor()
-{
-}
-
-Executor& Executor::operator=(const Executor& copy)
-{
-}
