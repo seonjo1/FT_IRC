@@ -2,7 +2,7 @@
 
 Kqueue::Kqueue()
 {
-	int fd = kqueue();
+	fd = kqueue();
 	if (fd == -1) throw std::runtime_error("kqueue() error");
 }
 
@@ -20,7 +20,7 @@ void Kqueue::removeSocket(int socket)
 	std::vector<struct kevent>::iterator iter = changeList.begin();
 	for (; iter != changeList.end(); iter++)
 	{
-		if (iter->ident == socket)
+		if (static_cast<int>(iter->ident) == socket)
 			break;
 	}
 	changeList.erase(iter);
