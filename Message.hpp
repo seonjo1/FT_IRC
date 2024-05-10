@@ -1,19 +1,27 @@
 #ifndef MESSAGE_HPP
 # define MESSAGE_HPP
 
+# include <errno.h>
 # include <string>
+# include <sys/socket.h>
 
 class Message
 {
-private:
-
 public:
-	Message();
-	Message(const Message& copy);
+	Message(int fd);
 	~Message();
-	Message&	operator=(const Message& copy);
 
-	std::string buffer;
+	bool isError();
+	bool isDisconnected();
+	void fillMsg();
+	bool isComplete();
+	std::string getMsg();
+
+private:
+	int fd;
+	std::string buf;
+	bool endFlag;
+	bool errFlag;
 };
 
 #endif
