@@ -16,7 +16,6 @@ void Server::removeSocket(int socket)
 	close(socket);
 }
 
-
 void Server::receiveClientRequest(int fd)
 {
 	if (fd == Socket::servSocket)
@@ -24,7 +23,7 @@ void Server::receiveClientRequest(int fd)
 		// 서버에 들어온 클라이언트 연결 요청
 		int clientSocket = Socket::makeClientSocket();
 		kq.addSocket(clientSocket);
-		clientList.insert({clientSocket, Client(fd)});
+		clientList.insert(std::make_pair(clientSocket, Client(clientSocket)));
 	}
 	else
 	{
@@ -32,7 +31,7 @@ void Server::receiveClientRequest(int fd)
 		Client client = clientList.find(fd)->second;
 		client.fillMsg();
 		if (client.isCmdComplete())
-			Executor::execute(client.getMsg());
+			Executor::execute(client.getMsg(), password);
 		if (client.isDisconnected())
 			removeSocket(fd);
 	}

@@ -18,7 +18,7 @@ public:
 
 	Kqueue kq;
 	std::map<int, Client> clientList;
-	std::map<std::string, Channel> channelList;
+	// std::map<std::string, Channel> channelList;
 
 	void run();
 	void receiveClientRequest(int fd);
