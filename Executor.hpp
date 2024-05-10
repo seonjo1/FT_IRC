@@ -11,7 +11,7 @@ public:
 	Executor();
 	~Executor();
 
-	static void execute(std::string msg, char *password);
+	static void execute(std::string msg, char *password); // 명령어 실행하는 함수
 };
 
 #endif
