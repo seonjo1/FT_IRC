@@ -12,7 +12,6 @@ void Message::fillMsg()
 	while (1)
 	{
 		readNum = recv(fd, &tmp, 1, 0);
-
 		if (readNum == -1)
 		{
 			if (errno != EAGAIN && errno != EWOULDBLOCK)
