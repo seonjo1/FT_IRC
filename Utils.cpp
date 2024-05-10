@@ -1,5 +1,6 @@
 #include "Utils.hpp"
 
+// 0 ~ 65535(TCP/IP port 최댓값)의 범위만 반환하는 atoi
 int	irc_atoi(char *str)
 {
 	int	i = 0;
