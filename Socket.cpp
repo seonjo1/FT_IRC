@@ -41,8 +41,6 @@ int Socket::makeClientSocket()
 	// 소켓 비동기화
 	int flag = fcntl(clientSocket, F_GETFL);
 	fcntl(clientSocket, F_SETFL, flag | O_NONBLOCK);
-	// 비동기화 구분법 (read 오류가 아닌 읽을 게 없는 것) 
-	// read == -1 && (errno == EAGAIN || errno == EWOULDBLOCK)
 
 	return (clientSocket);
 }
