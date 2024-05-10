@@ -6,11 +6,17 @@
 class Client
 {
 public:
-	Client();
+	Client(int fd);
 	~Client();
+
+	void fillMsg();
+	bool isDisconnected();
+	bool isCmdComplete();
+	std::string getMsg();
 
 private:
 	Message msg;
+	int fd;
 	int isRegist;
 };
 
