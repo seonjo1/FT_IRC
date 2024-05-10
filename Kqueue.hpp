@@ -4,6 +4,8 @@
 # include <vector>
 # include <sys/event.h>
 
+# define EVENTLISTSIZE 10
+
 class Kqueue
 {
 public:
@@ -12,9 +14,14 @@ public:
 	~Kqueue();
 	Kqueue&	operator=(const Kqueue& copy);
 
-	int kq;
+	int fd;
 	std::vector<struct kevent> changeList;
-	struct kevent eventList[10];
+	struct kevent eventList[EVENTLISTSIZE];
+
+	void socketAdd(int socket);
+	int event();
+	bool flagCheck(int idx);
+	int getFd(int idx);
 };
 
 #endif
