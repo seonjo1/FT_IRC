@@ -68,7 +68,7 @@ bool Message::isComplete()
 std::string Message::getCmd()
 {
 	// 명령어 처음부터 "\r\n" 전까지로 저장
-	std::string cmd = buf.substr(NL - 1);
+	std::string cmd = buf.substr(0, NL - 1);
 	// buf에서 명령어 부분 제거
 	buf.erase(0, NL + 1);
 	return (cmd);

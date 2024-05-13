@@ -21,7 +21,7 @@ public:
 
 private:
 	int fd; // 데이터를 받는 fd
-	int NL; // '\n' 위치
+	size_t NL; // '\n' 위치
 	std::string buf; // 메시지 저장 버퍼
 	bool endFlag; // 클라이언트와 연결 종료 플래그
 	bool errFlag; // recv 함수 에러 플래그
