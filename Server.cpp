@@ -29,9 +29,9 @@ void Server::receiveClientRequest(int fd)
 	{
 		// 서버에 연결되어있는 클라이언트에게 온 메시지 확인
 		Client client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
-		client.fillMsg(); // 클라이언트가 보낸 메시지 버퍼에 채우기
+		client.receiveMsg(); // 클라이언트가 보낸 메시지 받기
 		if (client.isCmdComplete()) // 메시지가 전부 들어온 경우 명령어 실행
-			Executor::execute(client.getMsg(), password);
+			Executor::execute(client.getCmd(), password);
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
 			removeSocket(fd);
 	}
