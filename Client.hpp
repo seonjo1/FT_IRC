@@ -33,7 +33,12 @@ public:
 	bool getNickFlag(); // NickFlag 전달
 	bool getUserFlag(); // UserFlag 전달
 	std::string& getNick(); // nickname 전달
+	int getFd(); // fd 전달
+	std::vector<Channel>& getChannelVec();
 
+	void setPassFlag(bool sign); // PassFlag 세팅
+	void setNickFlag(bool sign); // NickFlag 세팅
+	void setUserFlag(bool sign); // UserFlag 세팅
 	void setNick(std::string& newNick); // nickname 세팅
 	void setData(std::string& username, // data 값 세팅
 				 std::string& hostname,
@@ -43,7 +48,7 @@ private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
 	Data data; // 클라이언트 정보 모음
 	std::string nickname; // nickname
-	std::vector<Channel> channelList; // client가 가입한 channel 모음
+	std::vector<Channel> channelVec; // client가 가입한 channel 모음
 	std::vector<std::string>* nickList; // nickList 포인터;
 	int fd; // 클라이언트와 연결된 소켓
 	bool passFlag; // PASS 명령어 완료 여부

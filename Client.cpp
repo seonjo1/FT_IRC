@@ -16,9 +16,9 @@ Client::~Client()
 		nickList->erase(find(nickList->begin(), nickList->end(), lowercase));
 
 	// channelList에서 nick 제거
-		std::vector<Channel>::iterator iter = channelList.begin();
-		for(; iter != channelList.end(); iter++)
-			iter->removeNick(nickname);
+		std::vector<Channel>::iterator iter = channelVec.begin();
+		for(; iter != channelVec.end(); iter++)
+			iter->removeNickInChannel(nickname);
 
 	// 소켓 닫기
 		close(fd);
@@ -87,4 +87,29 @@ void Client::setData(std::string& username, std::string& hostname,
 	data.hostname = hostname;
 	data.servername = servername;
 	data.realname = realname;
+}
+
+int Client::getFd()
+{
+	return (fd);
+}
+
+void Client::setPassFlag(bool sign)
+{
+	passFlag = sign;
+}
+
+void Client::setNickFlag(bool sign)
+{
+	nickFlag = sign;
+}
+
+void Client::setUserFlag(bool sign)
+{
+	userFlag = sign;
+}
+
+std::vector<Channel>& Client::getChannelVec()
+{
+	return (channelVec);
 }

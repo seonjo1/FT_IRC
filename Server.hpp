@@ -4,7 +4,6 @@
 # include "Socket.hpp"
 # include "Client.hpp"
 # include "Channel.hpp"
-# include "Kqueue.hpp"
 # include "Executor.hpp"
 
 class Server

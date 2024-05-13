@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server(char *port, char *password)
-	: executor(password, &nickList)
+	: executor(password, &nickList, &clientList, &kq)
 {
 	Socket::makeServerSocket(port);   // 서버 소켓 생성
 	kq.addSocket(Socket::servSocket); // kq에 등록
@@ -30,7 +30,7 @@ void Server::receiveClientRequest(int fd)
 		Client client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
 		client.receiveMsg(); // 클라이언트가 보낸 메시지 받기
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
-			executor.execute(client.getCmd());
+			executor.execute(client, client.getCmd());
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
 			removeSocket(fd);
 	}
