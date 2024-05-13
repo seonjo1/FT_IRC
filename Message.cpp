@@ -36,13 +36,13 @@ void Message::fillMsg()
 }
 
 
-bool Message::isError()
+bool Message::getErrFlag()
 {
-	// 에러 플래그 반환
+	// recv 함수 에러 여부를 나타내는 플래그 반환
 	return (errFlag);
 }
 
-bool Message::isDisconnected()
+bool Message::getEndFlag()
 {
 	// 연결이 끊겼는지 나타내는 플래그 반환
 	return (endFlag);
@@ -65,7 +65,7 @@ bool Message::isComplete()
 	}
 }
 
-std::string Message::getMsg()
+std::string Message::getCmd()
 {
 	// 명령어 처음부터 "\r\n" 전까지로 저장
 	std::string cmd = buf.substr(NL - 1);

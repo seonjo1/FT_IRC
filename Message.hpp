@@ -13,10 +13,10 @@ public:
 	Message(int fd);
 	~Message();
 
-	std::string getMsg(); // 버퍼에 있는 내용 반환
+	std::string getCmd(); // 버퍼에 있는 명령어
 	void fillMsg(); // 클라이언트가 보낸 데이터 버퍼에 저장
-	bool isError(); // recv 함수 에러 발생 여부 확인
-	bool isDisconnected(); // 클라이언트와 연결 종료 여부 확인
+	bool getErrFlag(); // errFlag 반환
+	bool getEndFlag(); // endFlag 반환
 	bool isComplete(); // 버퍼에 있는 명령어 완성 확인
 
 private:
