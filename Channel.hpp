@@ -1,16 +1,18 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
+# include "Client.hpp"
+
 class Channel
 {
-private:
-
 public:
 	Channel();
-	Channel(const Channel& copy);
 	~Channel();
-	Channel&	operator=(const Channel& copy);
 
+	void removeNick(std::string& nick);
+private:
+	std::vector<std::string> clientList;
+	
 };
 
 #endif
