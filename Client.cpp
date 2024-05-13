@@ -4,19 +4,19 @@ Client::Client(int fd) : msg(fd) {};
 
 Client::~Client() {};
 
-void Client::fillMsg()
+void Client::receiveMsg()
 {
 	// 메시지에 클라이언트가 보낸 내용을 저장
 	msg.fillMsg();
 	// 메시지를 저장하다 발생한 에러 감지
-	if (msg.isError())
+	if (msg.getErrFlag())
 		throw std::runtime_error("recv() error");
 }
 
 bool Client::isDisconnected()
 {
 	// 연결이 끊겼는지 확인
-	if (msg.isDisconnected())
+	if (msg.getEndFlag())
 		return (true);
 	return (false);
 }
@@ -29,8 +29,8 @@ bool Client::isCmdComplete()
 	return (false);
 }
 
-std::string Client::getMsg()
+std::string Client::getCmd()
 {
 	// 메시지 반환
-	return (msg.getMsg());
+	return (msg.getCmd());
 }
