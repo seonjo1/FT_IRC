@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server(char *port, char *password)
-	: password(password)
+	: executor(password, &nickList)
 {
 	Socket::makeServerSocket(port);   // 서버 소켓 생성
 	kq.addSocket(Socket::servSocket); // kq에 등록
@@ -13,7 +13,6 @@ void Server::removeSocket(int socket)
 {
 	clientList.erase(socket); // 클라이언트 배열에서 제거
 	kq.removeSocket(socket); // kq에서 제거
-	close(socket); // 소켓 닫기
 }
 
 void Server::receiveClientRequest(int fd)
@@ -23,7 +22,7 @@ void Server::receiveClientRequest(int fd)
 		// 서버에 들어온 클라이언트 연결 요청
 		int clientSocket = Socket::makeClientSocket(); // 연결 소켓 생성
 		kq.addSocket(clientSocket); // kq에 등록
-		clientList.insert(std::make_pair(clientSocket, Client(clientSocket))); // 클라이언트 배열에 추가
+		clientList.insert(std::make_pair(clientSocket, Client(clientSocket, &nickList))); // 클라이언트 배열에 추가
 	}
 	else
 	{
@@ -31,7 +30,7 @@ void Server::receiveClientRequest(int fd)
 		Client client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
 		client.receiveMsg(); // 클라이언트가 보낸 메시지 받기
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
-			Executor::execute(client.getCmd(), password);
+			executor.execute(client.getCmd());
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
 			removeSocket(fd);
 	}
