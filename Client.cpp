@@ -1,8 +1,28 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
-Client::Client(int fd) : msg(fd) {};
+Client::Client(int fd, std::vector<std::string> *nickList)
+	: fd(fd), msg(fd), nickList(nickList) {};
 
-Client::~Client() {};
+Client::~Client()
+{
+	// nickList에서 nickname제거
+		int size = 0;
+		std::string lowercase;
+		// nickname의 대문자를 전부 소문자로 변경
+		for (int i = 0; i < size; i++)
+			lowercase += tolower(nickname[i]);
+		// nickname을 nickList에서 찾아 제거
+		nickList->erase(find(nickList->begin(), nickList->end(), lowercase));
+
+	// channelList에서 nick 제거
+		std::vector<Channel>::iterator iter = channelList.begin();
+		for(; iter != channelList.end(); iter++)
+			iter->removeNick(nickname);
+
+	// 소켓 닫기
+		close(fd);
+}
 
 void Client::receiveMsg()
 {
@@ -33,4 +53,38 @@ std::string Client::getCmd()
 {
 	// 메시지 반환
 	return (msg.getCmd());
+}
+
+bool Client::getPassFlag()
+{
+	return (passFlag);
+}
+
+bool Client::getNickFlag()
+{
+	return (nickFlag);
+}
+
+bool Client::getUserFlag()
+{
+	return (userFlag);
+}
+
+void Client::setNick(std::string& newNick)
+{
+	nickname = newNick;
+}
+
+std::string& Client::getNick()
+{
+	return (nickname);
+}
+
+void Client::setData(std::string& username, std::string& hostname,
+				 std::string& servername, std::string& realname)
+{
+	data.username = username;
+	data.hostname = hostname;
+	data.servername = servername;
+	data.realname = realname;
 }
