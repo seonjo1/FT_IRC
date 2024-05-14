@@ -10,6 +10,7 @@ class Socket
 {
 public:
 	static int servSocket; // 서버 소켓
+
 	// 소켓 만드는데 사용되는 변수들
 	static struct sockaddr_in addr; 
 	static socklen_t addrLen;

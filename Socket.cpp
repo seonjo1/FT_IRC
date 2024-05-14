@@ -27,6 +27,9 @@ void Socket::makeServerSocket(char *port)
 	// 소켓 비동기화
 	int flag = fcntl(servSocket, F_GETFL);
 	fcntl(servSocket, F_SETFL, flag | O_NONBLOCK);
+
+	// kq에 등록
+	kq.addSocket(servSocket);
 }
 
 int Socket::makeClientSocket()
@@ -39,6 +42,9 @@ int Socket::makeClientSocket()
 	// 소켓 비동기화
 	int flag = fcntl(clientSocket, F_GETFL);
 	fcntl(clientSocket, F_SETFL, flag | O_NONBLOCK);
+
+	// kq에 등록
+	kq.addSocket(clientSocket);
 
 	return (clientSocket);
 }
