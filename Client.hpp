@@ -21,21 +21,36 @@ struct Data
 class Client
 {
 public:
-	Client(int fd, std::vector<std::string> *nickList);
+	Client(int fd);
 	~Client();
 
+	// 서버에서 사용하는 함수
 	void receiveMsg(); // 클라이언트가 보낸 데이터를 받음
 	bool isDisconnected(); // 클라이언트와 연결 여부 확인
 	bool isCmdComplete(); // 버퍼에 있는 명령어 완성 여부 확인
 	std::string getCmd(); // 버퍼에 있는 명령어 반환
 
+	// nick 함수
+	bool isInvalidNick(std::string& nick); // nickname 유효성 검사
+	bool isNicknameInUse(std::string& nick); // nickname 사용중인지 검사
+	void addNickInNickList(std::string& nick); // nickname 추가
+	void removeNickInNickList(std::string& nick); // nickname 제거
+	void changeNickInNickList(std::string& oldNick, std::string& newNick); // 닉 변경
+
+	// 메시지 전송 함수
+	void sendMsg(std::string msg);
+
+	// channel 함수
+	bool checkChannelParticipation(std::string channel);
+
+	// getter
 	bool getPassFlag(); // PassFlag 전달
 	bool getNickFlag(); // NickFlag 전달
 	bool getUserFlag(); // UserFlag 전달
 	std::string& getNick(); // nickname 전달
 	int getFd(); // fd 전달
-	std::vector<Channel>& getChannelVec();
 
+	// setter
 	void setPassFlag(bool sign); // PassFlag 세팅
 	void setNickFlag(bool sign); // NickFlag 세팅
 	void setUserFlag(bool sign); // UserFlag 세팅
@@ -49,7 +64,6 @@ private:
 	Data data; // 클라이언트 정보 모음
 	std::string nickname; // nickname
 	std::vector<Channel> joinedChannels; // client가 가입한 channel 모음
-	std::vector<std::string>* nickList; // nickList 포인터;
 	int fd; // 클라이언트와 연결된 소켓
 	bool passFlag; // PASS 명령어 완료 여부
 	bool nickFlag; // NICK 명령어 완료 여부
