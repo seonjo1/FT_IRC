@@ -48,7 +48,7 @@ private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
 	Data data; // 클라이언트 정보 모음
 	std::string nickname; // nickname
-	std::vector<Channel> channelVec; // client가 가입한 channel 모음
+	std::vector<Channel> joinedChannels; // client가 가입한 channel 모음
 	std::vector<std::string>* nickList; // nickList 포인터;
 	int fd; // 클라이언트와 연결된 소켓
 	bool passFlag; // PASS 명령어 완료 여부
