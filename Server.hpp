@@ -13,16 +13,17 @@ public:
 	~Server();
 
 	void run(); // 서버 실행
+	
+	static Kqueue kq; // kqueue 관리 객체
+	static std::vector<std::string> nickList; // 닉네임 배열
+	static std::map<int, Client> clientList; // 클라이언트 배열
+	static std::map<std::string, Channel> channelList; // 채널 리스트
 
 private:
-	Kqueue kq; // kqueue 관리 객체
 	Executor executor; // 명령어 실행기
 	char *password; // server password
-	std::map<int, Client> clientList; // 클라이언트 배열
-	std::vector<std::string> nickList; // 닉네임 배열
 
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
-	void removeSocket(int fd); // 연결 종료된 소켓 정리 함수
 };
 
 #endif
