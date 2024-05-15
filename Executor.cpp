@@ -9,7 +9,7 @@ void Executor::execute(Client& client, std::string msg)
 {
 	std::vector<std::string> cmds = splitMsg(msg);
 
-	if (!client.getPassFlag() || !client.getNickFlag() || !client.getUserFlag())
+	if (!client.isRegistered())
 	{
 		if (cmds[0] == "PASS")
 			PASS(client, cmds);
@@ -18,7 +18,7 @@ void Executor::execute(Client& client, std::string msg)
 		else if (cmds[0] == "USER")
 			USER(client, cmds);
 		
-		if (client.getPassFlag() && client.getNickFlag() && client.getUserFlag())
+		if (client.isRegistered())
 
 	}
 	else
