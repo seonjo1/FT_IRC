@@ -8,11 +8,6 @@ Client::~Client()
 {
 	// nickList에서 nickname제거
 		removeNick(nick);
-
-	// channelList에서 nick 제거
-		std::vector<Channel>::iterator iter = channelVec.begin();
-		for(; iter != channelVec.end(); iter++)
-			iter->removeNickInChannel(nickname);
 	// kqueue에서 제거
 		Server::kq.removeSocket(socket); // kq에서 제거
 	// 소켓 닫기
@@ -50,60 +45,12 @@ std::string Client::getCmd()
 	return (msg.getCmd());
 }
 
-bool Client::getPassFlag()
+bool Client::isRegistered()
 {
-	return (passFlag);
+	if (PassFlag && NickFlag && UserFlag)
+		return (true);
+	return (false);
 }
-
-bool Client::getNickFlag()
-{
-	return (nickFlag);
-}
-
-bool Client::getUserFlag()
-{
-	return (userFlag);
-}
-
-void Client::setNick(std::string& newNick)
-{
-	nickname = newNick;
-}
-
-std::string& Client::getNick()
-{
-	return (nickname);
-}
-
-void Client::setData(std::string& username, std::string& hostname,
-				 std::string& servername, std::string& realname)
-{
-	data.username = username;
-	data.hostname = hostname;
-	data.servername = servername;
-	data.realname = realname;
-}
-
-int Client::getFd()
-{
-	return (fd);
-}
-
-void Client::setPassFlag(bool sign)
-{
-	passFlag = sign;
-}
-
-void Client::setNickFlag(bool sign)
-{
-	nickFlag = sign;
-}
-
-void Client::setUserFlag(bool sign)
-{
-	userFlag = sign;
-}
-
 
 // <nickname 함수들>
 // nick이 유효한 nickname인지 확인
@@ -136,8 +83,11 @@ bool Client::isNicknameInUse(std::string& nick)
 	return (false);
 }
 
-void Client::addNickInNickList(std::string& nick)
+void Client::addNick(std::string& nick)
 {
+	// nickname 갱신
+	nickname = nick;
+
 	int size = nick.size();
 
 	// 대문자를 소문자로 변환
@@ -148,7 +98,7 @@ void Client::addNickInNickList(std::string& nick)
 	Server::nickList.push_back(lowercase);
 }
 
-void Client::removeNickInNickLIst(std::string& nick)
+void Client::removeNick(std::string& nick)
 {
 	int size = nick.size();
 
@@ -156,13 +106,108 @@ void Client::removeNickInNickLIst(std::string& nick)
 	std::string lowercase;
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
-	// channelList에서 nick 제거
-	Server::nickList.erase(find(Server::nickList.begin(), Server::nickList.end(), lowercase))
+	// nickList에서 nick 제거
+	Server::nickList.erase(find(Server::nickList.begin(), Server::nickList.end(), lowercase));
+	// channelList에서 제거
+	std::vector<Channel>::iterator iter = joinedChannels.begin();
+	for (; iter != joinedChannels.end(); iter++)
+		iter->removeNickInChannel(nick);
 }
 
-// 메시지 보내느 함수
+void Client::changeNick(std::string& nick)
+{
+	// nickname 변경
+	nickname = nick;
+
+	int size = nick.size();
+
+	// 대문자를 소문자로 변환
+	std::string lowercase;
+	for (int i = 1; i < size; i++)
+		lowercase += tolower(nick[i]);
+	// nickList에 nick 변경
+	std::vector<std::string>::iterator iter = find(Server::nickList.begin(), Server::nickList.end(), lowercase);
+	*iter = nick;
+	// channelList의 nick 변경
+	std::vector<Channel>::iterator iter = joinedChannels.begin();
+	for (; iter != joinedChannels.end(); iter++)
+		iter->chanegeNickInChannel(nick);
+}
+
+// 메시지 보내는 함수
 
 void Client::sendMsg(std::string msg)
 {
 	send(fd, msg.c_str(), msg.size(), 0);
+}
+
+
+// channel 함수
+bool Client::checkChannelParticipation(std::string& channel)
+{
+	// channelList의 nick 변경
+	std::vector<Channel>::iterator iter = joinedChannels.begin();
+	for (; iter != joinedChannels.end(); iter++)
+	{
+		if (*iter == channel)
+			return (true);
+	}
+	return (false);
+}
+
+// getter
+bool Client::getPassFlag()
+{
+	return (passFlag);
+}
+
+bool Client::getNickFlag()
+{
+	return (nickFlag);
+}
+
+bool Client::getUserFlag()
+{
+	return (userFlag);
+}
+
+std::string& Client::getNick()
+{
+	return (nickname);
+}
+
+int Client::getFd()
+{
+	return (fd);
+}
+
+// setter
+
+void Client::setPassFlag(bool sign)
+{
+	passFlag = sign;
+}
+
+void Client::setNickFlag(bool sign)
+{
+	nickFlag = sign;
+}
+
+void Client::setUserFlag(bool sign)
+{
+	userFlag = sign;
+}
+
+void Client::setNick(std::string& newNick)
+{
+	nickname = newNick;
+}
+
+void Client::setData(std::string& username, std::string& hostname,
+				 std::string& servername, std::string& realname)
+{
+	data.username = username;
+	data.hostname = hostname;
+	data.servername = servername;
+	data.realname = realname;
 }

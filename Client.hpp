@@ -30,18 +30,21 @@ public:
 	bool isCmdComplete(); // 버퍼에 있는 명령어 완성 여부 확인
 	std::string getCmd(); // 버퍼에 있는 명령어 반환
 
+	// 등록 확인 함수
+	bool isRegistered();
+
 	// nick 함수
 	bool isInvalidNick(std::string& nick); // nickname 유효성 검사
 	bool isNicknameInUse(std::string& nick); // nickname 사용중인지 검사
-	void addNickInNickList(std::string& nick); // nickname 추가
-	void removeNickInNickList(std::string& nick); // nickname 제거
-	void changeNickInNickList(std::string& oldNick, std::string& newNick); // 닉 변경
+	void addNick(std::string& nick); // nickname 추가
+	void removeNick(std::string& nick); // nickname 제거
+	void changeNick(std::string& nick); // nickname 변경
 
 	// 메시지 전송 함수
 	void sendMsg(std::string msg);
 
 	// channel 함수
-	bool checkChannelParticipation(std::string channel);
+	bool checkChannelParticipation(std::string& channel);
 
 	// getter
 	bool getPassFlag(); // PassFlag 전달
@@ -58,7 +61,8 @@ public:
 	void setData(std::string& username, // data 값 세팅
 				 std::string& hostname,
 				 std::string& servername,
-				 std::string& realname); 
+				 std::string& realname);
+				 
 private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
 	Data data; // 클라이언트 정보 모음
