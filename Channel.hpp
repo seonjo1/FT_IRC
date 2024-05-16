@@ -11,8 +11,8 @@ public:
 	~Channel();
 
 	// 채널 관리 (참가자 명단, operator 명단, 초대 명단)
-	bool isInvalidChannelName(std::string& channel); // channel 이름 유효성 검사
-	bool isChannelInUse(std::string& channel); // channel 이 존재하는지
+	static bool isInvalidChannelName(std::string& channel); // channel 이름 유효성 검사
+	static bool isChannelInUse(std::string& channel); // channel 이 존재하는지
 	void addNickInChannel(Client& client);
 	void removeNickInChannel(Client& client);
 	void changeNickInChannel(Client& client, std::string& newNick);
