@@ -41,7 +41,7 @@ private:
 
 //함수
 	// 채널에 메시지 전송
-		void sendToClients(std::string& msg);
+		void sendToClients(std::string msg);
 	// 채널에 클라이언트 있나 확인
 		bool doesClientExist(std::string& nick);
 	// 채널 삭제 (채널리스트에서 삭제)
