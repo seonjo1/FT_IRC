@@ -1,3 +1,4 @@
+#include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 
@@ -7,9 +8,9 @@ Client::Client(int fd)
 Client::~Client()
 {
 	// nickList에서 nickname제거
-		removeNick(nick);
+		removeNick(nickname);
 	// kqueue에서 제거
-		Server::kq.removeSocket(socket); // kq에서 제거
+		Server::kq.removeSocket(fd); // kq에서 제거
 	// 소켓 닫기
 		close(fd);
 }
@@ -47,7 +48,7 @@ std::string Client::getCmd()
 
 bool Client::isRegistered()
 {
-	if (PassFlag && NickFlag && UserFlag)
+	if (passFlag && nickFlag && userFlag)
 		return (true);
 	return (false);
 }
@@ -116,9 +117,12 @@ void Client::removeNick(std::string& nick)
 
 void Client::changeNick(std::string& nick)
 {
+	// oldNick 저장
+	std::string oldNick = nickname;
+	
 	// nickname 변경
 	nickname = nick;
-
+	
 	int size = nick.size();
 
 	// 대문자를 소문자로 변환
@@ -126,12 +130,12 @@ void Client::changeNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 nick 변경
-	std::vector<std::string>::iterator iter = find(Server::nickList.begin(), Server::nickList.end(), lowercase);
-	*iter = nick;
+	std::vector<std::string>::iterator nickIter = find(Server::nickList.begin(), Server::nickList.end(), lowercase);
+	*nickIter = nick;
 	// channelList의 nick 변경
-	std::vector<Channel>::iterator iter = joinedChannels.begin();
-	for (; iter != joinedChannels.end(); iter++)
-		iter->chanegeNickInChannel(nick);
+	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
+	for (; channelIter != joinedChannels.end(); channelIter++)
+		channelIter->changeNickInChannel(oldNick, nick);
 }
 
 // 메시지 보내는 함수
@@ -149,7 +153,7 @@ bool Client::checkChannelParticipation(std::string& channel)
 	std::vector<Channel>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
 	{
-		if (*iter == channel)
+		if (iter->getName() == channel)
 			return (true);
 	}
 	return (false);
