@@ -13,9 +13,9 @@ public:
 	// 채널 관리 (참가자 명단, operator 명단, 초대 명단)
 	bool isInvalidChannelName(std::string& channel); // channel 이름 유효성 검사
 	bool isChannelInUse(std::string& channel); // channel 이 존재하는지
-	void addNickInChannel(std::string& nick);
-	void removeNickInChannel(std::string& nick);
-	void changeNickInChannel(std::string& oldNick, std::string& newNick);
+	void addNickInChannel(Client& client);
+	void removeNickInChannel(Client& client);
+	void changeNickInChannel(Client& client, std::string& newNick);
 
 	// getter
 	std::string getName();
@@ -40,7 +40,6 @@ private:
 	int limit;// limit
 
 //함수
-
 	// 채널에 메시지 전송
 		void sendToClients(std::string& msg);
 	// 채널에 클라이언트 있나 확인
@@ -49,6 +48,9 @@ private:
 		void removeChannel(std::string& channel);
 	// 채널 리스트에서 채널 찾아주는 함수
 		Channel& findChannel(std::string& channel);
+
+	// 모드 셋팅
+		void setMode(std::string& cmd);
 
 };
 
