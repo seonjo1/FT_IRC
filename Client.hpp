@@ -34,10 +34,10 @@ public:
 	bool isRegistered();
 
 	// nick 함수
-	bool isInvalidNick(std::string& nick); // nickname 유효성 검사
-	bool isNicknameInUse(std::string& nick); // nickname 사용중인지 검사
+	static bool isInvalidNick(std::string& nick); // nickname 유효성 검사
+	static bool isNicknameInUse(std::string& nick); // nickname 사용중인지 검사
 	void addNick(std::string& nick); // nickname 추가
-	void removeNick(std::string& nick); // nickname 제거
+	void removeNick(); // nickname 제거
 	void changeNick(std::string& nick); // nickname 변경
 
 	// 메시지 전송 함수

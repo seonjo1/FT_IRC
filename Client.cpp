@@ -99,14 +99,14 @@ void Client::addNick(std::string& nick)
 	Server::nickList.push_back(lowercase);
 }
 
-void Client::removeNick(std::string& nick)
+void Client::removeNick()
 {
-	int size = nick.size();
+	int size = nickname.size();
 
 	// 대문자를 소문자로 변환
 	std::string lowercase;
 	for (int i = 1; i < size; i++)
-		lowercase += tolower(nick[i]);
+		lowercase += tolower(nickname[i]);
 	// nickList에서 nick 제거
 	Server::nickList.erase(find(Server::nickList.begin(), Server::nickList.end(), lowercase));
 	// channelList에서 제거
