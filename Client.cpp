@@ -8,7 +8,7 @@ Client::Client(int fd)
 Client::~Client()
 {
 	// nickList에서 nickname제거
-		removeNick(nickname);
+		removeNick();
 	// kqueue에서 제거
 		Server::kq.removeSocket(fd); // kq에서 제거
 	// 소켓 닫기
