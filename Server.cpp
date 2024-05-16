@@ -8,7 +8,19 @@ std::map<std::string, Channel> channelList;
 Server::Server(char *port, char *password)
 	: executor(password)
 {
-	Socket::makeServerSocket(port);   // 서버 소켓 생성
+	// 서버 소켓 생성
+	Socket::makeServerSocket(port);
+
+	// hostname 저장
+	char hostname[256];
+	if (gethostname(hostname, sizeof(hostname)) == -1)
+		throw std::runtime_error("gethostname() error");
+	// hostentry 저장
+	struct hostent* hostEntry = gethostbyname(hostname);
+	if (hostEntry == NULL)
+		throw std::runtime_error("gethostbyname() error");
+	// 서버 IP 저장
+	IP = inet_ntoa(*((struct in_addr*)hostEntry->h_addr_list[0]));
 }
 
 Server::~Server() {};
@@ -19,7 +31,7 @@ void Server::receiveClientRequest(int fd)
 	{
 		// 서버에 들어온 클라이언트 연결 요청
 		int clientSocket = Socket::makeClientSocket(); // 연결 소켓 생성
-		clientList.insert(std::make_pair(clientSocket, Client(clientSocket, &nickList))); // 클라이언트 배열에 추가
+		clientList.insert(std::make_pair(clientSocket, Client(clientSocket))); // 클라이언트 배열에 추가
 	}
 	else
 	{
@@ -29,7 +41,7 @@ void Server::receiveClientRequest(int fd)
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
 			executor.execute(client, client.getCmd());
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
-			clientList.erase(socket); // 클라이언트 배열에서 제거
+			clientList.erase(fd); // 클라이언트 배열에서 제거
 	}
 }
 

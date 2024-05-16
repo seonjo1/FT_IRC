@@ -5,6 +5,7 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 # include "Executor.hpp"
+# include <netdb.h>
 
 class Server
 {
@@ -18,6 +19,7 @@ public:
 	static std::vector<std::string> nickList; // 닉네임 배열
 	static std::map<int, Client> clientList; // 클라이언트 배열
 	static std::map<std::string, Channel> channelList; // 채널 리스트
+	static std::string IP; // 서버 IP
 
 private:
 	Executor executor; // 명령어 실행기
