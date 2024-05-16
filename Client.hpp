@@ -52,6 +52,8 @@ public:
 	bool getUserFlag(); // UserFlag 전달
 	std::string& getNick(); // nickname 전달
 	int getFd(); // fd 전달
+	std::string getHostName(); // hostname 전달
+	std::string getServerName(); // servername 전달
 
 	// setter
 	void setPassFlag(bool sign); // PassFlag 세팅
@@ -72,6 +74,7 @@ private:
 	bool passFlag; // PASS 명령어 완료 여부
 	bool nickFlag; // NICK 명령어 완료 여부
 	bool userFlag; // USER 명령어 완료 여부
+	bool registerFlag; // register 여부
 };
 
 #endif

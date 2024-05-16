@@ -48,9 +48,7 @@ std::string Client::getCmd()
 
 bool Client::isRegistered()
 {
-	if (passFlag && nickFlag && userFlag)
-		return (true);
-	return (false);
+	return (registerFlag);
 }
 
 // <nickname 함수들>
@@ -116,10 +114,7 @@ void Client::removeNick()
 }
 
 void Client::changeNick(std::string& nick)
-{
-	// nickname 변경
-	nickname = nick;
-	
+{	
 	int size = nick.size();
 
 	// 대문자를 소문자로 변환
@@ -133,6 +128,9 @@ void Client::changeNick(std::string& nick)
 	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
 		channelIter->changeNickInChannel(*this, nick);
+
+	// nickname 변경
+	nickname = nick;
 }
 
 // 메시지 보내는 함수
@@ -182,21 +180,37 @@ int Client::getFd()
 	return (fd);
 }
 
+std::string Client::getHostName()
+{
+	return (data.hostname);
+}
+
+std::string Client::getServerName()
+{
+	return (data.servername);
+}
+
 // setter
 
 void Client::setPassFlag(bool sign)
 {
 	passFlag = sign;
+	if (passFlag && nickFlag && userFlag)
+		registerFlag = true;
 }
 
 void Client::setNickFlag(bool sign)
 {
 	nickFlag = sign;
+	if (passFlag && nickFlag && userFlag)
+		registerFlag = true;
 }
 
 void Client::setUserFlag(bool sign)
 {
 	userFlag = sign;
+	if (passFlag && nickFlag && userFlag)
+		registerFlag = true;
 }
 
 void Client::setNick(std::string& newNick)
