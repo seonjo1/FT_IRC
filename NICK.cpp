@@ -8,7 +8,7 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// PASS 등록 안된 클라이언트
 		if (!client.getPassFlag())
 		{
-			client.sendMsg(ErrMsg::NOTREGISTERD());
+			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
 			// 연결 종료
 			Server::clientList.erase(client.getFd());
 		}
@@ -16,26 +16,26 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// 인자 개수가 다른 경우
 		if (cmds.size() == 1)
 		{
-			client.sendMsg(ErrMsg::NONICKNAMEGIVEN());
+			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
 		else if (cmds.size() != 2)
 		{
-			client.sendMsg(ErrMsg::NEEDMOREPARAMS(cmds[0]));
+			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 			return ;
 		}
 
 		// 유효하지 않은 nickname
 		if (Client::isInvalidNick(cmds[1]))
 		{
-			client.sendMsg(ErrMsg::ERRONEUSNICKNAME(cmds[1]));
+			client.sendMsg(ServerMsg::ERRONEUSNICKNAME(client.getNick(), cmds[1]));
 			return ;
 		}
 
 		// 이미 존재하는 nickname
 		if (Client::isNicknameInUse(cmds[1]))
 		{
-			client.sendMsg(ErrMsg::NICKNAMEINUSE(cmds[1]));
+			client.sendMsg(ServerMsg::NICKNAMEINUSE(client.getNick(), cmds[1]));
 			return ;
 		}
 
@@ -48,25 +48,26 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// 인자 개수가 다른 경우
 		if (cmds.size() == 1)
 		{
-			client.sendMsg(ErrMsg::NONICKNAMEGIVEN());
+			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
 		else if (cmds.size() != 2)
 		{
-			client.sendMsg(ErrMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 			return ;
 		}
 
 		// 유효하지 않은 nickname
 		if (Client::isInvalidNick(cmds[1]))
 		{
-			client.sendMsg(ErrMsg::ERRONEUSNICKNAME(client.getNick(),cmds[1]));
+			client.sendMsg(ServerMsg::ERRONEUSNICKNAME(client.getNick(),cmds[1]));
 			return ;
 		}
+
 		// 이미 존재하는 nickname
 		if (Client::isNicknameInUse(cmds[1]))
 		{
-			client.sendMsg(ErrMsg::NICKNAMEINUSE(client.getNick(),cmds[1]));
+			client.sendMsg(ServerMsg::NICKNAMEINUSE(client.getNick(),cmds[1]));
 			return ;
 		}
 
