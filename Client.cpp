@@ -112,14 +112,11 @@ void Client::removeNick(std::string& nick)
 	// channelList에서 제거
 	std::vector<Channel>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
-		iter->removeNickInChannel(nick);
+		iter->removeNickInChannel(*this);
 }
 
 void Client::changeNick(std::string& nick)
 {
-	// oldNick 저장
-	std::string oldNick = nickname;
-	
 	// nickname 변경
 	nickname = nick;
 	
@@ -135,7 +132,7 @@ void Client::changeNick(std::string& nick)
 	// channelList의 nick 변경
 	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
-		channelIter->changeNickInChannel(oldNick, nick);
+		channelIter->changeNickInChannel(*this, nick);
 }
 
 // 메시지 보내는 함수
