@@ -21,6 +21,7 @@ private:
 
 	void PASS(Client& client, std::vector<std::string>& cmds);
 	void NICK(Client& client, std::vector<std::string>& cmds);
+	void USER(Client& client, std::vector<std::string>& cmds);
 
 };
 
