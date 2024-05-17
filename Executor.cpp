@@ -1,7 +1,7 @@
 #include "Executor.hpp"
 #include "Server.hpp"
 
-#include <iostream>
+// #include <iostream>
 
 Executor::Executor(char *password)
 	: password(password) {};
@@ -11,6 +11,8 @@ Executor::~Executor() {};
 void Executor::execute(Client& client, std::string msg)
 {
 	std::vector<std::string> cmds = splitMsg(msg);
+
+	// std::cout << "COMMAND : " << cmds[0] << "\n";
 
 	// 클라이언트 등록이 안 되있는 경우
 	if (!client.isRegistered())
@@ -24,11 +26,12 @@ void Executor::execute(Client& client, std::string msg)
 		else // 그 외의 명령일 경우 연결 종료
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			Server::clientList().erase(client.getFd());
+			std::map<int, Client>& clientList = Server::getClientList();
+			clientList.erase(client.getFd());
 		}
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
-			client.sendMsg(ServerMsg::PINGMSG(Server::IP()));
+			client.sendMsg(ServerMsg::PINGMSG(Server::getIP()));
 	}
 	else
 	{
