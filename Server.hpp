@@ -23,7 +23,6 @@ public:
 
 private:
 	Executor executor; // 명령어 실행기
-	char *password; // server password
 
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
 };
