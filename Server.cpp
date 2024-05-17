@@ -69,16 +69,18 @@ Server::~Server() {};
 void Server::receiveClientRequest(int fd)
 {
 	std::map<int, Client>& clientList = getClientList();
+
 	if (fd == Socket::servSocket)
 	{
 		// 서버에 들어온 클라이언트 연결 요청
 		int clientSocket = Socket::makeClientSocket(); // 연결 소켓 생성
 		clientList.insert(std::make_pair(clientSocket, Client(clientSocket))); // 클라이언트 배열에 추가
+		clientList.find(clientSocket)->second.setOrigin(true);
 	}
 	else
 	{
 		// 서버에 연결되어있는 클라이언트에게 온 메시지 확인
-		Client client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
+		Client& client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
 		client.receiveMsg(); // 클라이언트가 보낸 메시지 받기
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
 			executor.execute(client, client.getCmd());
@@ -95,7 +97,6 @@ void Server::run()
 		// event 발생 개수 파악
 		int eventCnt = kq.event();
 
-		std::cout << "eventCnt : " << eventCnt << "\n";
 		// event 발생한 만큼 Loop
 		for (int idx = 0; idx < eventCnt; idx++)
 		{
