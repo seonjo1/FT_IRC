@@ -13,10 +13,10 @@ Channel::~Channel() {};
 bool Channel::isInvalidChannelName(std::string& channel)
 {
 	// 규칙 1. 길이는 #포함 64까지
-	if (channel.size() > 64)
+	if (static_cast<int>(channel.size()) > 64)
 		return (true);
 	// 규칙 2. 공백(space) 콤마(,) unprintable 포함 x
-	for (int i = 0; i < channel.size(); i++)
+	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 	{
 		if (channel[i] == ' ' || channel[i] == ',' || !isprint(channel[i]))
 			return (true);
@@ -27,13 +27,13 @@ bool Channel::isInvalidChannelName(std::string& channel)
 // channel이 존재하는지 확인
 bool Channel::isChannelInUse(std::string& channel)
 {
-	for (int i = 0; i < channel.size(); i++)
+	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
 	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
 	for (; iter != Server::channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
-		for (int i = 0; i < name.size(); i++)
+		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
 			return (true);
@@ -119,13 +119,13 @@ bool Channel::doesClientExist(std::string& nick)
 // 채널 삭제 (채널리스트에서 삭제)
 void Channel::removeChannel(std::string& channel)
 {
-	for (int i = 0; i < channel.size(); i++)
+	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
 	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
 	for (; iter != Server::channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
-		for (int i = 0; i < name.size(); i++)
+		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
 			Server::channelList.erase(iter);
@@ -135,17 +135,18 @@ void Channel::removeChannel(std::string& channel)
 // 채널 리스트에서 채널 찾아주는 함수
 Channel& Channel::findChannel(std::string& channel)
 {
-	for (int i = 0; i < channel.size(); i++)
+	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
 	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
 	for (; iter != Server::channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
-		for (int i = 0; i < name.size(); i++)
+		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
-			return (iter->second);
+			break;
 	}
+	return (iter->second);
 }
 
 // getter
