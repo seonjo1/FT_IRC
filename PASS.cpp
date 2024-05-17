@@ -1,6 +1,15 @@
 #include "Executor.hpp"
 #include "Server.hpp"
 
+void Executor::parsePASS(std::vector<std::string>& cmds, std::string& msg)
+{
+	std::stringstream ss(msg);
+	std::string cmd;
+	while (ss >> cmd)
+		cmds.push_back(cmd);
+}
+
+
 void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 {
 	// 이미 PASS 인증이 끝난 유저
@@ -22,7 +31,8 @@ void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 	{
 		client.sendMsg(ServerMsg::PASSWDMISMATCH());
 		// 연결 종료
-		Server::clientList().erase(client.getFd());
+		std::map<int, Client>& clientList = Server::getClientList();
+		clientList.erase(client.getFd());
 	}
 
 	client.setPassFlag(true);
