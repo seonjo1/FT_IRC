@@ -30,7 +30,8 @@ void Socket::makeServerSocket(char *port)
 	fcntl(servSocket, F_SETFL, flag | O_NONBLOCK);
 
 	// kq에 등록
-	Server::kq().addSocket(servSocket);
+	Kqueue& kq = Server::getKq();
+	kq.addSocket(servSocket);
 }
 
 int Socket::makeClientSocket()
@@ -45,7 +46,8 @@ int Socket::makeClientSocket()
 	fcntl(clientSocket, F_SETFL, flag | O_NONBLOCK);
 
 	// kq에 등록
-	Server::kq().addSocket(clientSocket);
+	Kqueue& kq = Server::getKq();
+	kq.addSocket(clientSocket);
 
 	return (clientSocket);
 }
