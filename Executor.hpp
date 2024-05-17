@@ -6,6 +6,8 @@
 # include "ServerMsg.hpp"
 # include "Kqueue.hpp"
 
+# include <iostream>
+
 class Executor
 {
 public:
@@ -17,7 +19,12 @@ public:
 private:
 	std::string password; // PASS에 사용될 비밀번호
 
-	std::vector<std::string> splitMsg(std::string &msg); // 명령어 공백 단위로 분리
+	std::vector<std::string> parseMsg(std::string &msg); // 명령어 파싱
+
+	void parsePASS(std::vector<std::string>& cmds, std::string& msg);
+	void parseNICK(std::vector<std::string>& cmds, std::string& msg);
+	void parseUSER(std::vector<std::string>& cmds, std::string& msg);
+	void parsePONG(std::vector<std::string>& cmds, std::string& msg);
 
 	void PASS(Client& client, std::vector<std::string>& cmds);
 	void NICK(Client& client, std::vector<std::string>& cmds);

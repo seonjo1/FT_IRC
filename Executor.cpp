@@ -1,8 +1,6 @@
 #include "Executor.hpp"
 #include "Server.hpp"
 
-// #include <iostream>
-
 Executor::Executor(char *password)
 	: password(password) {};
 
@@ -10,9 +8,11 @@ Executor::~Executor() {};
 
 void Executor::execute(Client& client, std::string msg)
 {
-	std::vector<std::string> cmds = splitMsg(msg);
+	std::cout << "cmd : " << msg << "\n";
+	std::vector<std::string> cmds = parseMsg(msg);
 
-	// std::cout << "COMMAND : " << cmds[0] << "\n";
+	for (std::vector<std::string>::iterator iter = cmds.begin(); iter != cmds.end(); iter++)
+		std::cout << *iter << "\n";
 
 	// 클라이언트 등록이 안 되있는 경우
 	if (!client.isRegistered())
@@ -28,6 +28,7 @@ void Executor::execute(Client& client, std::string msg)
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
 			std::map<int, Client>& clientList = Server::getClientList();
 			clientList.erase(client.getFd());
+			return ;
 		}
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
@@ -43,19 +44,28 @@ void Executor::execute(Client& client, std::string msg)
 			USER(client, cmds);
 		else if (cmds[0] == "PONG")
 			PONG(client, cmds);
-		else
-			std::cout << "cmd : " << cmds[0] << "\n";
 	}
 }
 
-std::vector<std::string> Executor::splitMsg(std::string &msg)
+std::vector<std::string> Executor::parseMsg(std::string &msg)
 {
 	std::vector<std::string> cmds;
-	std::stringstream ss(msg);
-
-	std::string cmd;
-	while (ss >> cmd)
-		cmds.push_back(cmd);
 	
+	int i = 0;
+	int size = msg.size();
+	std::string cmd;
+	while (i < size && msg[i] != ' ')
+		cmd += msg[i++];
+
+	if (cmd == "PASS")
+		parsePASS(cmds, msg);
+	else if (cmd == "NICK")
+		parseNICK(cmds, msg);
+	else if (cmd == "USER")
+		parseUSER(cmds, msg);
+	else if (cmd == "PONG")
+		parsePONG(cmds, msg);
+	else
+		cmds.push_back(msg);
 	return (cmds);
 }
