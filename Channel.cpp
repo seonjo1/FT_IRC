@@ -29,8 +29,8 @@ bool Channel::isChannelInUse(std::string& channel)
 {
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
-	for (; iter != Server::channelList.end(); iter++)
+	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
+	for (; iter != Server::channelList().end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
@@ -121,14 +121,14 @@ void Channel::removeChannel(std::string& channel)
 {
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
-	for (; iter != Server::channelList.end(); iter++)
+	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
+	for (; iter != Server::channelList().end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
-			Server::channelList.erase(iter);
+			Server::channelList().erase(iter);
 	}
 }
 
@@ -137,8 +137,8 @@ Channel& Channel::findChannel(std::string& channel)
 {
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList.begin();
-	for (; iter != Server::channelList.end(); iter++)
+	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
+	for (; iter != Server::channelList().end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
