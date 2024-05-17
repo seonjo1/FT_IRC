@@ -3,7 +3,8 @@ CPP			:=	c++
 WFLAG		:=	-Wall -Wextra -Werror -std=c++98
 
 DIR			:=	./
-BASE		:=	main Server Socket Client Executor Kqueue Message Utils
+BASE		:=	main Server Socket Client Executor Kqueue Message Utils Channel \
+				PASS NICK USER PONG
 SRC			:=	$(addprefix $(DIR), $(addsuffix .cpp, $(BASE)))
 OBJ			:=	$(addprefix $(DIR), $(addsuffix .o, $(BASE)))
 
