@@ -101,7 +101,7 @@ std::string ServerMsg::WELCOME(std::string nick, std::string hostname,
 							std::string servername)
 {
 	std::string msg;
-	msg = ":" + Server::IP() + " 001 " + nick + " :Welcome to the FT_IRC Network, "
+	msg = ":" + Server::getIP() + " 001 " + nick + " :Welcome to the FT_IRC Network, "
 		+ nick + "!" + hostname + "@" + servername + "\r\n";
 	return (msg);
 }
@@ -109,6 +109,6 @@ std::string ServerMsg::WELCOME(std::string nick, std::string hostname,
 std::string ServerMsg::NOMOTD(std::string nick)
 {
 	std::string msg;
-	msg = ":" + Server::IP() + " 422 " + nick + " :MOTD File is missing\r\n"; 
+	msg = ":" + Server::getIP() + " 422 " + nick + " :MOTD File is missing\r\n"; 
 	return (msg);
 }
