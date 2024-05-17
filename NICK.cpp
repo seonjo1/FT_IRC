@@ -1,6 +1,14 @@
 #include "Executor.hpp"
 #include "Server.hpp"
 
+void Executor::parseNICK(std::vector<std::string>& cmds, std::string& msg)
+{
+	std::stringstream ss(msg);
+	std::string cmd;
+	while (ss >> cmd)
+		cmds.push_back(cmd);
+}
+
 void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 {
 	if (!client.getNickFlag())
@@ -10,7 +18,8 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
 			// 연결 종료
-			Server::clientList().erase(client.getFd());
+			std::map<int, Client>& clientList = Server::getClientList();
+			clientList.erase(client.getFd());
 		}
 
 		// 인자 개수가 다른 경우
