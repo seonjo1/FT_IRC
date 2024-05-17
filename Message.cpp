@@ -31,7 +31,7 @@ void Message::fillMsg()
 			break;
 		}
 		// 버퍼에 메시지 추가
-		buf += tmp;
+		buf += std::string(tmp, readNum);
 	}
 }
 
