@@ -2,18 +2,23 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
+#include <iostream>
+
 Client::Client(int fd)
-	: msg(fd), fd(fd) {};
+	: msg(fd), fd(fd), origin(false) {};
 
 Client::~Client()
 {
-	Kqueue& kq = Server::getKq();
-	// nickList에서 nickname제거
-		removeNick();
-	// kqueue에서 제거
-		kq.removeSocket(fd); // kq에서 제거
-	// 소켓 닫기
-		close(fd);
+	if (origin)
+	{
+		Kqueue& kq = Server::getKq();
+		// nickList에서 nickname제거
+			removeNick();
+		// kqueue에서 제거
+			kq.removeSocket(fd); // kq에서 제거
+		// 소켓 닫기
+			close(fd);
+	}
 }
 
 void Client::receiveMsg()
@@ -63,8 +68,8 @@ bool Client::isInvalidNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 	{
 		if (nick[i] == ' ') return (true); // 규칙 3. 공백 포함 x
-		else if (!isalpha(nick[i]) || !isdigit(nick[i]) // 규칙 4. 숫자, 알파벳, '-', '_' 만으로 구성
-			|| nick[i] != '-' || nick[i] != '_')
+		else if (!(isalpha(nick[i]) || isdigit(nick[i]) // 규칙 4. 숫자, 알파벳, '-', '_' 만으로 구성
+			|| nick[i] == '-' || nick[i] == '_'))
 			return (true);
 	}
 	return (false);
@@ -233,6 +238,11 @@ void Client::setData(std::string& username, std::string& hostname,
 	data.hostname = hostname;
 	data.servername = servername;
 	data.realname = realname;
+}
+
+void Client::setOrigin(bool sign)
+{
+	origin = sign;
 }
 
 bool Client::operator==(const Client& rhs)

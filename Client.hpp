@@ -64,6 +64,7 @@ public:
 				 std::string& hostname,
 				 std::string& servername,
 				 std::string& realname);
+	void setOrigin(bool sign);
 
 	// 연산자
 	bool operator==(const Client& rhs);
@@ -78,7 +79,7 @@ private:
 	bool nickFlag; // NICK 명령어 완료 여부
 	bool userFlag; // USER 명령어 완료 여부
 	bool registerFlag; // register 여부
-
+	bool origin; // 원본 클라이언트 여부
 };
 
 #endif
