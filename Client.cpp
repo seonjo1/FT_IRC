@@ -10,7 +10,7 @@ Client::~Client()
 	// nickList에서 nickname제거
 		removeNick();
 	// kqueue에서 제거
-		Server::kq.removeSocket(fd); // kq에서 제거
+		Server::kq().removeSocket(fd); // kq에서 제거
 	// 소켓 닫기
 		close(fd);
 }
@@ -78,7 +78,7 @@ bool Client::isNicknameInUse(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickname 대소문자 상관없이 중복 금지
-	if (find(Server::nickList.begin(), Server::nickList.end(), lowercase) != Server::nickList.end()) return (true);
+	if (find(Server::nickList().begin(), Server::nickList().end(), lowercase) != Server::nickList().end()) return (true);
 	return (false);
 }
 
@@ -94,7 +94,7 @@ void Client::addNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 추가
-	Server::nickList.push_back(lowercase);
+	Server::nickList().push_back(lowercase);
 }
 
 void Client::removeNick()
@@ -106,7 +106,7 @@ void Client::removeNick()
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nickname[i]);
 	// nickList에서 nick 제거
-	Server::nickList.erase(find(Server::nickList.begin(), Server::nickList.end(), lowercase));
+	Server::nickList().erase(find(Server::nickList().begin(), Server::nickList().end(), lowercase));
 	// channelList에서 제거
 	std::vector<Channel>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
@@ -122,7 +122,7 @@ void Client::changeNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 nick 변경
-	std::vector<std::string>::iterator nickIter = find(Server::nickList.begin(), Server::nickList.end(), lowercase);
+	std::vector<std::string>::iterator nickIter = find(Server::nickList().begin(), Server::nickList().end(), lowercase);
 	*nickIter = nick;
 	// channelList의 nick 변경
 	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
