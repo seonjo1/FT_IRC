@@ -1,6 +1,7 @@
 #include "ServerMsg.hpp"
+#include "Server.hpp"
 
-std::string ServerMsg::ALREADYREGISTER(std::string& nick)
+std::string ServerMsg::ALREADYREGISTER(std::string nick)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -10,7 +11,7 @@ std::string ServerMsg::ALREADYREGISTER(std::string& nick)
 	return (msg);
 }
 
-std::string ServerMsg::NEEDMOREPARAMS(std::string& nick, std::string& cmd)
+std::string ServerMsg::NEEDMOREPARAMS(std::string nick, std::string cmd)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -27,7 +28,7 @@ std::string ServerMsg::PASSWDMISMATCH()
 	return (msg);
 }
 
-std::string ServerMsg::NOTREGISTERD(std::string& nick)
+std::string ServerMsg::NOTREGISTERD(std::string nick)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -37,7 +38,7 @@ std::string ServerMsg::NOTREGISTERD(std::string& nick)
 	return (std::string());
 }
 
-std::string ServerMsg::NONICKNAMEGIVEN(std::string& nick)
+std::string ServerMsg::NONICKNAMEGIVEN(std::string nick)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -47,7 +48,7 @@ std::string ServerMsg::NONICKNAMEGIVEN(std::string& nick)
 	return (msg);
 }
 
-std::string ServerMsg::ERRONEUSNICKNAME(std::string& nick, std::string& errNick)
+std::string ServerMsg::ERRONEUSNICKNAME(std::string nick, std::string errNick)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -57,7 +58,7 @@ std::string ServerMsg::ERRONEUSNICKNAME(std::string& nick, std::string& errNick)
 	return (msg);
 }
 
-std::string ServerMsg::NICKNAMEINUSE(std::string& nick, std::string& errNick)
+std::string ServerMsg::NICKNAMEINUSE(std::string nick, std::string errNick)
 {
 	std::string msg;
 	if (nick.size() > 0)
@@ -75,10 +76,39 @@ std::string ServerMsg::NICKCHANGE(std::string oldNick, std::string hostname,
 	return (msg);
 }
 
-std::string PINGMSG(std::string serverIP)
+std::string ServerMsg::PINGMSG(std::string serverIP)
 {
 	std::string msg;
-	msg = "PING " + serverIP + "\r\n";
+	msg = "PING " + serverIP + " :" + serverIP + "\r\n";
 	return (msg);
 }
 
+std::string ServerMsg::NOORIGIN(std::string nick)
+{
+	std::string msg;
+	msg = "409 " + nick + " :No origin specified\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::NOSUCHSERVER(std::string nick, std::string server)
+{
+	std::string msg;
+	msg = "402 " + nick + " " + server + ":No such server\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::WELCOME(std::string nick, std::string hostname,
+							std::string servername)
+{
+	std::string msg;
+	msg = ":" + Server::IP + " 001 " + nick + " :Welcome to the FT_IRC Network, "
+		+ nick + "!" + hostname + "@" + servername + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::NOMOTD(std::string nick)
+{
+	std::string msg;
+	msg = ":" + Server::IP + " 422 " + nick + " :MOTD File is missing\r\n"; 
+	return (msg);
+}
