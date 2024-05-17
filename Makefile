@@ -1,10 +1,10 @@
 NAME		:=	ircserv
 CPP			:=	c++
-WFLAG		:=	-Wall -Wextra -Werror -std=c++98
+WFLAG		:=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 DIR			:=	./
 BASE		:=	main Server Socket Client Executor Kqueue Message Utils Channel \
-				PASS NICK USER PONG
+				ServerMsg PASS NICK USER PONG
 SRC			:=	$(addprefix $(DIR), $(addsuffix .cpp, $(BASE)))
 OBJ			:=	$(addprefix $(DIR), $(addsuffix .o, $(BASE)))
 
