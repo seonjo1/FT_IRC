@@ -2,10 +2,7 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string& channelName)
-	: channelName(channelName)
-{
-	timeChannelWasCreated = time(0);
-}
+	: channelName(channelName), timeChannelWasCreated(time(0)) {};
 
 Channel::~Channel() {};
 
@@ -27,10 +24,11 @@ bool Channel::isInvalidChannelName(std::string& channel)
 // channel이 존재하는지 확인
 bool Channel::isChannelInUse(std::string& channel)
 {
+	std::map<std::string, Channel>& channelList = Server::getChannelList();
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
-	for (; iter != Server::channelList().end(); iter++)
+	std::map<std::string, Channel>::iterator iter = channelList.begin();
+	for (; iter != channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
@@ -119,26 +117,30 @@ bool Channel::doesClientExist(std::string& nick)
 // 채널 삭제 (채널리스트에서 삭제)
 void Channel::removeChannel(std::string& channel)
 {
+	std::map<std::string, Channel>& channelList = Server::getChannelList();
+
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
-	for (; iter != Server::channelList().end(); iter++)
+	std::map<std::string, Channel>::iterator iter = channelList.begin();
+	for (; iter != channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
-			Server::channelList().erase(iter);
+			channelList.erase(iter);
 	}
 }
 
 // 채널 리스트에서 채널 찾아주는 함수
 Channel& Channel::findChannel(std::string& channel)
 {
+	std::map<std::string, Channel>& channelList = Server::getChannelList();
+
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
 		channel[i] = tolower(channel[i]);
-	std::map<std::string, Channel>::iterator iter = Server::channelList().begin();
-	for (; iter != Server::channelList().end(); iter++)
+	std::map<std::string, Channel>::iterator iter = channelList.begin();
+	for (; iter != channelList.end(); iter++)
 	{
 		std::string name = iter->second.getName();
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
