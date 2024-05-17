@@ -24,11 +24,11 @@ void Executor::execute(Client& client, std::string msg)
 		else // 그 외의 명령일 경우 연결 종료
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			Server::clientList.erase(client.getFd());
+			Server::clientList().erase(client.getFd());
 		}
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
-			client.sendMsg(ServerMsg::PINGMSG(Server::IP));
+			client.sendMsg(ServerMsg::PINGMSG(Server::IP()));
 	}
 	else
 	{
