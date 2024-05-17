@@ -22,7 +22,7 @@ void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 	{
 		client.sendMsg(ServerMsg::PASSWDMISMATCH());
 		// 연결 종료
-		Server::clientList.erase(client.getFd());
+		Server::clientList().erase(client.getFd());
 	}
 
 	client.setPassFlag(true);
