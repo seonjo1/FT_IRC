@@ -7,10 +7,11 @@ Client::Client(int fd)
 
 Client::~Client()
 {
+	Kqueue& kq = Server::getKq();
 	// nickList에서 nickname제거
 		removeNick();
 	// kqueue에서 제거
-		Server::kq().removeSocket(fd); // kq에서 제거
+		kq.removeSocket(fd); // kq에서 제거
 	// 소켓 닫기
 		close(fd);
 }
@@ -71,19 +72,22 @@ bool Client::isInvalidNick(std::string& nick)
 
 bool Client::isNicknameInUse(std::string& nick)
 {
-	int size = nick.size();
+	std::vector<std::string>& nickList = Server::getNickList();
 
+	int size = nick.size();
 	// 대문자를 소문자로 변환
 	std::string lowercase;
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickname 대소문자 상관없이 중복 금지
-	if (find(Server::nickList().begin(), Server::nickList().end(), lowercase) != Server::nickList().end()) return (true);
+	if (find(nickList.begin(), nickList.end(), lowercase) != nickList.end()) return (true);
 	return (false);
 }
 
 void Client::addNick(std::string& nick)
 {
+	std::vector<std::string>& nickList = Server::getNickList();
+
 	// nickname 갱신
 	nickname = nick;
 
@@ -94,11 +98,13 @@ void Client::addNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 추가
-	Server::nickList().push_back(lowercase);
+	nickList.push_back(lowercase);
 }
 
 void Client::removeNick()
 {
+	std::vector<std::string>& nickList = Server::getNickList();
+
 	int size = nickname.size();
 
 	// 대문자를 소문자로 변환
@@ -106,7 +112,7 @@ void Client::removeNick()
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nickname[i]);
 	// nickList에서 nick 제거
-	Server::nickList().erase(find(Server::nickList().begin(), Server::nickList().end(), lowercase));
+	nickList.erase(find(nickList.begin(), nickList.end(), lowercase));
 	// channelList에서 제거
 	std::vector<Channel>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
@@ -115,6 +121,8 @@ void Client::removeNick()
 
 void Client::changeNick(std::string& nick)
 {	
+	std::vector<std::string>& nickList = Server::getNickList();
+
 	int size = nick.size();
 
 	// 대문자를 소문자로 변환
@@ -122,7 +130,7 @@ void Client::changeNick(std::string& nick)
 	for (int i = 1; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 nick 변경
-	std::vector<std::string>::iterator nickIter = find(Server::nickList().begin(), Server::nickList().end(), lowercase);
+	std::vector<std::string>::iterator nickIter = find(nickList.begin(), nickList.end(), lowercase);
 	*nickIter = nick;
 	// channelList의 nick 변경
 	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
