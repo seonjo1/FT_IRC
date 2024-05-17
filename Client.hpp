@@ -64,6 +64,9 @@ public:
 				 std::string& hostname,
 				 std::string& servername,
 				 std::string& realname);
+
+	// 연산자
+	bool operator==(const Client& rhs);
 				 
 private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
@@ -75,6 +78,7 @@ private:
 	bool nickFlag; // NICK 명령어 완료 여부
 	bool userFlag; // USER 명령어 완료 여부
 	bool registerFlag; // register 여부
+
 };
 
 #endif

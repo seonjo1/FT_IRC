@@ -3,7 +3,7 @@
 #include "Channel.hpp"
 
 Client::Client(int fd)
-	: fd(fd), msg(fd) {};
+	: msg(fd), fd(fd) {};
 
 Client::~Client()
 {
@@ -225,4 +225,11 @@ void Client::setData(std::string& username, std::string& hostname,
 	data.hostname = hostname;
 	data.servername = servername;
 	data.realname = realname;
+}
+
+bool Client::operator==(const Client& rhs)
+{
+	if (this->nickname == rhs.nickname)
+		return (true);
+	return (false);
 }
