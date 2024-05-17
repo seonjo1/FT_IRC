@@ -8,7 +8,7 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	{
 		client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
 		// 연결 종료
-		Server::clientList.erase(client.getFd());
+		Server::clientList().erase(client.getFd());
 	}
 
 	// 인자 개수가 다른 경우
