@@ -30,10 +30,10 @@ void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 	if (cmds[1] != password)
 	{
 		client.sendMsg(ServerMsg::PASSWDMISMATCH());
-		// 연결 종료
-		std::map<int, Client>& clientList = Server::getClientList();
-		clientList.erase(client.getFd());
+		client.setErrflag(true);
+		return ;
 	}
 
+	// 성공시 PassFlag 설정
 	client.setPassFlag(true);
 }

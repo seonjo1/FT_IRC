@@ -83,7 +83,11 @@ void Server::receiveClientRequest(int fd)
 		Client& client = clientList.find(fd)->second; // fd에 맞는 클라이언트 찾기
 		client.receiveMsg(); // 클라이언트가 보낸 메시지 받기
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
+		{
 			executor.execute(client, client.getCmd());
+			if (client.getErrflag())
+				break;
+		}
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
 			clientList.erase(fd); // 클라이언트 배열에서 제거
 	}

@@ -15,7 +15,7 @@ public:
 	static bool isChannelInUse(std::string& channel); // channel 이 존재하는지
 	void addNickInChannel(Client& client);
 	void removeNickInChannel(Client& client);
-	void changeNickInChannel(Client& client, std::string& newNick);
+	void changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set);
 
 	// getter
 	std::string getName();

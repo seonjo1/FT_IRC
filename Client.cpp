@@ -5,7 +5,7 @@
 #include <iostream>
 
 Client::Client(int fd)
-	: msg(fd), fd(fd), origin(false) {};
+	: msg(fd), fd(fd), origin(false), errFlag(false) {};
 
 Client::~Client()
 {
@@ -13,6 +13,7 @@ Client::~Client()
 	{
 		Kqueue& kq = Server::getKq();
 		// nickList에서 nickname제거
+		if (nickFlag)
 			removeNick();
 		// kqueue에서 제거
 			kq.removeSocket(fd); // kq에서 제거
@@ -33,7 +34,7 @@ void Client::receiveMsg()
 bool Client::isDisconnected()
 {
 	// 연결이 끊겼는지 확인
-	if (msg.getEndFlag())
+	if (msg.getEndFlag() || errFlag)
 		return (true);
 	return (false);
 }
@@ -100,7 +101,7 @@ void Client::addNick(std::string& nick)
 
 	// 대문자를 소문자로 변환
 	std::string lowercase;
-	for (int i = 1; i < size; i++)
+	for (int i = 0; i < size; i++)
 		lowercase += tolower(nick[i]);
 	// nickList에 추가
 	nickList.push_back(lowercase);
@@ -128,19 +129,33 @@ void Client::changeNick(std::string& nick)
 {	
 	std::vector<std::string>& nickList = Server::getNickList();
 
-	int size = nick.size();
+	// old nickname 소문자로 변환
+	std::string oldLower;
+	for (int i = 0; i < static_cast<int>(nickname.size()); i++)
+		oldLower += tolower(nickname[i]);
+	// new nickname 소문자로 변환
+	std::string newLower;
+	for (int i = 0; i < static_cast<int>(nick.size()); i++)
+		newLower += tolower(nick[i]);
 
-	// 대문자를 소문자로 변환
-	std::string lowercase;
-	for (int i = 1; i < size; i++)
-		lowercase += tolower(nick[i]);
-	// nickList에 nick 변경
-	std::vector<std::string>::iterator nickIter = find(nickList.begin(), nickList.end(), lowercase);
-	*nickIter = nick;
-	// channelList의 nick 변경
+	// nickList에서 old nickname 찾기
+	std::vector<std::string>::iterator nickIter = find(nickList.begin(), nickList.end(), oldLower);
+	*nickIter = newLower;
+
+	std::set<int> set;
+
+	// 같은 채널에 있는 nickname set에 저장
 	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
-		channelIter->changeNickInChannel(*this, nick);
+		channelIter->changeNickInChannel(*this, nick, set);
+	
+	std::set<int>::iterator setIter = set.begin();
+	
+	std::string msgStr = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick); 
+	const char *msg = msgStr.c_str();
+	
+	for (; setIter != set.end(); setIter++)
+		send(*setIter, msg, msgStr.size(), 0);
 
 	// nickname 변경
 	nickname = nick;
@@ -203,6 +218,11 @@ std::string Client::getServerName()
 	return (data.servername);
 }
 
+bool Client::getErrflag()
+{
+	return (errFlag);
+}
+
 // setter
 
 void Client::setPassFlag(bool sign)
@@ -244,6 +264,12 @@ void Client::setOrigin(bool sign)
 {
 	origin = sign;
 }
+
+void Client::setErrflag(bool sign)
+{
+	errFlag = sign;
+}
+
 
 bool Client::operator==(const Client& rhs)
 {

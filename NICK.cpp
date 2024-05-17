@@ -17,18 +17,19 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		if (!client.getPassFlag())
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			// 연결 종료
-			std::map<int, Client>& clientList = Server::getClientList();
-			clientList.erase(client.getFd());
+			client.setErrflag(true);
+			return ;
 		}
 
-		// 인자 개수가 다른 경우
+		// nickname 인자가 주어지지 않은 경우
 		if (cmds.size() == 1)
 		{
 			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
-		else if (cmds.size() != 2)
+		
+		// 인자 개수가 다른 경우
+		if (cmds.size() != 2)
 		{
 			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 			return ;
@@ -48,7 +49,7 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 			return ;
 		}
 
-		// 등록 가능한 NICK
+		// 등록 가능한 NICK이므로 NICK 설정
 		client.addNick(cmds[1]);
 		client.setNickFlag(true);
 	}

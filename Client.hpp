@@ -1,12 +1,13 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-# include "Message.hpp"
 # include <map>
+# include <set>
 # include <cctype>
 # include <vector>
 # include <unistd.h>
 # include <algorithm>
+# include "Message.hpp"
 
 class Channel;
 
@@ -54,6 +55,7 @@ public:
 	int getFd(); // fd 전달
 	std::string getHostName(); // hostname 전달
 	std::string getServerName(); // servername 전달
+	bool getErrflag();
 
 	// setter
 	void setPassFlag(bool sign); // PassFlag 세팅
@@ -65,6 +67,8 @@ public:
 				 std::string& servername,
 				 std::string& realname);
 	void setOrigin(bool sign);
+	void setErrflag(bool sign);
+
 
 	// 연산자
 	bool operator==(const Client& rhs);
@@ -80,6 +84,7 @@ private:
 	bool userFlag; // USER 명령어 완료 여부
 	bool registerFlag; // register 여부
 	bool origin; // 원본 클라이언트 여부
+	bool errFlag; // 클라이언트 에러 여부
 };
 
 #endif

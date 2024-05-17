@@ -64,7 +64,7 @@ void Channel::removeNickInChannel(Client& client)
 }
 
 // channel nick 변경
-void Channel::changeNickInChannel(Client& client, std::string& newNick)
+void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set)
 {
 	// joinList에 있는 nick 변경
 	std::vector<Client>::iterator iter = find(joinList.begin(), joinList.end(), client);
@@ -76,13 +76,16 @@ void Channel::changeNickInChannel(Client& client, std::string& newNick)
 	if (iter != opList.end())
 		iter->setNick(newNick);
 
+	// joinList와 opList에 있는 클라이언트들의 fd 수집
+	for (iter = joinList.begin(); iter != joinList.end(); iter++)
+		set.insert(iter->getFd());
+	for (iter = opList.begin(); iter != opList.end(); iter++)
+		set.insert(iter->getFd());
+
 	// inviteList에 있는 nick 변경
 	std::vector<std::string>::iterator inviteIter = find(inviteList.begin(), inviteList.end(), client.getNick());
 	if (inviteIter != inviteList.end())
 		*inviteIter = newNick;
-
-	// 채널에 nick 변경 알림
-	sendToClients(ServerMsg::NICKCHANGE(client.getNick(), client.getHostName(), client.getServerName(), newNick));
 }
 
 // 채널에 메시지 전송
