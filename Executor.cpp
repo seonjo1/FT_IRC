@@ -8,7 +8,7 @@ Executor::~Executor() {};
 
 void Executor::execute(Client& client, std::string msg)
 {
-	std::cout << "cmd : " << msg << "\n";
+	std::cout << "receive from client : " << msg << "\n";
 	std::vector<std::string> cmds = parseMsg(msg);
 
 	for (std::vector<std::string>::iterator iter = cmds.begin(); iter != cmds.end(); iter++)
@@ -46,6 +46,8 @@ void Executor::execute(Client& client, std::string msg)
 			USER(client, cmds);
 		else if (cmds[0] == "PONG")
 			PONG(client, cmds);
+		else if (cmds[0] == "JOIN")
+			JOIN(client, cmds);
 	}
 }
 
@@ -67,6 +69,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parseUSER(cmds, msg);
 	else if (cmd == "PONG")
 		parsePONG(cmds, msg);
+	else if (cmd == "JOIN")
+		parseJOIN(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);
