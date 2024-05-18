@@ -45,7 +45,7 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// 이미 존재하는 nickname
 		if (Client::isNicknameInUse(cmds[1]))
 		{
-			client.sendMsg(ServerMsg::NICKNAMEINUSE(client.getNick(), cmds[1]));
+			client.sendMsg(ServerMsg::NICKNAMEINUSE(cmds[1], cmds[1]));
 			return ;
 		}
 
