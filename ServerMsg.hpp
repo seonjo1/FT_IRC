@@ -1,6 +1,7 @@
 #ifndef SERVERMSG_HPP
 # define SERVERMSG_HPP
 
+# include <sstream>
 # include <string>
 
 class ServerMsg
@@ -21,6 +22,17 @@ public:
 	static std::string WELCOME(std::string nick, std::string hostname,
 								std::string servername);
 	static std::string NOMOTD(std::string nick);
+	static std::string INVALIDCHANNEL(std::string nick, std::string server);
+
+	static std::string TOPIC(std::string nick, std::string channel, 
+							std::string topic);
+	static std::string TOPICINFO(std::string nick, std::string channel,
+								std::string topicWriter, int time);
+	static std::string BADCHANNELKEY(std::string nick, std::string channel);
+	static std::string INVITEONLYCHAN(std::string nick, std::string channel);
+	static std::string CHANNELISFULL(std::string nick, std::string channel);
+	static std::string JOIN(std::string nick, std::string hostname,
+							std::string servername, std::string channel);
 };
 
 #endif

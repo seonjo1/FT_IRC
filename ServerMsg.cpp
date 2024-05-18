@@ -61,10 +61,7 @@ std::string ServerMsg::ERRONEUSNICKNAME(std::string nick, std::string errNick)
 std::string ServerMsg::NICKNAMEINUSE(std::string nick, std::string errNick)
 {
 	std::string msg;
-	if (nick.size() > 0)
-		msg = "433 " + nick + " " + errNick + " :Nickname is already in use\r\n";
-	else
-		msg = "433 " + errNick + " :Nickname is already in use\r\n";
+	msg = "433 " + nick + " " + errNick + " :Nickname is already in use\r\n";
 	return (msg);
 }
 
@@ -110,5 +107,60 @@ std::string ServerMsg::NOMOTD(std::string nick)
 {
 	std::string msg;
 	msg = ":" + Server::getIP() + " 422 " + nick + " :MOTD File is missing\r\n"; 
+	return (msg);
+}
+
+std::string ServerMsg::INVALIDCHANNEL(std::string nick, std::string server)
+{
+	std::string msg;
+	msg = "476 " + nick + " " + server + " :Invalid channel name\r\n";
+	return (msg);
+}
+
+
+std::string ServerMsg::TOPIC(std::string nick, std::string channel, 
+						std::string topic)
+{
+	std::string msg;
+	msg = "332 " + nick + " " + channel + " :" + topic + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::TOPICINFO(std::string nick, std::string channel,
+							std::string topicWriter, int time)
+{
+	std::string msg;
+	std::stringstream ss(time);
+	msg = "333 " + nick + " " + channel + " " + topicWriter + " :" + ss.str() + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::BADCHANNELKEY(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "475 " + nick + " " + channel + " :Cannot join channel (+k)\r\n";
+	return (msg);	
+}
+
+std::string ServerMsg::INVITEONLYCHAN(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "473 " + nick + " " + channel + " :Cannot join channel (+i)\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::CHANNELISFULL(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "471 " + nick + " " + channel + " :Cannot join channel (+l)\r\n";
+	return (msg);
+}
+
+
+std::string ServerMsg::JOIN(std::string nick, std::string hostname,
+						std::string servername, std::string channel)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " JOIN " + channel + "\r\n";
 	return (msg);
 }
