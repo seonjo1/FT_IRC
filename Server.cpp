@@ -66,6 +66,58 @@ Server::Server(char *port, char *password)
 
 Server::~Server() {};
 
+void Server::print_result()
+{
+	std::map<int, Client>& clientList = getClientList();
+	std::map<std::string, Channel>& channelList = getChannelList();
+	std::vector<std::string>& nickList = getNickList();
+
+	std::cout << "\n<Channel List> \n";
+	std::map<std::string, Channel>::iterator channelIter = channelList.begin();
+	for (; channelIter != channelList.end(); channelIter++)
+	{
+		std::cout << "channel name : " << channelIter->second.getName() << "\n";
+		
+		std::cout << "<JOINList>\n";
+		std::vector<Client*> joinList = channelIter->second.getJoinList();
+		std::vector<Client*>::iterator joinIter = joinList.begin();
+		for (; joinIter != joinList.end(); joinIter++)
+			std::cout << (*joinIter)->getNick() << "\n";
+
+		std::cout << "<OPList>\n";
+		std::vector<Client*> opList = channelIter->second.getOpList();
+		std::vector<Client*>::iterator opIter = opList.begin();
+		for (; opIter != opList.end(); opIter++)
+			std::cout << (*opIter)->getNick() << "\n";
+	
+		std::cout << "<InviteList>\n";
+		std::vector<std::string> inviteList = channelIter->second.getInviteList();
+		std::vector<std::string>::iterator inviteIter = inviteList.begin();
+		for (; inviteIter != inviteList.end(); inviteIter++)
+			std::cout << *inviteIter << "\n";
+	}
+
+	std::cout << "\n<clientList>\n";
+	std::map<int, Client>::iterator clientIter = clientList.begin();
+	for (; clientIter != clientList.end(); clientIter++)
+	{
+		std::cout << "Client nick : " << clientIter->second.getNick() << "\n";
+		std::cout << "<join channels>\n";
+		std::vector<Channel*>& joinedChannels = clientIter->second.getJoinedChannels();
+		std::vector<Channel*>::iterator joinchannelIter = joinedChannels.begin();
+		for (; joinchannelIter != joinedChannels.end(); joinchannelIter++)
+			std::cout << "joined channel : " << (*joinchannelIter)->getName() << "\n";
+	}
+
+	std::cout << "\n<nickList>\n";
+	std::vector<std::string>::iterator nickIter = nickList.begin();
+	for (; nickIter != nickList.end(); nickIter++)
+	{
+		std::cout << "NickList : " << *nickIter << "\n";
+	}
+}
+
+
 void Server::receiveClientRequest(int fd)
 {
 	std::map<int, Client>& clientList = getClientList();
@@ -85,6 +137,7 @@ void Server::receiveClientRequest(int fd)
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
 		{
 			executor.execute(client, client.getCmd());
+			print_result();
 			if (client.getErrflag())
 				break;
 		}

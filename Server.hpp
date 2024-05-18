@@ -24,6 +24,7 @@ public:
 private:
 	Executor executor; // 명령어 실행기
 
+	void print_result();
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
 };
 
