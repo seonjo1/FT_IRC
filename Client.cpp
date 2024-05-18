@@ -66,7 +66,7 @@ bool Client::isInvalidNick(std::string& nick)
 	if (size > 30) return (true); // 규칙 1. 길이 최대 30
 	if (!isalpha(nick[0])) return (true); // 규칙 2. 맨 앞은 알파벳으로 시작
 	
-	for (int i = 1; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		if (nick[i] == ' ') return (true); // 규칙 3. 공백 포함 x
 		else if (!(isalpha(nick[i]) || isdigit(nick[i]) // 규칙 4. 숫자, 알파벳, '-', '_' 만으로 구성
@@ -83,14 +83,15 @@ bool Client::isNicknameInUse(std::string& nick)
 	int size = nick.size();
 	// 대문자를 소문자로 변환
 	std::string lowercase;
-	for (int i = 1; i < size; i++)
+	for (int i = 0; i < size; i++)
 		lowercase += tolower(nick[i]);
+	
 	// nickname 대소문자 상관없이 중복 금지
 	if (find(nickList.begin(), nickList.end(), lowercase) != nickList.end()) return (true);
 	return (false);
 }
 
-void Client::addNick(std::string& nick)
+void Client::addNick(std::string nick)
 {
 	std::vector<std::string>& nickList = Server::getNickList();
 
@@ -103,6 +104,7 @@ void Client::addNick(std::string& nick)
 	std::string lowercase;
 	for (int i = 0; i < size; i++)
 		lowercase += tolower(nick[i]);
+	
 	// nickList에 추가
 	nickList.push_back(lowercase);
 }
@@ -115,17 +117,17 @@ void Client::removeNick()
 
 	// 대문자를 소문자로 변환
 	std::string lowercase;
-	for (int i = 1; i < size; i++)
+	for (int i = 0; i < size; i++)
 		lowercase += tolower(nickname[i]);
 	// nickList에서 nick 제거
 	nickList.erase(find(nickList.begin(), nickList.end(), lowercase));
 	// channelList에서 제거
-	std::vector<Channel>::iterator iter = joinedChannels.begin();
+	std::vector<Channel*>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
-		iter->removeNickInChannel(*this);
+		(*iter)->removeNickInChannel(*this);
 }
 
-void Client::changeNick(std::string& nick)
+void Client::changeNick(std::string nick)
 {	
 	std::vector<std::string>& nickList = Server::getNickList();
 
@@ -147,9 +149,9 @@ void Client::changeNick(std::string& nick)
 
 	// 같은 채널에 있는 nickname의 fd 들을 set에 저장
 	set.insert(fd);
-	std::vector<Channel>::iterator channelIter = joinedChannels.begin();
+	std::vector<Channel*>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
-		channelIter->changeNickInChannel(*this, nick, set);
+		(*channelIter)->changeNickInChannel(*this, nick, set);
 	
 	// nickname 변경 메시지 만들기
 	std::string msgStr = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick); 
@@ -168,22 +170,29 @@ void Client::changeNick(std::string& nick)
 
 void Client::sendMsg(std::string msg)
 {
+	std::cout << "send to client : " << msg;
 	send(fd, msg.c_str(), msg.size(), 0);
 }
 
 
 // channel 함수
-bool Client::checkChannelParticipation(std::string& channel)
+bool Client::isClientMemberOfChannel(std::string& channel)
 {
 	// channelList의 nick 변경
-	std::vector<Channel>::iterator iter = joinedChannels.begin();
+	std::vector<Channel*>::iterator iter = joinedChannels.begin();
 	for (; iter != joinedChannels.end(); iter++)
 	{
-		if (iter->getName() == channel)
+		if ((*iter)->getName() == channel)
 			return (true);
 	}
 	return (false);
 }
+
+void Client::addJoinedChannels(Channel* channel)
+{
+	joinedChannels.push_back(channel);
+}
+
 
 // getter
 bool Client::getPassFlag()
@@ -225,6 +234,12 @@ bool Client::getErrflag()
 {
 	return (errFlag);
 }
+
+std::vector<Channel*>& Client::getJoinedChannels()
+{
+	return (joinedChannels);
+}
+
 
 // setter
 

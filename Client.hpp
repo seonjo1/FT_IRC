@@ -37,25 +37,27 @@ public:
 	// nick 함수
 	static bool isInvalidNick(std::string& nick); // nickname 유효성 검사
 	static bool isNicknameInUse(std::string& nick); // nickname 사용중인지 검사
-	void addNick(std::string& nick); // nickname 추가
+	void addNick(std::string nick); // nickname 추가
 	void removeNick(); // nickname 제거
-	void changeNick(std::string& nick); // nickname 변경
+	void changeNick(std::string nick); // nickname 변경
 
 	// 메시지 전송 함수
 	void sendMsg(std::string msg);
 
 	// channel 함수
-	bool checkChannelParticipation(std::string& channel);
+	bool isClientMemberOfChannel(std::string& channel);
+	void addJoinedChannels(Channel* channel);
 
 	// getter
+	int getFd(); // fd 전달
 	bool getPassFlag(); // PassFlag 전달
 	bool getNickFlag(); // NickFlag 전달
 	bool getUserFlag(); // UserFlag 전달
-	std::string& getNick(); // nickname 전달
-	int getFd(); // fd 전달
+	bool getErrflag(); // ErrFlag 전달
 	std::string getHostName(); // hostname 전달
 	std::string getServerName(); // servername 전달
-	bool getErrflag();
+	std::string& getNick(); // nickname 전달
+	std::vector<Channel*>& getJoinedChannels();
 
 	// setter
 	void setPassFlag(bool sign); // PassFlag 세팅
@@ -69,7 +71,6 @@ public:
 	void setOrigin(bool sign);
 	void setErrflag(bool sign);
 
-
 	// 연산자
 	bool operator==(const Client& rhs);
 				 
@@ -77,7 +78,7 @@ private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
 	Data data; // 클라이언트 정보 모음
 	std::string nickname; // nickname
-	std::vector<Channel> joinedChannels; // client가 가입한 channel 모음
+	std::vector<Channel*> joinedChannels; // client가 가입한 channel 모음
 	int fd; // 클라이언트와 연결된 소켓
 	bool passFlag; // PASS 명령어 완료 여부
 	bool nickFlag; // NICK 명령어 완료 여부
