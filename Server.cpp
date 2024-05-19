@@ -102,6 +102,7 @@ void Server::print_result()
 	for (; clientIter != clientList.end(); clientIter++)
 	{
 		std::cout << "Client nick : " << clientIter->second.getNick() << "\n";
+		std::cout << "Client socket : " << clientIter->second.getFd() << "\n";
 		std::cout << "<join channels>\n";
 		std::vector<Channel*>& joinedChannels = clientIter->second.getJoinedChannels();
 		std::vector<Channel*>::iterator joinchannelIter = joinedChannels.begin();
@@ -138,7 +139,7 @@ void Server::receiveClientRequest(int fd)
 		{
 			executor.execute(client, client.getCmd());
 			print_result();
-			if (client.getErrflag())
+			if (client.getQuitflag())
 				break;
 		}
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
