@@ -122,6 +122,8 @@ void Channel::removeNickInChannel(Client& client)
 	iter = find(opList.begin(), opList.end(),&client);
 	if (iter != opList.end())
 		opList.erase(iter);
+	
+	client.removeJoinedChannels(this);
 }
 
 // channel nick 변경
@@ -167,13 +169,13 @@ void Channel::sendToClients(std::string msg)
 bool Channel::doesClientExist(std::string& nick)
 {
 	std::vector<Client*>::iterator iter = opList.begin();
-	for (; iter != opList.begin(); iter++)
+	for (; iter != opList.end(); iter++)
 	{
 		if ((*iter)->getNick() == nick)
 			return (true);
 	}
 	iter = joinList.begin();
-	for (; iter != joinList.begin(); iter++)
+	for (; iter != joinList.end(); iter++)
 	{
 		if ((*iter)->getNick() == nick)
 			return (true);
