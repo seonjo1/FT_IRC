@@ -6,7 +6,7 @@ DIR			:=	./
 BASE		:=	main Server Socket Client Executor \
 				Kqueue Message Utils Channel ServerMsg \
 				PASS NICK USER PONG \
-				JOIN PING PART
+				JOIN PING PART QUIT
 SRC			:=	$(addprefix $(DIR), $(addsuffix .cpp, $(BASE)))
 OBJ			:=	$(addprefix $(DIR), $(addsuffix .o, $(BASE)))
 
