@@ -151,16 +151,16 @@ void Client::changeNick(std::string nick)
 	// old nickname 에서 new nickname 으로 변환
 	*nickIter = newLower;
 
-	std::set<int> set;
 
 	// 같은 채널에 있는 nickname의 fd 들을 set에 저장
+	std::set<int> set;
 	set.insert(fd);
 	std::vector<Channel*>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
 		(*channelIter)->changeNickInChannel(*this, nick, set);
 	
 	// nickname 변경 메시지 만들기
-	std::string msgStr = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick); 
+	std::string msgStr = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick);
 	const char *msg = msgStr.c_str();
 	
 	// set에 있는 같은 채널에 있는 client들의 fd에 메시지 전송

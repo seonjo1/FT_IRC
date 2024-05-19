@@ -8,6 +8,7 @@
 # include <unistd.h>
 # include <algorithm>
 # include "Message.hpp"
+# include "ServerMsg.hpp"
 
 class Channel;
 
