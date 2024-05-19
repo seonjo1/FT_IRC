@@ -68,11 +68,14 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
  // channel 이름 유효성 검사
 bool Channel::isInvalidChannelName(std::string& channel)
 {
-	// 규칙 1. 길이는 #포함 64까지
+	// 규칙 1. 맨 앞의 char는 '#' or '&'
+	if (channel[0] != '#' || channel[0] != '&')
+		return (true);
+	// 규칙 2. 길이는 #포함 64까지
 	if (static_cast<int>(channel.size()) > 64)
 		return (true);
-	// 규칙 2. 공백(space) 콤마(,) unprintable 포함 x
-	for (int i = 0; i < static_cast<int>(channel.size()); i++)
+	// 규칙 3. 공백(space) 콤마(,) unprintable 포함 x
+	for (int i = 1; i < static_cast<int>(channel.size()); i++)
 	{
 		if (channel[i] == ' ' || channel[i] == ',' || !isprint(channel[i]))
 			return (true);
@@ -177,6 +180,29 @@ void Channel::sendToClients(std::string msg)
 	iter = joinList.begin();
 	for (; iter != joinList.end(); iter++)
 		(*iter)->sendMsg(msg);
+}
+
+// 채널에 메시지 전송
+void Channel::sendToClients(std::string msg, Client& client)
+{
+	std::vector<Client*>::iterator iter = opList.begin();
+	for (; iter != opList.end(); iter++)
+	{
+		if ((*iter)->getNick() != client.getNick())
+		{
+			std::cout << "member : " << (*iter)->getNick() << "\n";
+			(*iter)->sendMsg(msg);
+		}
+	}
+	iter = joinList.begin();
+	for (; iter != joinList.end(); iter++)
+	{
+		if ((*iter)->getNick() != client.getNick())
+		{
+			std::cout << "member : " << (*iter)->getNick() << "\n";
+			(*iter)->sendMsg(msg);
+		}
+	}
 }
 
 // 채널에 클라이언트 있나 확인

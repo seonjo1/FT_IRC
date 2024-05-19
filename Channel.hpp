@@ -10,7 +10,7 @@ public:
 	Channel(std::string& channelName);
 	~Channel();
 
-	// 채널 관리 (참가자 명단, operator 명단, 초대 명단)
+	// 채널 관리
 	static void removeChannel(std::string channel);  // 채널 삭제
 	static void joinChannel(Client& client, std::string& channelName, std::string param); // 채널에 참가
 	static bool isChannelInUse(std::string& channel); // channel 이 존재하는지
@@ -19,6 +19,7 @@ public:
 	static Channel& findChannel(std::string& channel); // 채널 찾아서 반환
 	void fillSetWithFd(std::set<int>& set); // 채널 참여자의 fd들을 set에 추가
 	void sendToClients(std::string msg); // 채널에 메시지 전송
+	void sendToClients(std::string msg, Client& client); // 채널에 메시지 전송 (client 제외)
 	void addNickInChannel(Client& client); // channel에 nick 추가
 	void removeNickInChannel(Client& client); // channel에 nick 삭제
 	void changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set); // channel에 nick 변경
@@ -26,8 +27,8 @@ public:
 
 	// mode 함수
 	bool isKeyMode();
-	bool isInviteMode();
 	bool isLimitMode();
+	bool isInviteMode();
 	bool doesTopicExist();
 	bool isInvitedClient(std::string nick);
 	void removeClientFromInvitedList(std::string nick);
@@ -36,12 +37,12 @@ public:
 	int getSize();
 	int getLimit();
 	int	getTopicTime();
-	std::string getName();
 	std::string getKey();
+	std::string getName();
 	std::string getTopic();
 	std::string getTopicWriter();
-	std::vector<Client*>& getJoinList();
 	std::vector<Client*>& getOpList();
+	std::vector<Client*>& getJoinList();
 	std::vector<std::string>& getInviteList();
 
 
