@@ -69,7 +69,7 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 bool Channel::isInvalidChannelName(std::string& channel)
 {
 	// 규칙 1. 맨 앞의 char는 '#' or '&'
-	if (channel[0] != '#' || channel[0] != '&')
+	if (channel[0] != '#' && channel[0] != '&')
 		return (true);
 	// 규칙 2. 길이는 #포함 64까지
 	if (static_cast<int>(channel.size()) > 64)
