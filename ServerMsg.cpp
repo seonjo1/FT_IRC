@@ -242,6 +242,6 @@ std::string ServerMsg::PRIVMSG(std::string nick, std::string hostname,
 							   std::string message)
 {
 	std::string msg;
-	msg = ":" + nick + "!" + hostname + "@" + servername + " PRIVMSG " + receiver + " :" + msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " PRIVMSG " + receiver + " :" + message;
 	return (msg);
 }
