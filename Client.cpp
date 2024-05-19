@@ -5,7 +5,7 @@
 #include <iostream>
 
 Client::Client(int fd)
-	: msg(fd), fd(fd), origin(false), errFlag(false) {};
+	: msg(fd), fd(fd), origin(false), quitFlag(false) {};
 
 Client::~Client()
 {
@@ -34,7 +34,7 @@ void Client::receiveMsg()
 bool Client::isDisconnected()
 {
 	// 연결이 끊겼는지 확인
-	if (msg.getEndFlag() || errFlag)
+	if (msg.getEndFlag() || quitFlag)
 		return (true);
 	return (false);
 }
@@ -111,20 +111,26 @@ void Client::addNick(std::string nick)
 
 void Client::removeNick()
 {
-	std::vector<std::string>& nickList = Server::getNickList();
-
 	int size = nickname.size();
+	if (size != 0)
+	{
+		std::vector<std::string>& nickList = Server::getNickList();
 
-	// 대문자를 소문자로 변환
-	std::string lowercase;
-	for (int i = 0; i < size; i++)
-		lowercase += tolower(nickname[i]);
-	// nickList에서 nick 제거
-	nickList.erase(find(nickList.begin(), nickList.end(), lowercase));
-	// channelList에서 제거
-	std::vector<Channel*>::iterator iter = joinedChannels.begin();
-	for (; iter != joinedChannels.end(); iter++)
-		(*iter)->removeNickInChannel(*this);
+		// 대문자를 소문자로 변환
+		std::string lowercase;
+		for (int i = 0; i < size; i++)
+			lowercase += tolower(nickname[i]);
+		// nickList에서 nick 제거
+		nickList.erase(find(nickList.begin(), nickList.end(), lowercase));
+		// channelList에서 제거
+		std::vector<Channel*>::iterator iter = joinedChannels.begin();
+		for (; iter != joinedChannels.end(); iter++)
+		{
+			(*iter)->removeNickInChannel(*this);
+			if ((*iter)->getSize() == 0)
+				Channel::removeChannel((*iter)->getName());
+		}
+	}
 }
 
 void Client::changeNick(std::string nick)
@@ -235,9 +241,9 @@ std::string Client::getServerName()
 	return (data.servername);
 }
 
-bool Client::getErrflag()
+bool Client::getQuitflag()
 {
-	return (errFlag);
+	return (quitFlag);
 }
 
 std::vector<Channel*>& Client::getJoinedChannels()
@@ -288,9 +294,9 @@ void Client::setOrigin(bool sign)
 	origin = sign;
 }
 
-void Client::setErrflag(bool sign)
+void Client::setQuitflag(bool sign)
 {
-	errFlag = sign;
+	quitFlag = sign;
 }
 
 

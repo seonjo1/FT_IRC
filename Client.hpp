@@ -45,16 +45,16 @@ public:
 	void sendMsg(std::string msg);
 
 	// channel 함수
-	bool isClientMemberOfChannel(std::string& channel);
-	void addJoinedChannels(Channel* channel);
-	void removeJoinedChannels(Channel* channel);
+	bool isClientMemberOfChannel(std::string& channel); // 클라이언트가 해당 채널에 참여했는지 확인
+	void addJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에 추가
+	void removeJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에서 제거
 
 	// getter
 	int getFd(); // fd 전달
 	bool getPassFlag(); // PassFlag 전달
 	bool getNickFlag(); // NickFlag 전달
 	bool getUserFlag(); // UserFlag 전달
-	bool getErrflag(); // ErrFlag 전달
+	bool getQuitflag(); // QuitFlag 전달
 	std::string getHostName(); // hostname 전달
 	std::string getServerName(); // servername 전달
 	std::string& getNick(); // nickname 전달
@@ -70,7 +70,7 @@ public:
 				 std::string& servername,
 				 std::string& realname);
 	void setOrigin(bool sign);
-	void setErrflag(bool sign);
+	void setQuitflag(bool sign);
 
 	// 연산자
 	bool operator==(const Client& rhs);
@@ -86,7 +86,7 @@ private:
 	bool userFlag; // USER 명령어 완료 여부
 	bool registerFlag; // register 여부
 	bool origin; // 원본 클라이언트 여부
-	bool errFlag; // 클라이언트 에러 여부
+	bool quitFlag; // 클라이언트 종료 여부
 };
 
 #endif
