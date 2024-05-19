@@ -9,9 +9,6 @@ Channel::~Channel() {};
 // 채널에 참가
 void Channel::joinChannel(Client& client, std::string& channelName, std::string param)
 {
-	std::vector<std::string> room;
-	// 할일 /join #room1, #room2, key1, key2 일때 pair로 파싱하기
-
 	if (isChannelInUse(channelName)) // 기존 채널이 있는 경우
 	{
 		// channel 찾기
