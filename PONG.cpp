@@ -29,12 +29,10 @@ void Executor::parsePONG(std::vector<std::string>& cmds, std::string& msg)
 
 void Executor::PONG(Client& client, std::vector<std::string>& cmds)
 {
-	if (cmds.size() < 3)
+	if (cmds.size() == 1)
 		client.sendMsg(ServerMsg::NOORIGIN(client.getNick()));
 	else if (cmds[1] != Server::getIP())
 		client.sendMsg(ServerMsg::NOSUCHSERVER(client.getNick(), cmds[1]));
-	else if (cmds[2] != (Server::getIP()))
-		client.sendMsg(ServerMsg::NOSUCHSERVER(client.getNick(), cmds[2]));
 	else
 	{
 		client.sendMsg(ServerMsg::WELCOME(client.getNick(), client.getHostName(), client.getServerName()));
