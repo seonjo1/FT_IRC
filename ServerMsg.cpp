@@ -200,3 +200,18 @@ std::string ServerMsg::PART(std::string nick, std::string hostname, std::string 
 		msg = ":" + nick + "!" + hostname + "@" + servername + " PART " + channel + " :" + message + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::QUITMSGTOCHANNEL(std::string nick, std::string hostname,
+									std::string servername, std::string message)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " QUIT :Quit: " + message + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::QUITCHANNEL(std::string hostname, std::string servername, std::string message)
+{
+	std::string msg;
+	msg = "ERROR :Closing link: (" + hostname + "@" + servername + ") [Quit: " + message + "]\r\n";
+	return (msg);
+}

@@ -38,6 +38,9 @@ public:
 	static std::string NOTONCHANNEL(std::string nick, std::string channel);
 	static std::string PART(std::string nick, std::string hostname, std::string servername,
 							std::string channel, std::string message);
+	static std::string QUITMSGTOCHANNEL(std::string nick, std::string hostname,
+									std::string servername, std::string message);
+	static std::string QUITCHANNEL(std::string hostname, std::string servername, std::string message);
 };
 
 #endif
