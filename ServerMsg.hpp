@@ -33,6 +33,7 @@ public:
 	static std::string CHANNELISFULL(std::string nick, std::string channel);
 	static std::string JOIN(std::string nick, std::string hostname,
 							std::string servername, std::string channel);
+	static std::string PING(std::string cmd1, std::string cmd2);
 };
 
 #endif

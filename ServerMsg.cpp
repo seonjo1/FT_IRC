@@ -164,3 +164,13 @@ std::string ServerMsg::JOIN(std::string nick, std::string hostname,
 	msg = ":" + nick + "!" + hostname + "@" + servername + " JOIN " + channel + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::PING(std::string cmd1, std::string cmd2)
+{
+	std::string msg;
+	if (cmd2.size() == 0)
+		msg = "PONG " + cmd1 + "\r\n";
+	else
+		msg = "PONG " + cmd1 + " " + cmd2 + "\r\n";
+	return (msg);
+}
