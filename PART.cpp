@@ -91,7 +91,9 @@ void Executor::PART(Client& client, std::vector<std::string>& cmds)
 		{
 			channel.sendToClients(ServerMsg::PART(client.getNick(), client.getHostName(), client.getServerName(), room, cmds[2]));
 		}
-		
 		channel.removeNickInChannel(client);
+		client.removeJoinedChannels(&channel);
+		if (channel.getSize() == 0)
+				Channel::removeChannel(channel.getName());
 	}
 }
