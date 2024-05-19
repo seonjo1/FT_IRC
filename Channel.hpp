@@ -11,12 +11,13 @@ public:
 	~Channel();
 
 	// 채널 관리 (참가자 명단, operator 명단, 초대 명단)
-	static void removeChannel(std::string& channel);  // 채널 삭제
+	static void removeChannel(std::string channel);  // 채널 삭제
 	static void joinChannel(Client& client, std::string& channelName, std::string param); // 채널에 참가
 	static bool isChannelInUse(std::string& channel); // channel 이 존재하는지
 	static bool isInvalidChannelName(std::string& channel); // channel 이름 유효성 검사
 	static Channel& addChannel(std::string& channel); // 채널 추가
 	static Channel& findChannel(std::string& channel); // 채널 찾아서 반환
+	void fillSetWithFd(std::set<int>& set); // 채널 참여자의 fd들을 set에 추가
 	void sendToClients(std::string msg); // 채널에 메시지 전송
 	void addNickInChannel(Client& client); // channel에 nick 추가
 	void removeNickInChannel(Client& client); // channel에 nick 삭제

@@ -112,18 +112,23 @@ void Channel::addNickInChannel(Client& client)
 	client.addJoinedChannels(this);
 }
 
-// channel 나가기
+/*  channel 나가기 
+	but 클라이언트가 갖고 있는 joinList는 따로 삭제해야댐
+	그리고 빈방이면 채널 삭제도 따로 해야댐
+*/ 
 void Channel::removeNickInChannel(Client& client)
 {
 	std::vector<Client*>::iterator iter = find(joinList.begin(), joinList.end(), &client);
 	if (iter != joinList.end())
+	{
 		joinList.erase(iter);
-	
-	iter = find(opList.begin(), opList.end(),&client);
+	}
+
+	iter = find(opList.begin(), opList.end(), &client);
 	if (iter != opList.end())
+	{
 		opList.erase(iter);
-	
-	client.removeJoinedChannels(this);
+	}
 }
 
 // channel nick 변경
@@ -140,16 +145,25 @@ void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set
 		(*iter)->setNick(newNick);
 
 	// joinList와 opList에 있는 클라이언트들의 fd 수집
-	for (iter = joinList.begin(); iter != joinList.end(); iter++)
-		set.insert((*iter)->getFd());
-	for (iter = opList.begin(); iter != opList.end(); iter++)
-		set.insert((*iter)->getFd());
+	fillSetWithFd(set);
 
 	// inviteList에 있는 nick 변경
 	std::vector<std::string>::iterator inviteIter = find(inviteList.begin(), inviteList.end(), client.getNick());
 	if (inviteIter != inviteList.end())
 		*inviteIter = newNick;
 }
+
+// 채널에 있는 클라이언트들의 fd 수집
+void Channel::fillSetWithFd(std::set<int>& set)
+{
+	std::vector<Client*>::iterator iter;
+
+	for (iter = joinList.begin(); iter != joinList.end(); iter++)
+		set.insert((*iter)->getFd());
+	for (iter = opList.begin(); iter != opList.end(); iter++)
+		set.insert((*iter)->getFd());
+}
+
 
 // 채널에 메시지 전송
 void Channel::sendToClients(std::string msg)
@@ -193,7 +207,7 @@ Channel& Channel::addChannel(std::string& channel)
 
 
 // 채널 삭제 (채널리스트에서 삭제)
-void Channel::removeChannel(std::string& channel)
+void Channel::removeChannel(std::string channel)
 {
 	std::map<std::string, Channel>& channelList = Server::getChannelList();
 
@@ -206,7 +220,10 @@ void Channel::removeChannel(std::string& channel)
 		for (int i = 0; i < static_cast<int>(name.size()); i++)
 			name[i] = tolower(name[i]);
 		if (name == channel)
+		{
 			channelList.erase(iter);
+			break ;
+		}
 	}
 }
 
