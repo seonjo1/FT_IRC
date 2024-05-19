@@ -26,10 +26,10 @@ void Executor::execute(Client& client, std::string msg)
 		else // 그 외의 명령일 경우 연결 종료
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			client.setErrflag(true);
+			client.setQuitflag(true);
 		}
 		// 클라이언트 오류시 연결 종료
-		if (client.getErrflag())
+		if (client.getQuitflag())
 			return ;
 			
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
@@ -52,6 +52,8 @@ void Executor::execute(Client& client, std::string msg)
 			PING(client, cmds);
 		else if (cmds[0] == "PART")
 			PART(client, cmds);
+		else if (cmds[0] == "QUIT")
+			QUIT(client, cmds);
 	}
 }
 
@@ -79,6 +81,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parsePING(cmds, msg);
 	else if (cmd == "PART")
 		parsePART(cmds, msg);
+	else if (cmd == "QUIT")
+		parseQUIT(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);

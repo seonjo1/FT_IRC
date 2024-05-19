@@ -28,6 +28,7 @@ private:
 	void parseJOIN(std::vector<std::string>& cmds, std::string& msg);
 	void parsePING(std::vector<std::string>& cmds, std::string& msg);
 	void parsePART(std::vector<std::string>& cmds, std::string& msg);
+	void parseQUIT(std::vector<std::string>& cmds, std::string& msg);
 
 	void PASS(Client& client, std::vector<std::string>& cmds);
 	void NICK(Client& client, std::vector<std::string>& cmds);
@@ -36,6 +37,7 @@ private:
 	void JOIN(Client& client, std::vector<std::string>& cmds);
 	void PING(Client& client, std::vector<std::string>& cmds);
 	void PART(Client& client, std::vector<std::string>& cmds);
+	void QUIT(Client& client, std::vector<std::string>& cmds);
 
 };
 
