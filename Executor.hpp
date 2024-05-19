@@ -26,12 +26,14 @@ private:
 	void parseUSER(std::vector<std::string>& cmds, std::string& msg);
 	void parsePONG(std::vector<std::string>& cmds, std::string& msg);
 	void parseJOIN(std::vector<std::string>& cmds, std::string& msg);
+	void parsePING(std::vector<std::string>& cmds, std::string& msg);
 
 	void PASS(Client& client, std::vector<std::string>& cmds);
 	void NICK(Client& client, std::vector<std::string>& cmds);
 	void USER(Client& client, std::vector<std::string>& cmds);
 	void PONG(Client& client, std::vector<std::string>& cmds);
 	void JOIN(Client& client, std::vector<std::string>& cmds);
+	void PING(Client& client, std::vector<std::string>& cmds);
 
 };
 

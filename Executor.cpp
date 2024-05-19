@@ -48,6 +48,8 @@ void Executor::execute(Client& client, std::string msg)
 			PONG(client, cmds);
 		else if (cmds[0] == "JOIN")
 			JOIN(client, cmds);
+		else if (cmds[0] == "PING")
+			PING(client, cmds);
 	}
 }
 
@@ -71,6 +73,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parsePONG(cmds, msg);
 	else if (cmd == "JOIN")
 		parseJOIN(cmds, msg);
+	else if (cmd == "PING")
+		parsePING(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);
