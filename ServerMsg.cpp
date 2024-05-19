@@ -174,3 +174,29 @@ std::string ServerMsg::PING(std::string cmd1, std::string cmd2)
 		msg = "PONG " + cmd1 + " " + cmd2 + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::NOSUCHCHANNEL(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "403 " + nick + " " + channel + " :No such channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::NOTONCHANNEL(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "442 " + nick + " " + channel + " :You're not on that channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::PART(std::string nick, std::string hostname, std::string servername,
+							std::string channel, std::string message)
+{
+	std::string msg;
+
+	if (message.size() == 0)
+		msg = ":" + nick + "!" + hostname + "@" + servername + " PART :" + channel + "\r\n";
+	else
+		msg = ":" + nick + "!" + hostname + "@" + servername + " PART " + channel + " :" + message + "\r\n";
+	return (msg);
+}
