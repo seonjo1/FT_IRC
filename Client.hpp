@@ -47,6 +47,7 @@ public:
 	// channel 함수
 	bool isClientMemberOfChannel(std::string& channel);
 	void addJoinedChannels(Channel* channel);
+	void removeJoinedChannels(Channel* channel);
 
 	// getter
 	int getFd(); // fd 전달

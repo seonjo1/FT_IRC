@@ -193,6 +193,11 @@ void Client::addJoinedChannels(Channel* channel)
 	joinedChannels.push_back(channel);
 }
 
+void Client::removeJoinedChannels(Channel* channel)
+{
+	joinedChannels.erase(find(joinedChannels.begin(), joinedChannels.end(), channel));
+}
+
 
 // getter
 bool Client::getPassFlag()
