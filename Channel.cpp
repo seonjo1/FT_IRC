@@ -12,7 +12,7 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 	if (isChannelInUse(channelName)) // 기존 채널이 있는 경우
 	{
 		// channel 찾기
-		Channel& channel = findChannel(channelName);
+		Channel& channel = getChannel(channelName);
 		
 		// key 모드인데 key가 틀린경우
 		if (channel.isKeyMode() && channel.getKey() != param)
@@ -123,7 +123,7 @@ void Channel::addNickInChannel(Client& client)
 }
 
 /*  channel 나가기 
-	but 클라이언트가 갖고 있는 joinList는 따로 삭제해야댐
+	but 클라이언트가 갖고 있는 joinChannels는 따로 삭제해야댐
 	그리고 빈방이면 채널 삭제도 따로 해야댐
 */ 
 void Channel::removeNickInChannel(Client& client)
@@ -225,7 +225,7 @@ Channel& Channel::addChannel(std::string& channel)
 {
 	std::map<std::string, Channel>& channelList = Server::getChannelList();
 	channelList.insert(std::make_pair(channel, Channel(channel)));
-	return (findChannel(channel));
+	return (getChannel(channel));
 }
 
 
@@ -251,7 +251,7 @@ void Channel::removeChannel(std::string channel)
 }
 
 // 채널 리스트에서 채널 찾아주는 함수
-Channel& Channel::findChannel(std::string& channel)
+Channel& Channel::getChannel(std::string& channel)
 {
 	std::map<std::string, Channel>& channelList = Server::getChannelList();
 
@@ -304,6 +304,16 @@ bool Channel::isInvitedClient(std::string nick)
 	return (true);
 }
 
+bool Channel::isOperator(std::string nick)
+{
+	std::vector<Client*>::iterator iter = opList.begin();
+	for (; iter != opList.end(); iter++)
+	{
+		if ((*iter)->getNick() == nick)
+			return (true);
+	}
+	return (false);
+}
 
 void Channel::removeClientFromInvitedList(std::string nick)
 {
