@@ -81,7 +81,7 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 			}
 
 			// 해당 채널에 클라이언트가 없는 경우
-			Channel& channel = Channel::findChannel(receiver);
+			Channel& channel = Channel::getChannel(receiver);
 			if (!channel.doesClientExist(client.getNick()))
 			{
 				client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
