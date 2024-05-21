@@ -47,7 +47,10 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	// PASS 등록 안된 클라이언트
 	if (!client.getPassFlag())
 	{
-		client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
+		if (client.getNickFlag())
+			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
+		else
+			client.sendMsg(ServerMsg::NOTREGISTERD(""));
 		// 연결 종료
 		std::map<int, Client>& clientList = Server::getClientList();
 		clientList.erase(client.getFd());
