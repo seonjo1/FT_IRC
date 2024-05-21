@@ -20,6 +20,7 @@ public:
 	void sendToClients(std::string msg); // 채널에 메시지 전송
 	void sendToClients(std::string msg, Client& client); // 채널에 메시지 전송 (client 제외)
 	void addNickInChannel(Client& client); // channel에 nick 추가
+	void addInviteList(std::string nick); // 초대 리스트에 클라이언트 추가
 	void removeNickInChannel(Client& client); // channel에 nick 삭제 (클라이언트가 갖고 있는 joinChannels는 따로 삭제해야되고 빈방이 될경우 채널 삭제도 따로 해야댐)
 	void changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set); // channel에 nick 변경
 	bool doesClientExist(std::string& nick); // 채널에 클라이언트 존재하는지 확인

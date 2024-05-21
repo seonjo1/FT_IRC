@@ -122,6 +122,13 @@ void Channel::addNickInChannel(Client& client)
 	client.addJoinedChannels(this);
 }
 
+// Invite List 에 클라이언트 추가
+void Channel::addInviteList(std::string nick)
+{
+	if (find(inviteList.begin(), inviteList.end(), nick) == inviteList.end())
+		inviteList.push_back(nick);
+}
+
 /*  channel 나가기 
 	but 클라이언트가 갖고 있는 joinChannels는 따로 삭제해야댐
 	그리고 빈방이면 채널 삭제도 따로 해야댐
