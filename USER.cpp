@@ -52,21 +52,27 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 		else
 			client.sendMsg(ServerMsg::NOTREGISTERD(""));
 		// 연결 종료
-		std::map<int, Client>& clientList = Server::getClientList();
-		clientList.erase(client.getFd());
+		client.setQuitFlag(true);
+		return ;
 	}
 
 	// 인자 개수가 다른 경우
 	if (cmds.size() != 5)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		if (client.getNickFlag())
+			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		else
+			client.sendMsg(ServerMsg::NEEDMOREPARAMS("", cmds[0]));
 		return ;
 	}
 
 	// 이미 user 등록이 완료된 client
 	if (client.getUserFlag())
 	{
-		client.sendMsg(ServerMsg::ALREADYREGISTER(client.getNick()));
+		if (client.getNickFlag())
+			client.sendMsg(ServerMsg::ALREADYREGISTER(client.getNick()));
+		else
+			client.sendMsg(ServerMsg::ALREADYREGISTER(""));	
 		return ;
 	}
 
