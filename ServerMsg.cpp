@@ -130,8 +130,9 @@ std::string ServerMsg::TOPIC(std::string nick, std::string channel,
 std::string ServerMsg::TOPICINFO(std::string nick, std::string channel,
 							std::string topicWriter, int time)
 {
+	std::stringstream ss;
+	ss << time;
 	std::string msg;
-	std::stringstream ss(time);
 	msg = "333 " + nick + " " + channel + " " + topicWriter + " :" + ss.str() + "\r\n";
 	return (msg);
 }
@@ -323,5 +324,27 @@ std::string ServerMsg::INVITENOTICE(std::string nick, std::string channel, std::
 {
 	std::string msg;
 	msg = "NOTICE " + channel + " :*** " + nick + " invited " + targetNick + " into the channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::NOTOPIC(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "331 " + nick + " " + channel + " :No toopic is set\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::CHANOPRIVSNEEDEDTOPICVERSION(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "482 " + nick + " " + channel + " :You do not have access to change the topic on this channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::TOPICCHANGE(std::string nick, std::string hostname, std::string servername,
+									std::string channel, std::string topic)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " TOPIC " + channel + " :" + topic + "\r\n";
 	return (msg);
 }

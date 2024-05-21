@@ -58,7 +58,11 @@ public:
 	static std::string INVITE(std::string nick, std::string targetNick, std::string channel);
 	static std::string INVITETOTARGET(std::string nick, std::string hostname, std::string servername,
 								std::string targetNick, std::string channel);
-	static std::string INVITENOTICE(std::string nick, std::string channel, std::string targetNick);	
+	static std::string INVITENOTICE(std::string nick, std::string channel, std::string targetNick);
+	static std::string NOTOPIC(std::string nick, std::string channel);
+	static std::string CHANOPRIVSNEEDEDTOPICVERSION(std::string nick, std::string channel);
+	static std::string TOPICCHANGE(std::string nick, std::string hostname, std::string servername,
+									std::string channel, std::string topic);
 };
 
 #endif
