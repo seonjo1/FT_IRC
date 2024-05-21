@@ -51,5 +51,5 @@ void Executor::QUIT(Client& client, std::vector<std::string>& cmds)
 	client.sendMsg(ServerMsg::QUITCHANNEL(client.getHostName(), client.getServerName(), cmds[1]));
 
 	// 연결 종료 플래그 on
-	client.setQuitflag(true);
+	client.setQuitFlag(true);
 }
