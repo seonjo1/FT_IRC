@@ -9,6 +9,7 @@ int main(int argc, char **argv)
 	{
 		try
 		{
+			std::cout << "/connect -nocap localhost " << argv[1] << " " << argv[2] << "\n";
 			Server server(argv[1], argv[2]);
 			server.run();
 			return (0);
