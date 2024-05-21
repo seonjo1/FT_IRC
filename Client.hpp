@@ -51,6 +51,7 @@ public:
 	void removeJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에서 제거
 
 	// getter
+	static Client& getClient(std::string& nick);
 	int getFd(); // fd 전달
 	bool getPassFlag(); // PassFlag 전달
 	bool getNickFlag(); // NickFlag 전달

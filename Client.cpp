@@ -206,6 +206,21 @@ void Client::removeJoinedChannels(Channel* channel)
 
 
 // getter
+
+Client& Client::getClient(std::string& nick)
+{
+	std::map<int, Client>& clientList = Server::getClientList();
+
+	std::map<int, Client>::iterator iter = clientList.begin();
+	for (; iter != clientList.end(); iter++)
+	{
+		if (iter->second.getNick() == nick)
+			break;
+	}
+	return (iter->second);
+}
+
+
 bool Client::getPassFlag()
 {
 	return (passFlag);
