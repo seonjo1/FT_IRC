@@ -4,6 +4,8 @@
 # include <sstream>
 # include <string>
 
+class Channel;
+
 class ServerMsg
 {
 public:
@@ -46,6 +48,8 @@ public:
 	static std::string NOSUCHNICK(std::string clientNick, std::string findNick);
 	static std::string PRIVMSG(std::string nick, std::string hostname, std::string servername,
 								std::string receiver, std::string message);
+	static std::string NAMREPLY(std::string nick, Channel& channel);
+	static std::string ENDOFNAMES(std::string nick, std::string channel);
 };
 
 #endif

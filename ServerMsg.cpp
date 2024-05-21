@@ -1,4 +1,5 @@
 #include "ServerMsg.hpp"
+#include "Channel.hpp"
 #include "Server.hpp"
 
 std::string ServerMsg::ALREADYREGISTER(std::string nick)
@@ -69,7 +70,7 @@ std::string ServerMsg::NICKCHANGE(std::string oldNick, std::string hostname,
 								  std::string servername, std::string newNick)
 {
 	std::string msg;
-	msg = ":" + oldNick + "!" + hostname + "@" + servername + " NICK " + newNick + "\r\n";
+	msg = ":" + oldNick + "!" + hostname + "@" + servername + " NICK :" + newNick + "\r\n";
 	return (msg);
 }
 
@@ -156,7 +157,6 @@ std::string ServerMsg::CHANNELISFULL(std::string nick, std::string channel)
 	return (msg);
 }
 
-
 std::string ServerMsg::JOIN(std::string nick, std::string hostname,
 						std::string servername, std::string channel)
 {
@@ -242,6 +242,35 @@ std::string ServerMsg::PRIVMSG(std::string nick, std::string hostname,
 							   std::string message)
 {
 	std::string msg;
-	msg = ":" + nick + "!" + hostname + "@" + servername + " PRIVMSG " + receiver + " :" + message;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " PRIVMSG " + receiver + " :" + message + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::NAMREPLY(std::string nick, Channel& channel)
+{
+	std::string msg;
+	msg = "353 " + nick + " = " + channel.getName() + " :";
+	
+	// operator list 명단 적기
+	std::vector<Client*>& opList = channel.getOpList();
+	int opSize = opList.size();
+	for (int i = 0; i < opSize; i++)
+		msg += "@" + opList[i]->getNick() + " ";
+	
+	// 일반 참여자 list 명단 적기
+	std::vector<Client*>& joinList = channel.getJoinList();
+	int joinSize = joinList.size();
+	for (int i = 0; i < joinSize; i++)
+		msg += joinList[i]->getNick() + " ";
+	
+	// 마지막 공백 제거하고 CRLF 추가
+	msg = msg.substr(0, msg.size() - 1);
+	msg += "\r\n";
+	return (msg);
+}
+std::string ServerMsg::ENDOFNAMES(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "366 " + nick + " " + channel + " :End of /NAMES list\r\n";
 	return (msg);
 }
