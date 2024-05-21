@@ -17,7 +17,7 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		if (!client.getPassFlag())
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			client.setQuitflag(true);
+			client.setQuitFlag(true);
 			return ;
 		}
 
