@@ -2,6 +2,15 @@
 
 #include <iostream>
 
+Server::Server(char *port, char *password)
+	: executor(password)
+{
+	// 서버 소켓 생성
+	Socket::makeServerSocket(port);
+}
+
+Server::~Server() {};
+
 // kqueue 관리 객체
 Kqueue& Server::getKq()
 {
@@ -56,15 +65,6 @@ std::string Server::getIP()
 	}
 	return (IP);
 }
-
-Server::Server(char *port, char *password)
-	: executor(password)
-{
-	// 서버 소켓 생성
-	Socket::makeServerSocket(port);
-}
-
-Server::~Server() {};
 
 void Server::print_result()
 {

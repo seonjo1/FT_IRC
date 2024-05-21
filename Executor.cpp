@@ -68,6 +68,8 @@ void Executor::execute(Client& client, std::string msg)
 			INVITE(client, cmds);
 		else if (cmds[0] == "TOPIC")
 			TOPIC(client, cmds);
+		else if (cmds[0] == "MODE")
+			MODE(client, cmds);
 	}
 }
 
@@ -105,6 +107,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parseINVITE(cmds, msg);
 	else if (cmd == "TOPIC")
 		parseTOPIC(cmds, msg);
+	else if (cmd == "MODE")
+		parseMODE(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);

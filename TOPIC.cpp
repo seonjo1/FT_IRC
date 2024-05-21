@@ -81,7 +81,7 @@ void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 	}
 
 	// 오퍼레이터가 아닐때 (권한 없을 때)
-	if (!channel.isOperator(client.getNick()))
+	if (!channel.isOperator(client.getNick()) && !channel.isTopicMode())
 	{
 		client.sendMsg(ServerMsg::CHANOPRIVSNEEDEDTOPICVERSION(client.getNick(), cmds[1]));
 		return ;

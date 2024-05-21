@@ -63,6 +63,11 @@ public:
 	static std::string CHANOPRIVSNEEDEDTOPICVERSION(std::string nick, std::string channel);
 	static std::string TOPICCHANGE(std::string nick, std::string hostname, std::string servername,
 									std::string channel, std::string topic);
+	static std::string CHANOPRIVSNEEDEDMODEVERSION(std::string nick, std::string channel, char mode);
+	static std::string UNKNOWNMODE(std::string nick, char mode);
+	static std::string CHANNELMODEIS(std::string nick, std::string channel, std::string modeInfo);
+	static std::string CHANNELINFO(std::string nick, std::string channel, int channelCreatedTime);
+
 };
 
 #endif

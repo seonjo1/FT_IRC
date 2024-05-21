@@ -348,3 +348,33 @@ std::string ServerMsg::TOPICCHANGE(std::string nick, std::string hostname, std::
 	msg = ":" + nick + "!" + hostname + "@" + servername + " TOPIC " + channel + " :" + topic + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::CHANOPRIVSNEEDEDMODEVERSION(std::string nick, std::string channel, char mode)
+{
+	std::string msg;
+	msg = "482 " + nick + " " + channel + " :You must have channel op access or above to set channel mode " + mode + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::UNKNOWNMODE(std::string nick, char mode)
+{
+	std::string msg;
+	msg = "472 " + nick + " " + mode + " :is an unknown mode character\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::CHANNELMODEIS(std::string nick, std::string channel, std::string modeInfo)
+{
+	std::string msg;
+	msg = "324 " + nick + " " + channel + " " + modeInfo + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::CHANNELINFO(std::string nick, std::string channel, int channelCreatedTime)
+{
+	std::stringstream ss;
+	ss << channelCreatedTime;
+	std::string msg;
+	msg = "329 " + nick + " " + channel + " :" + ss.str() + "\r\n";
+	return (msg);
+}

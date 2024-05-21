@@ -7,7 +7,8 @@ BASE		:=	main Server Socket Client Executor \
 				Kqueue Message Utils Channel ServerMsg \
 				PASS NICK USER PONG \
 				JOIN PING PART QUIT \
-				PRIVMSG KICK INVITE TOPIC
+				PRIVMSG KICK INVITE \
+				TOPIC MODE
 SRC			:=	$(addprefix $(DIR), $(addsuffix .cpp, $(BASE)))
 OBJ			:=	$(addprefix $(DIR), $(addsuffix .o, $(BASE)))
 

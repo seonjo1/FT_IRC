@@ -3,7 +3,9 @@
 
 # include <cctype>
 # include <stdexcept>
+# include <string>
 
-int	irc_atoi(char *str);
+int	socket_atoi(char *str);
+int	irc_atoi(std::string str);
 
 #endif

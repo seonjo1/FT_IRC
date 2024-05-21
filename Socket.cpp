@@ -14,7 +14,7 @@ void Socket::makeServerSocket(char *port)
 	// 서버 소켓 정보 구조체에 저장
 	struct sockaddr_in servAddr;
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(irc_atoi(port));
+	servAddr.sin_port = htons(socket_atoi(port));
 	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	// 소켓 바인드
