@@ -6,6 +6,8 @@ void Executor::parseUSER(std::vector<std::string>& cmds, std::string& msg)
 	int size = msg.size();
 	int argNum = 0;
 	int i = 0;
+
+	// 공백 기준으로 앞에 인자 4개 구분
 	while (1)
 	{
 		if (argNum == 4 || i == size) break;
@@ -21,10 +23,23 @@ void Executor::parseUSER(std::vector<std::string>& cmds, std::string& msg)
 		}
 	}
 
-	while (i < size && msg[i] != ':')
+	// 5번째 인자는 ':'으로 시작하면 인정
+	while(i < size && msg[i] != ':')
+	{
+		// 5번째 인자가 ':'으로 시작안하는 애면 오류
+		if (msg[i] != ' ')
+		{
+			cmds.push_back("error");
+			cmds.push_back("error");
+			return ;
+		}
 		i++;
-	if (++i != size)
+	}
+
+	// 5번째 인자 추가
+	if (++i < size)
 		cmds.push_back(msg.substr(i));
+
 }
 
 void Executor::USER(Client& client, std::vector<std::string>& cmds)
@@ -39,7 +54,7 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	}
 
 	// 인자 개수가 다른 경우
-	if (cmds.size() < 5)
+	if (cmds.size() != 5)
 	{
 		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
