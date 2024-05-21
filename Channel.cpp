@@ -349,6 +349,12 @@ int Channel::getSize()
 	return (joinList.size() + opList.size());
 }
 
+bool Channel::getTopicFlag()
+{
+	return (topicFlag);
+}
+
+
 std::string Channel::getTopic()
 {
 	return (topic);
@@ -381,10 +387,10 @@ std::vector<std::string>& Channel::getInviteList()
 
 
 // setter
-void Channel::setTopic(Client& client, std::string topic)
+void Channel::setTopic(std::string nick, std::string topic)
 {
 	topicFlag = true;
 	this->topic = topic;
-	topicWriter = client.getNick();
+	topicWriter = nick;
 	timeTopicWasWritten = time(0);
 }

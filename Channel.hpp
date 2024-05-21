@@ -39,6 +39,7 @@ public:
 	int getSize();
 	int getLimit();
 	int	getTopicTime();
+	bool getTopicFlag();
 	std::string getKey();
 	std::string getName();
 	std::string getTopic();
@@ -49,7 +50,7 @@ public:
 
 
 	// setter
-	void setTopic(Client& client, std::string topic);
+	void setTopic(std::string nick, std::string topic);
 
 private:
 // 변수
