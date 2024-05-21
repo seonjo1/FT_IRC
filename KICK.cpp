@@ -104,4 +104,8 @@ void Executor::KICK(Client& client, std::vector<std::string>& cmds)
 
 	// 클라이언트 채널 리스트에서 채널 제거
 	beKickedClient.removeJoinedChannels(&channel);
+
+	// 만약 채널에 아무도 없으면 채널 제거
+	if (channel.getSize() == 0)
+		Channel::removeChannel(channel.getName());
 }
