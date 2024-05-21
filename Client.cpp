@@ -5,7 +5,8 @@
 #include <iostream>
 
 Client::Client(int fd)
-	: msg(fd), fd(fd), origin(false), quitFlag(false) {};
+	: msg(fd), fd(fd), origin(false), passFlag(false), nickFlag(false),
+		userFlag(false), quitFlag(false), registerFlag(false) {};
 
 Client::~Client()
 {
@@ -309,11 +310,12 @@ void Client::setOrigin(bool sign)
 	origin = sign;
 }
 
-void Client::setQuitflag(bool sign)
+void Client::setQuitFlag(bool sign)
 {
 	quitFlag = sign;
 }
 
+// 연산자
 
 bool Client::operator==(const Client& rhs)
 {

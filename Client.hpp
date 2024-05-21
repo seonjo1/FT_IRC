@@ -72,7 +72,7 @@ public:
 				 std::string& servername,
 				 std::string& realname);
 	void setOrigin(bool sign);
-	void setQuitflag(bool sign);
+	void setQuitFlag(bool sign);
 
 	// 연산자
 	bool operator==(const Client& rhs);
@@ -83,12 +83,12 @@ private:
 	std::string nickname; // nickname
 	std::vector<Channel*> joinedChannels; // client가 가입한 channel 모음
 	int fd; // 클라이언트와 연결된 소켓
+	bool origin; // 원본 클라이언트 여부
 	bool passFlag; // PASS 명령어 완료 여부
 	bool nickFlag; // NICK 명령어 완료 여부
 	bool userFlag; // USER 명령어 완료 여부
-	bool registerFlag; // register 여부
-	bool origin; // 원본 클라이언트 여부
 	bool quitFlag; // 클라이언트 종료 여부
+	bool registerFlag; // register 여부
 };
 
 #endif
