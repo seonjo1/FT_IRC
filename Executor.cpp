@@ -66,6 +66,8 @@ void Executor::execute(Client& client, std::string msg)
 			KICK(client, cmds);
 		else if (cmds[0] == "INVITE")
 			INVITE(client, cmds);
+		else if (cmds[0] == "TOPIC")
+			TOPIC(client, cmds);
 	}
 }
 
@@ -101,6 +103,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parseKICK(cmds, msg);
 	else if (cmd == "INVITE")
 		parseINVITE(cmds, msg);
+	else if (cmd == "TOPIC")
+		parseTOPIC(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);
