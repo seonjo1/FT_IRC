@@ -29,12 +29,20 @@ void Executor::execute(Client& client, std::string msg)
 			client.setQuitFlag(true);
 		}
 		// 클라이언트 오류시 연결 종료
-		if (client.getQuitflag())
+		if (client.getQuitFlag())
 			return ;
 			
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
+		{
 			client.sendMsg(ServerMsg::PINGMSG(Server::getIP()));
+			client.setConnectFlag(true);
+		}
+	}
+	else if (!client.getConnectFlag())
+	{
+		if (cmds[0] == "PONG")
+			PONG(client, cmds);
 	}
 	else
 	{
@@ -44,8 +52,6 @@ void Executor::execute(Client& client, std::string msg)
 			NICK(client, cmds);
 		else if (cmds[0] == "USER")
 			USER(client, cmds);
-		else if (cmds[0] == "PONG")
-			PONG(client, cmds);
 		else if (cmds[0] == "JOIN")
 			JOIN(client, cmds);
 		else if (cmds[0] == "PING")
