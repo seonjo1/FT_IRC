@@ -30,7 +30,7 @@ void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 	if (cmds[1] != password)
 	{
 		client.sendMsg(ServerMsg::PASSWDMISMATCH());
-		client.setQuitflag(true);
+		client.setQuitFlag(true);
 		return ;
 	}
 
