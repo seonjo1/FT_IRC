@@ -38,6 +38,10 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		// 채널에 참여
 		channel.addNickInChannel(client);
 
+		// 채널에 모든이들에게 join 메시지전송
+		channel.sendToClients(ServerMsg::JOIN(client.getNick(), client.getHostName(),
+											client.getServerName(), channel.getName()));
+		
 		// 토픽확인하고 참가자에게 토픽 메시지 전송
 		if (channel.doesTopicExist())
 		{
@@ -46,9 +50,9 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 												channel.getTopicWriter(), channel.getTopicTime()));
 		}
 
-		// 채널에 모든이들에게 join 메시지전송
-		channel.sendToClients(ServerMsg::JOIN(client.getNick(), client.getHostName(),
-											client.getServerName(), channel.getName()));
+		// 참가자 리스트 전송
+		client.sendMsg(ServerMsg::NAMREPLY(client.getNick(), channel));
+		client.sendMsg(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
 	}
 	else // 채널이 없어서 만들어야하는 경우
 	{
@@ -60,7 +64,10 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		// join 메시지전송
 		client.sendMsg(ServerMsg::JOIN(client.getNick(), client.getHostName(),
 									 client.getServerName(), channel.getName()));
-	
+
+		// 참가자 리스트 전송
+		client.sendMsg(ServerMsg::NAMREPLY(client.getNick(), channel));
+		client.sendMsg(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
 	}
 }
 
@@ -137,16 +144,6 @@ void Channel::removeNickInChannel(Client& client)
 // channel nick 변경
 void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set)
 {
-	// joinList에 있는 nick 변경
-	std::vector<Client*>::iterator iter = find(joinList.begin(), joinList.end(), &client);
-	if (iter != joinList.end())
-		(*iter)->setNick(newNick);
-	
-	// opList에 있는 nick 변경
-	iter = find(opList.begin(), opList.end(), &client);
-	if (iter != opList.end())
-		(*iter)->setNick(newNick);
-
 	// joinList와 opList에 있는 클라이언트들의 fd 수집
 	fillSetWithFd(set);
 
