@@ -296,3 +296,32 @@ std::string ServerMsg::KICK(std::string nick, std::string hostname, std::string 
 	msg = ":" + nick + "!" + hostname + "@" + servername + " KICK " + channel + " " + targetNick + " :" + message + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::USERONCHANNEL(std::string nick, std::string user, std::string channel)
+{
+	std::string msg;
+	msg = "443 " + nick + " " + user + " " + channel + " :is already on channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::INVITE(std::string nick, std::string targetNick, std::string channel)
+{
+	std::string msg;
+	msg = "341 " + nick + " " + targetNick + " :" + channel + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::INVITETOTARGET(std::string nick, std::string hostname, std::string servername,
+									std::string targetNick, std::string channel)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " INVITE " + targetNick + " :" + channel + "\r\n";
+	return (msg); 
+}
+
+std::string ServerMsg::INVITENOTICE(std::string nick, std::string channel, std::string targetNick)
+{
+	std::string msg;
+	msg = "NOTICE " + channel + " :*** " + nick + " invited " + targetNick + " into the channel\r\n";
+	return (msg);
+}
