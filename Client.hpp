@@ -56,7 +56,8 @@ public:
 	bool getPassFlag(); // PassFlag 전달
 	bool getNickFlag(); // NickFlag 전달
 	bool getUserFlag(); // UserFlag 전달
-	bool getQuitflag(); // QuitFlag 전달
+	bool getQuitFlag(); // QuitFlag 전달
+	bool getConnectFlag(); // ConnectFlag 전달
 	std::string getHostName(); // hostname 전달
 	std::string getServerName(); // servername 전달
 	std::string& getNick(); // nickname 전달
@@ -73,6 +74,7 @@ public:
 				 std::string& realname);
 	void setOrigin(bool sign);
 	void setQuitFlag(bool sign);
+	void setConnectFlag(bool sign);
 
 	// 연산자
 	bool operator==(const Client& rhs);
@@ -88,6 +90,7 @@ private:
 	bool nickFlag; // NICK 명령어 완료 여부
 	bool userFlag; // USER 명령어 완료 여부
 	bool quitFlag; // 클라이언트 종료 여부
+	bool connectFlag; // 클라이언트 종료 여부
 	bool registerFlag; // register 여부
 };
 

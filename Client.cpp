@@ -6,7 +6,7 @@
 
 Client::Client(int fd)
 	: msg(fd), fd(fd), origin(false), passFlag(false), nickFlag(false),
-		userFlag(false), quitFlag(false), registerFlag(false) {};
+		userFlag(false), quitFlag(false), connectFlag(false), registerFlag(false) {};
 
 Client::~Client()
 {
@@ -257,9 +257,14 @@ std::string Client::getServerName()
 	return (data.servername);
 }
 
-bool Client::getQuitflag()
+bool Client::getQuitFlag()
 {
 	return (quitFlag);
+}
+
+bool Client::getConnectFlag()
+{
+	return (connectFlag);
 }
 
 std::vector<Channel*>& Client::getJoinedChannels()
@@ -314,6 +319,12 @@ void Client::setQuitFlag(bool sign)
 {
 	quitFlag = sign;
 }
+
+void Client::setConnectFlag(bool sign)
+{
+	connectFlag = sign;
+}
+
 
 // 연산자
 
