@@ -76,7 +76,7 @@ void Executor::PART(Client& client, std::vector<std::string>& cmds)
 		}
 
 		// 내가 해당 채널에 없는 경우
-		Channel& channel = Channel::findChannel(room);
+		Channel& channel = Channel::getChannel(room);
 		if (!channel.doesClientExist(client.getNick()))
 		{
 			client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
