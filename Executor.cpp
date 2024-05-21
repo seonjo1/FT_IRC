@@ -26,7 +26,7 @@ void Executor::execute(Client& client, std::string msg)
 		else // 그 외의 명령일 경우 연결 종료
 		{
 			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
-			client.setQuitflag(true);
+			client.setQuitFlag(true);
 		}
 		// 클라이언트 오류시 연결 종료
 		if (client.getQuitflag())
