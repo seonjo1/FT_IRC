@@ -64,6 +64,8 @@ void Executor::execute(Client& client, std::string msg)
 			PRIVMSG(client, cmds);
 		else if (cmds[0] == "KICK")
 			KICK(client, cmds);
+		else if (cmds[0] == "INVITE")
+			INVITE(client, cmds);
 	}
 }
 
@@ -97,6 +99,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parsePRIVMSG(cmds, msg);
 	else if (cmd == "KICK")
 		parseKICK(cmds, msg);
+	else if (cmd == "INVITE")
+		parseINVITE(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);

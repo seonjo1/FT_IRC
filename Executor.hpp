@@ -31,6 +31,7 @@ private:
 	void parseQUIT(std::vector<std::string>& cmds, std::string& msg);
 	void parsePRIVMSG(std::vector<std::string>& cmds, std::string& msg);
 	void parseKICK(std::vector<std::string>& cmds, std::string& msg);
+	void parseINVITE(std::vector<std::string>& cmds, std::string& msg);
 
 	void PASS(Client& client, std::vector<std::string>& cmds);
 	void NICK(Client& client, std::vector<std::string>& cmds);
@@ -42,6 +43,7 @@ private:
 	void QUIT(Client& client, std::vector<std::string>& cmds);
 	void PRIVMSG(Client& client, std::vector<std::string>& cmds);
 	void KICK(Client& client, std::vector<std::string>& cmds);
+	void INVITE(Client& client, std::vector<std::string>& cmds);
 
 };
 
