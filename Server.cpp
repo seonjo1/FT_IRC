@@ -139,7 +139,7 @@ void Server::receiveClientRequest(int fd)
 		{
 			executor.execute(client, client.getCmd());
 			print_result();
-			if (client.getQuitflag())
+			if (client.getQuitFlag())
 				break;
 		}
 		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
