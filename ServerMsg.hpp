@@ -50,6 +50,10 @@ public:
 								std::string receiver, std::string message);
 	static std::string NAMREPLY(std::string nick, Channel& channel);
 	static std::string ENDOFNAMES(std::string nick, std::string channel);
+	static std::string USERNOTINCHANNEL(std::string nick, std::string targetNick, std::string channel);
+	static std::string CHANOPRIVSNEEDED(std::string nick, std::string channel);
+	static std::string KICK(std::string nick, std::string hostname, std::string servername,
+							std::string channel, std::string targetNick, std::string message);
 };
 
 #endif

@@ -274,3 +274,25 @@ std::string ServerMsg::ENDOFNAMES(std::string nick, std::string channel)
 	msg = "366 " + nick + " " + channel + " :End of /NAMES list\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::USERNOTINCHANNEL(std::string nick, std::string targetNick, std::string channel)
+{
+	std::string msg;
+	msg = "441 " + nick + " " + targetNick + " " + channel + " :They are not on that channel\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::CHANOPRIVSNEEDED(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "482 " + nick + " " + channel + " :You must be a channel operator\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::KICK(std::string nick, std::string hostname, std::string servername,
+							std::string channel, std::string targetNick, std::string message)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " KICK " + channel + " " + targetNick + " :" + msg + "\r\n";
+	return (msg);
+}
