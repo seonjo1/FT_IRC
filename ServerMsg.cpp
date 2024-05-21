@@ -293,6 +293,6 @@ std::string ServerMsg::KICK(std::string nick, std::string hostname, std::string 
 							std::string channel, std::string targetNick, std::string message)
 {
 	std::string msg;
-	msg = ":" + nick + "!" + hostname + "@" + servername + " KICK " + channel + " " + targetNick + " :" + msg + "\r\n";
+	msg = ":" + nick + "!" + hostname + "@" + servername + " KICK " + channel + " " + targetNick + " :" + message + "\r\n";
 	return (msg);
 }
