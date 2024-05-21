@@ -29,7 +29,7 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		}
 
 		// 풀방 확인
-		if (channel.isLimitMode() && channel.getLimit() <= channel.getSize())
+		if (channel.isLimitMode() && irc_atoi(channel.getLimit()) <= channel.getSize())
 		{
 			client.sendMsg(ServerMsg::CHANNELISFULL(client.getNick(), channel.getName()));
 			return ;
@@ -299,6 +299,14 @@ bool Channel::isLimitMode()
 	return (false);
 }
 
+bool Channel::isTopicMode()
+{
+	if (mode.find("t") != std::string::npos)
+		return (true);
+	return (false);
+}
+
+
 bool Channel::doesTopicExist()
 {
 	return (topicFlag);
@@ -339,21 +347,31 @@ std::string Channel::getKey()
 	return (key);
 }
 
-int Channel::getLimit()
-{
-	return (limit);
-}
-
 int Channel::getSize()
 {
 	return (joinList.size() + opList.size());
 }
+
+int	Channel::getTopicTime()
+{
+	return (timeTopicWasWritten);
+}
+
+int Channel::getCreatedTime()
+{
+	return (timeChannelWasCreated);
+}
+
 
 bool Channel::getTopicFlag()
 {
 	return (topicFlag);
 }
 
+std::string Channel::getLimit()
+{
+	return (limit);
+}
 
 std::string Channel::getTopic()
 {
@@ -363,11 +381,6 @@ std::string Channel::getTopic()
 std::string Channel::getTopicWriter()
 {
 	return (topicWriter);
-}
-
-int	Channel::getTopicTime()
-{
-	return (timeTopicWasWritten);
 }
 
 std::vector<Client*>& Channel::getJoinList()
@@ -385,6 +398,40 @@ std::vector<std::string>& Channel::getInviteList()
 	return (inviteList);
 }
 
+std::string Channel::getModeInfo(std::string nick)
+{
+	// mode + 요소 modeInfo에 저장
+	std::string modeInfo("+" + mode);
+
+	// 만약 parma을 갖는 요소가 있으면 따로 저장
+	std::vector<std::string> v;
+	int size = mode.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (mode[i] == 'k')
+		{
+			if (doesClientExist(nick))
+				v.push_back(key);
+			else
+				v.push_back("<key>");
+		}
+		else if (mode[i] == 'l')
+			v.push_back(limit);
+	}
+
+	// modeInfo에 param들 순서대로 저장 (마지막 요소는 ':'를 붙여서 저장)
+	size = v.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (i == size - 1)
+			modeInfo += " :" + v[i];
+		else
+			modeInfo += " " + v[i];
+	}
+
+	// modeInfo를 반환
+	return (modeInfo);
+}
 
 // setter
 void Channel::setTopic(std::string nick, std::string topic)
@@ -394,3 +441,48 @@ void Channel::setTopic(std::string nick, std::string topic)
 	topicWriter = nick;
 	timeTopicWasWritten = time(0);
 }
+
+void Channel::setInviteMode(bool sign)
+{
+	if (sign) // +i
+		mode += "i";
+	else //-i
+		mode.erase(mode.find("i"), 1);
+}
+
+// void Channel::setTopicMode(bool sign)
+// {
+// 	if (sign) // +t
+// 		mode += "t";
+// 	else //-t
+// 		mode.erase(mode.find("t"), 1);
+// }
+
+// void Channel::setKeyMode(bool sign, std::string key)
+// {
+// 	if (sign) // +k
+// 	{
+// 		mode += "k";
+// 		this->key = key;
+// 	}
+// 	else //-k
+// 		mode.erase(mode.find("k"), 1);
+// }
+
+// void Channel::setLimitMode(bool sign, int limit)
+// {
+// 	if (sign) // +l
+// 	{
+// 		mode += "l";
+// 	}
+// 	else //-l
+// 		mode.erase(mode.find("l"), 1);
+// }
+
+// void Channel::setOperatorMode(bool sign)
+// {
+// 	if (sign) // +o
+// 		mode += "o";
+// 	else //-o
+// 		mode.erase(mode.find("o"), 1);
+// }

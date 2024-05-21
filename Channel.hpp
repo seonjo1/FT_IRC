@@ -28,6 +28,7 @@ public:
 	// mode 함수
 	bool isKeyMode();
 	bool isLimitMode();
+	bool isTopicMode();
 	bool isInviteMode();
 	bool doesTopicExist();
 	bool isInvitedClient(std::string nick);
@@ -37,13 +38,15 @@ public:
 	// getter
 	static Channel& getChannel(std::string& channel); // 채널 찾아서 반환
 	int getSize();
-	int getLimit();
 	int	getTopicTime();
+	int getCreatedTime();
 	bool getTopicFlag();
 	std::string getKey();
 	std::string getName();
+	std::string getLimit();
 	std::string getTopic();
 	std::string getTopicWriter();
+	std::string getModeInfo(std::string nick);
 	std::vector<Client*>& getOpList();
 	std::vector<Client*>& getJoinList();
 	std::vector<std::string>& getInviteList();
@@ -51,6 +54,11 @@ public:
 
 	// setter
 	void setTopic(std::string nick, std::string topic);
+	void setInviteMode(bool sign);
+	void setTopicMode(bool sign);
+	void setKeyMode(bool sign);
+	void setLimitMode(bool sign);
+	void setOperatorMode(bool sign);
 
 private:
 // 변수
@@ -70,10 +78,7 @@ private:
 		
 	std::string key;// 채널 key
 
-	int limit;// limit
-
-// 함수
-	void setMode(std::string& cmd);
+	std::string limit;// limit
 
 };
 
