@@ -34,15 +34,15 @@ void Executor::execute(Client& client, std::string msg)
 			
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
-		{
 			client.sendMsg(ServerMsg::PINGMSG(Server::getIP()));
-			client.setConnectFlag(true);
-		}
 	}
 	else if (!client.getConnectFlag())
 	{
 		if (cmds[0] == "PONG")
+		{
 			PONG(client, cmds);
+			client.setConnectFlag(true);
+		}
 	}
 	else
 	{
