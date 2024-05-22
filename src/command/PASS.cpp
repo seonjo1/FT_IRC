@@ -9,7 +9,6 @@ void Executor::parsePASS(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(cmd);
 }
 
-
 void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 {
 	// 이미 PASS 인증이 끝난 유저

@@ -115,18 +115,10 @@ void Channel::addNickInChannel(Client& client)
 		opList.push_back(&client);
 	else
 		joinList.push_back(&client);
-	std::vector<std::string>::iterator iter = find(inviteList.begin(), inviteList.end(), client.getNick());
-	if (iter != inviteList.end())
-		inviteList.erase(iter);
+
+	removeFromInvitedList(client.getNick());
 	
 	client.addJoinedChannels(this);
-}
-
-// Invite List 에 클라이언트 추가
-void Channel::addInviteList(std::string nick)
-{
-	if (find(inviteList.begin(), inviteList.end(), nick) == inviteList.end())
-		inviteList.push_back(nick);
 }
 
 /*  channel 나가기 
@@ -351,9 +343,19 @@ bool Channel::isOperator(std::string nick)
 	return (false);
 }
 
-void Channel::removeClientFromInvitedList(std::string nick)
+// Invite List 에 클라이언트 추가
+void Channel::addToInviteList(std::string nick)
 {
-	inviteList.erase(find(inviteList.begin(), inviteList.end(), nick));
+	if (find(inviteList.begin(), inviteList.end(), nick) == inviteList.end())
+		inviteList.push_back(nick);
+}
+
+// Invite List 에서 클라이언트 삭제
+void Channel::removeFromInvitedList(std::string nick)
+{	
+	std::vector<std::string>::iterator iter = find(inviteList.begin(), inviteList.end(), nick);
+	if (iter != inviteList.end())
+		inviteList.erase(iter);
 }
 
 

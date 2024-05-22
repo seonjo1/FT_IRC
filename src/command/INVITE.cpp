@@ -55,7 +55,7 @@ void Executor::INVITE(Client& client, std::vector<std::string>& cmds)
 	}
 
 	// 초대 리스트에 추가
-	channel.addInviteList(cmds[1]);
+	channel.addToInviteList(cmds[1]);
 
 	// 초대한 클라이언트에게 초대 완료 알림
 	client.sendMsg(ServerMsg::INVITE(client.getNick(), cmds[1], cmds[2]));
