@@ -12,7 +12,7 @@ void Executor::parseINVITE(std::vector<std::string>& cmds, std::string& msg)
 void Executor::INVITE(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 검사
-	if (cmds.size() != 3)
+	if (cmds.size() < 3)
 	{
 		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
