@@ -5,6 +5,7 @@
 
 # include "Client.hpp"
 # include "../utils/Kqueue.hpp"
+# include "../utils/Bot.hpp"
 
 class Executor
 {

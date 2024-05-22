@@ -70,6 +70,8 @@ void Executor::execute(Client& client, std::string msg)
 			TOPIC(client, cmds);
 		else if (cmds[0] == "MODE")
 			MODE(client, cmds);
+		else if (cmds[0] == "BOT")
+			Bot::BOT(client, cmds);
 	}
 }
 
@@ -109,6 +111,8 @@ std::vector<std::string> Executor::parseMsg(std::string &msg)
 		parseTOPIC(cmds, msg);
 	else if (cmd == "MODE")
 		parseMODE(cmds, msg);
+	else if (cmd == "BOT")
+		Bot::parseBOT(cmds, msg);
 	else
 		cmds.push_back(msg);
 	return (cmds);
