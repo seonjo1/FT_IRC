@@ -23,21 +23,16 @@ void Executor::parsePONG(std::vector<std::string>& cmds, std::string& msg)
 		}
 	}
 
-	// 3번째 인자는 ':'으로 시작하면 인정
-	while(i < size && msg[i] != ':')
-	{
-		// 3번째 인자가 ':'으로 시작안하는 애면 오류
-		if (msg[i] != ' ')
-		{
-			cmds.push_back("error");
-			cmds.push_back("error");
-			return ;
-		}
+	// 공백 다 pass
+	while(i < size && msg[i] == ' ')
 		i++;
-	}
 
-	// 3번째 인자 추가
-	if (++i < size)
+	// ':'가 있으면 index 1 증가
+	if (i < size && msg[i] == ':')
+		i++;
+	
+	// 뒤에 내용이 있는경우 한번에 담기
+	if (i < size)
 		cmds.push_back(msg.substr(i));
 }
 
@@ -47,7 +42,7 @@ void Executor::PONG(Client& client, std::vector<std::string>& cmds)
 		client.sendMsg(ServerMsg::NOORIGIN(client.getNick()));
 	else if (cmds[1] != Server::getIP()) // 서버 IP 답장이 틀림
 		client.sendMsg(ServerMsg::NOSUCHSERVER(client.getNick(), cmds[1]));
-	else if (cmds.size() < 4)
+	else
 	{
 		// 연결 성공했으므로 welcome msg 전송
 		client.sendMsg(ServerMsg::WELCOME(client.getNick(), client.getHostName(), client.getServerName()));
