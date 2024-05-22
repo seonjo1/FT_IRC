@@ -13,7 +13,7 @@ void Executor::JOIN(Client& client, std::vector<std::string>& cmds)
 {
 
 	// 매개변수가 부족한 경우
-	if (cmds.size() == 1)
+	if (cmds.size() < 2)
 	{
 		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
