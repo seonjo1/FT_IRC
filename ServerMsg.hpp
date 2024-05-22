@@ -67,7 +67,13 @@ public:
 	static std::string UNKNOWNMODE(std::string nick, char mode);
 	static std::string CHANNELMODEIS(std::string nick, std::string channel, std::string modeInfo);
 	static std::string CHANNELINFO(std::string nick, std::string channel, int channelCreatedTime);
-
+	static std::string KEYMODENOPARAM(std::string nick, std::string channel);
+	static std::string LIMITMODENOPARAM(std::string nick, std::string channel);
+	static std::string OPMODENOPARAM(std::string nick, std::string channel);
+	static std::string UNKNOWNMODEKEY(std::string nick);
+	static std::string UNKNOWNMODELIMIT(std::string nick);
+	static std::string MODE(std::string nick, std::string hostname, std::string servername,
+							std::string channel, std::string modeInfo);
 };
 
 #endif

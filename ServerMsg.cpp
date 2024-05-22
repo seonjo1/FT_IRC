@@ -378,3 +378,46 @@ std::string ServerMsg::CHANNELINFO(std::string nick, std::string channel, int ch
 	msg = "329 " + nick + " " + channel + " :" + ss.str() + "\r\n";
 	return (msg);
 }
+
+std::string ServerMsg::KEYMODENOPARAM(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "696 " + nick + " " + channel + " k * :You must specify a parameter for the key mode. Syntax: <key>.\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::LIMITMODENOPARAM(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "696 " + nick + " " + channel + " l * :You must specify a parameter for the limit mode. Syntax: <limit>.\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::OPMODENOPARAM(std::string nick, std::string channel)
+{
+	std::string msg;
+	msg = "696 " + nick + " " + channel + " o * :You must specify a parameter for the op mode. Syntax: <nick>.\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::UNKNOWNMODEKEY(std::string nick)
+{
+	std::string msg;
+	msg = "472 " + nick + " :Invalid key\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::UNKNOWNMODELIMIT(std::string nick)
+{
+	std::string msg;
+	msg = "472 " + nick + " :Invalild limit\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::MODE(std::string nick, std::string hostname, std::string servername,
+							std::string channel, std::string modeInfo)
+{
+	std::string msg;
+	msg = ":" + nick + "!" + hostname + "@" + servername + " MODE " + channel + " " + modeInfo + "\r\n";
+	return (msg);
+}
