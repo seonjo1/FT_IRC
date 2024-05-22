@@ -103,7 +103,8 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 			}
 			
 			// 메시지 전달
-			client.sendMsg(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
+			Client& toClient = Client::getClient(receiver);
+			toClient.sendMsg(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
 											client.getServerName(), receiver, cmds[2]));
 		}
 	}
