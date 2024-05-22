@@ -179,19 +179,18 @@ void operatorMode(Client& client, Channel& channel, char sign, std::string param
 	}
 
 	// 없는 nick
-	if (Client::isNicknameInUse(param))
+	if (!Client::isNicknameInUse(param))
 	{
 		client.sendMsg(ServerMsg::NOSUCHNICK(client.getNick(), param));
 		return ;
 	}
 
 	// 채널에 없는 nick
-	if (channel.doesClientExist(param))
+	if (!channel.doesClientExist(param))
 	{
 		return ;
 	}
 
-	// 틀린 인자 처리 (명령어 별로)
 	if (sign == '+')
 	{
 		// 이미 +o 이면 return;
@@ -314,10 +313,10 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 			tokenMode(channel, mode[0], msgVector, plus);
 		else if (mode[1] == 'k') // key mode
 			keyMode(client, channel, mode[0], param, msgVector, plus);
-		else if (mode[1] == 'o') // operator mode
-			operatorMode(client, channel, mode[0], param, msgVector, plus);
 		else if (mode[1] == 'l') // limit mode
 			limitMode(client, channel, mode[0], param, msgVector, plus);
+		else if (mode[1] == 'o') // operator mode
+			operatorMode(client, channel, mode[0], param, msgVector, plus);
 	}
 
 	// 메시지가 있으면 전송

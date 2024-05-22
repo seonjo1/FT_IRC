@@ -513,6 +513,7 @@ void Channel::setOPMode(bool sign, std::string nick)
 			{
 				opList.push_back(*iter);
 				joinList.erase(iter);
+				break ;
 			}
 		}
 	}
@@ -525,6 +526,7 @@ void Channel::setOPMode(bool sign, std::string nick)
 			{
 				joinList.push_back(*iter);
 				opList.erase(iter);
+				break ;
 			}
 		}
 	}
