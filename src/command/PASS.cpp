@@ -20,7 +20,7 @@ void Executor::PASS(Client& client, std::vector<std::string>& cmds)
 	}
 	
 	// 인자 개수가 틀린 경우
-	if (cmds.size() != 2)
+	if (cmds.size() < 2)
 	{
 		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
