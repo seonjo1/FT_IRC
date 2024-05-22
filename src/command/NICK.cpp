@@ -27,13 +27,6 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
-		
-		// 인자 개수가 다른 경우
-		if (cmds.size() != 2)
-		{
-			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
-			return ;
-		}
 
 		// 유효하지 않은 nickname
 		if (Client::isInvalidNick(cmds[1]))
@@ -59,11 +52,6 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		if (cmds.size() == 1)
 		{
 			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
-			return ;
-		}
-		else if (cmds.size() != 2)
-		{
-			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 			return ;
 		}
 
