@@ -2,15 +2,26 @@ NAME		:=	ircserv
 CPP			:=	c++
 WFLAG		:=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
-DIR			:=	./
-BASE		:=	main Server Socket Client Executor \
-				Kqueue Message Utils Channel ServerMsg \
-				PASS NICK USER PONG \
-				JOIN PING PART QUIT \
-				PRIVMSG KICK INVITE \
-				TOPIC MODE
-SRC			:=	$(addprefix $(DIR), $(addsuffix .cpp, $(BASE)))
-OBJ			:=	$(addprefix $(DIR), $(addsuffix .o, $(BASE)))
+COREDIR			:=	./src/core/
+COREBASE		:=	main Server Client Executor Channel
+
+UTILSDIR		:= ./src/utils/
+UTILSBASE		:=	Kqueue Message Utils Socket ServerMsg
+
+CMDDIR			:= ./src/command/
+CMDBASE			:= 	PASS NICK USER PONG \
+					JOIN PING PART QUIT \
+					PRIVMSG KICK INVITE \
+					TOPIC MODE
+
+SRC			:=	$(addprefix $(COREDIR), $(addsuffix .cpp, $(COREBASE))) \
+				$(addprefix $(UTILSDIR), $(addsuffix .cpp, $(UTILSBASE))) \
+				$(addprefix $(CMDDIR), $(addsuffix .cpp, $(CMDBASE)))
+
+OBJ			:=	$(addprefix $(COREDIR), $(addsuffix .o, $(COREBASE))) \
+				$(addprefix $(UTILSDIR), $(addsuffix .o, $(UTILSBASE))) \
+				$(addprefix $(CMDDIR), $(addsuffix .o, $(CMDBASE)))
+
 
 all : $(NAME)
 
