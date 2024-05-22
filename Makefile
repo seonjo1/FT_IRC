@@ -6,7 +6,7 @@ COREDIR			:=	./src/core/
 COREBASE		:=	main Server Client Executor Channel
 
 UTILSDIR		:= ./src/utils/
-UTILSBASE		:=	Kqueue Message Utils Socket ServerMsg
+UTILSBASE		:=	Kqueue Message Utils Socket ServerMsg Bot
 
 CMDDIR			:= ./src/command/
 CMDBASE			:= 	PASS NICK USER PONG \
