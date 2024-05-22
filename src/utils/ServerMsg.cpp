@@ -265,8 +265,8 @@ std::string ServerMsg::NAMREPLY(std::string nick, Channel& channel)
 		msg += joinList[i]->getNick() + " ";
 	
 	// 마지막 공백 제거하고 CRLF 추가
-	msg = msg.substr(0, msg.size() - 1);
-	msg += "\r\n";
+	Bot& bot = channel.getBot();
+	msg += bot.getName() + "\r\n";
 	return (msg);
 }
 std::string ServerMsg::ENDOFNAMES(std::string nick, std::string channel)
@@ -419,5 +419,19 @@ std::string ServerMsg::MODE(std::string nick, std::string hostname, std::string 
 {
 	std::string msg;
 	msg = ":" + nick + "!" + hostname + "@" + servername + " MODE " + channel + " " + modeInfo + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::BOTNICKCHANGE(std::string oldNick, std::string newNick)
+{
+	std::string msg;
+	msg = ":" + oldNick + " NICK :" + newNick + "\r\n";
+	return (msg);
+}
+
+std::string ServerMsg::BOTPRIVMSG(std::string name, std::string channel, std::string message)
+{
+	std::string msg;
+	msg = ":" + name + " PRIVMSG " + channel + " :" + message + "\r\n";
 	return (msg);
 }
