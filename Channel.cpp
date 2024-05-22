@@ -22,7 +22,7 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		}
 
 		// invite 여부 확인
-		if (channel.isInviteMode() && channel.isInvitedClient(client.getNick()))
+		if (channel.isInviteMode() && !channel.isInvitedClient(client.getNick()))
 		{
 			client.sendMsg(ServerMsg::INVITEONLYCHAN(client.getNick(), channel.getName()));
 			return ;
@@ -277,6 +277,27 @@ Channel& Channel::getChannel(std::string& channel)
 }
 
 // mode 함수
+
+bool Channel::isInvalidKey(std::string key)
+{
+	int size = key.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (!isprint(key[i]))
+			return (true);
+	}
+	return (false);
+}
+
+bool Channel::isInvalidLimit(std::string limit)
+{
+	// 숫자가 0 ~ 1000일 때만 허용
+	int num = irc_atoi(limit);
+	if (num == -1)
+		return (true);
+	return (false);
+}
+
 bool Channel::isKeyMode()
 {
 	if (mode.find("k") != std::string::npos)
@@ -450,39 +471,61 @@ void Channel::setInviteMode(bool sign)
 		mode.erase(mode.find("i"), 1);
 }
 
-// void Channel::setTopicMode(bool sign)
-// {
-// 	if (sign) // +t
-// 		mode += "t";
-// 	else //-t
-// 		mode.erase(mode.find("t"), 1);
-// }
+void Channel::setTopicMode(bool sign)
+{
+	if (sign) // +t
+		mode += "t";
+	else //-t
+		mode.erase(mode.find("t"), 1);
+}
 
-// void Channel::setKeyMode(bool sign, std::string key)
-// {
-// 	if (sign) // +k
-// 	{
-// 		mode += "k";
-// 		this->key = key;
-// 	}
-// 	else //-k
-// 		mode.erase(mode.find("k"), 1);
-// }
+void Channel::setKeyMode(bool sign, std::string key)
+{
+	if (sign) // +k
+	{
+		mode += "k";
+		this->key = key;
+	}
+	else //-k
+		mode.erase(mode.find("k"), 1);
+}
 
-// void Channel::setLimitMode(bool sign, int limit)
-// {
-// 	if (sign) // +l
-// 	{
-// 		mode += "l";
-// 	}
-// 	else //-l
-// 		mode.erase(mode.find("l"), 1);
-// }
+void Channel::setLimitMode(bool sign, std::string limit)
+{
+	if (sign) // +l
+	{
+		mode += "l";
+		this->limit = limit;
+	}
+	else //-l
+		mode.erase(mode.find("l"), 1);
+}
 
-// void Channel::setOperatorMode(bool sign)
-// {
-// 	if (sign) // +o
-// 		mode += "o";
-// 	else //-o
-// 		mode.erase(mode.find("o"), 1);
-// }
+void Channel::setOPMode(bool sign, std::string nick)
+{
+
+	if (sign) // +o
+	{
+		std::vector<Client*>::iterator iter;
+		for (iter = joinList.begin(); iter != joinList.end(); iter++)
+		{
+			if ((*iter)->getNick() == nick)
+			{
+				opList.push_back(*iter);
+				joinList.erase(iter);
+			}
+		}
+	}
+	else //-o
+	{
+		std::vector<Client*>::iterator iter;
+		for (iter = opList.begin(); iter != opList.end(); iter++)
+		{
+			if ((*iter)->getNick() == nick)
+			{
+				joinList.push_back(*iter);
+				opList.erase(iter);
+			}
+		}
+	}
+}

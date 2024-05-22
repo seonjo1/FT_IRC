@@ -26,6 +26,8 @@ public:
 	bool doesClientExist(std::string& nick); // 채널에 클라이언트 존재하는지 확인
 
 	// mode 함수
+	static bool isInvalidKey(std::string key);
+	static bool isInvalidLimit(std::string limit);
 	bool isKeyMode();
 	bool isLimitMode();
 	bool isTopicMode();
@@ -56,9 +58,9 @@ public:
 	void setTopic(std::string nick, std::string topic);
 	void setInviteMode(bool sign);
 	void setTopicMode(bool sign);
-	void setKeyMode(bool sign);
-	void setLimitMode(bool sign);
-	void setOperatorMode(bool sign);
+	void setKeyMode(bool sign, std::string key);
+	void setLimitMode(bool sign, std::string limit);
+	void setOPMode(bool sign, std::string nick);
 
 private:
 // 변수
