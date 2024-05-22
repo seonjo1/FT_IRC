@@ -22,28 +22,23 @@ void Executor::parsePART(std::vector<std::string>& cmds, std::string& msg)
 		}
 	}
 
-	// 3번째 인자는 ':'으로 시작하면 인정
-	while(i < size && msg[i] != ':')
-	{
-		// 3번째 인자가 ':'으로 시작안하는 애면 오류
-		if (msg[i] != ' ')
-		{
-			cmds.push_back("error");
-			cmds.push_back("error");
-			return ;
-		}
+	// 공백 다 pass
+	while(i < size && msg[i] == ' ')
 		i++;
-	}
 
-	// 3번째 인자 추가
-	if (++i < size)
+	// ':'가 있으면 index 1 증가
+	if (i < size && msg[i] == ':')
+		i++;
+	
+	// 뒤에 내용이 있는경우 한번에 담기
+	if (i < size)
 		cmds.push_back(msg.substr(i));
 }
 
 void Executor::PART(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 부족
-	if (cmds.size() == 1 || cmds.size() > 3)
+	if (cmds.size() < 2)
 	{
 		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
