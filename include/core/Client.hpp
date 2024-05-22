@@ -27,7 +27,7 @@ public:
 	Client(int fd);
 	~Client();
 
-	// 서버에서 사용하는 함수
+	// 서버에서 소켓 메시지 받을때 사용하는 함수
 	void receiveMsg(); // 클라이언트가 보낸 데이터를 받음
 	bool isDisconnected(); // 클라이언트와 연결 여부 확인
 	bool isCmdComplete(); // 버퍼에 있는 명령어 완성 여부 확인
@@ -47,9 +47,9 @@ public:
 	void sendMsg(std::string msg);
 
 	// channel 함수
-	bool isClientMemberOfChannel(std::string& channel); // 클라이언트가 해당 채널에 참여했는지 확인
 	void addJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에 추가
 	void removeJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에서 제거
+	bool isClientMemberOfChannel(std::string& channel); // 클라이언트가 해당 채널에 참여했는지 확인
 
 	// getter
 	static Client& getClient(std::string& nick);

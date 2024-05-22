@@ -12,10 +12,10 @@ public:
 	Kqueue();
 	~Kqueue();
 
-	void addSocket(int socket); // kqueue에 이벤트 추가
-	void removeSocket(int socket); // kqueue에 이벤트 삭제
 	int event(); // kevent 함수로 발생한 이벤트 수 반환
 	int getFd(int idx); // 발생한 이벤트의 fd 반환
+	void addSocket(int socket); // kqueue에 이벤트 추가
+	void removeSocket(int socket); // kqueue에 이벤트 삭제
 	bool isNotEventError(int idx); // 발생한 이벤트에 에러 확인
 
 private:

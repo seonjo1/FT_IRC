@@ -16,8 +16,8 @@ public:
 	static struct sockaddr_in addr; 
 	static socklen_t addrLen;
 
-	static void makeServerSocket(char *port); // 서버 소켓 만드는 함수
 	static int makeClientSocket(); // 클라이언트와 통신하는 소켓 만드는 함수
+	static void makeServerSocket(char *port); // 서버 소켓 만드는 함수
 };
 
 #endif
