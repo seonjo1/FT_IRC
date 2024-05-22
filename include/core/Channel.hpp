@@ -5,6 +5,7 @@
 
 # include "Client.hpp"
 # include "../utils/Utils.hpp"
+# include "../utils/Bot.hpp"
 
 class Channel
 {
@@ -45,6 +46,7 @@ public:
 	int	getTopicTime();
 	int getCreatedTime();
 	bool getTopicFlag();
+	Bot& getBot();
 	std::string getKey();
 	std::string getName();
 	std::string getLimit();
@@ -72,7 +74,7 @@ private:
 	std::vector<Client*> joinList;// 참가자 명단
 	std::vector<Client*> opList;// operator 명단
 	std::vector<std::string> inviteList;// 초대명단
-
+	Bot bot; // Chat Bot
 
 	std::string mode;// mode
 	bool topicFlag; // topic 존재 여부

@@ -391,6 +391,11 @@ bool Channel::getTopicFlag()
 	return (topicFlag);
 }
 
+Bot& Channel::getBot()
+{
+	return (bot);
+}
+
 std::string Channel::getLimit()
 {
 	return (limit);
