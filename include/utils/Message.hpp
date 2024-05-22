@@ -5,6 +5,7 @@
 # include <string>
 # include <sys/socket.h>
 
+# define MAX_BUFFER_SIZE 2048
 # define BUFFER_SIZE 1024
 
 class Message

@@ -11,6 +11,8 @@ void Message::fillMsg()
 
 	while (1)
 	{
+		if (buf.size() > MAX_BUFFER_SIZE)
+			break ;
 		// 메시지 수신
 		readNum = recv(fd, &tmp, BUFFER_SIZE, 0);
 		if (readNum == -1)
@@ -56,7 +58,12 @@ bool Message::isComplete()
 		NL = buf.find("\n");
 		// '\n'이 발견되지 않았으면 명령어 완성 x
 		if (NL == std::string::npos)
+		{
+			// 만약 512 길이에도 '\n'이 없다면 앞의 512 제거
+			if (buf.size() > 512)
+				buf = buf.substr(512);
 			return (false);
+		}
 		// '\n'이 발견됐어도 앞에 '\r'가 없으면 올바른 명령어 형식이 아니므로 삭제하고 무시
 		if (NL < 2 || buf[NL - 1] != '\r')
 			buf.erase(0, NL + 1);
