@@ -10,14 +10,16 @@ void Executor::parseQUIT(std::vector<std::string>& cmds, std::string& msg)
 	// QUIT 다음 공백 다 넘기기
 	while (i < size && msg[i] == ' ')
 		i++;
+
+	// ':'가 있으면 index 1 증가
+	if (i < size && msg[i] == ':')
+		i++;
 	
-	// 공백이 끝난 다음 문자가 ':'면
-	if (i + 1 >= size || msg[i] != ':')
-		return ;
-	if (i + 1 == size)
-		cmds.push_back("");
+	// 뒤에 내용이 있는경우 한번에 담기
+	if (i < size)
+		cmds.push_back(msg.substr(i));
 	else
-		cmds.push_back(msg.substr(i + 1));
+		cmds.push_back("");
 }
 
 void Executor::QUIT(Client& client, std::vector<std::string>& cmds)
