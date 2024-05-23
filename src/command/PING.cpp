@@ -40,15 +40,15 @@ void Executor::PING(Client& client, std::vector<std::string>& cmds)
 {
 	if (cmds.size() == 1)
 	{
-		client.sendMsg(ServerMsg::NOORIGIN(client.getNick()));
+		client.addToSendBuf(ServerMsg::NOORIGIN(client.getNick()));
 	}
 	else if (cmds.size() == 2)
 	{
-		client.sendMsg(ServerMsg::PING(cmds[1], ""));
+		client.addToSendBuf(ServerMsg::PING(cmds[1], ""));
 	}
 	else
 	{
-		client.sendMsg(ServerMsg::PING(cmds[1], cmds[2]));
+		client.addToSendBuf(ServerMsg::PING(cmds[1], cmds[2]));
 	}
 }
 

@@ -26,6 +26,7 @@ private:
 
 	void print_result();
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
+	void sendMsgToClients(std::map<int, Client>& clientList); // 클라이언트들에게 sendBuf에 있는 메시지 전송
 };
 
 #endif

@@ -43,9 +43,9 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	if (!client.getPassFlag())
 	{
 		if (client.getNickFlag())
-			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
+			client.addToSendBuf(ServerMsg::NOTREGISTERD(client.getNick()));
 		else
-			client.sendMsg(ServerMsg::NOTREGISTERD(""));
+			client.addToSendBuf(ServerMsg::NOTREGISTERD(""));
 		// 연결 종료
 		client.setQuitFlag(true);
 		return ;
@@ -55,9 +55,9 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	if (cmds.size() < 5)
 	{
 		if (client.getNickFlag())
-			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+			client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		else
-			client.sendMsg(ServerMsg::NEEDMOREPARAMS("", cmds[0]));
+			client.addToSendBuf(ServerMsg::NEEDMOREPARAMS("", cmds[0]));
 		return ;
 	}
 
@@ -65,9 +65,9 @@ void Executor::USER(Client& client, std::vector<std::string>& cmds)
 	if (client.getUserFlag())
 	{
 		if (client.getNickFlag())
-			client.sendMsg(ServerMsg::ALREADYREGISTER(client.getNick()));
+			client.addToSendBuf(ServerMsg::ALREADYREGISTER(client.getNick()));
 		else
-			client.sendMsg(ServerMsg::ALREADYREGISTER(""));	
+			client.addToSendBuf(ServerMsg::ALREADYREGISTER(""));	
 		return ;
 	}
 

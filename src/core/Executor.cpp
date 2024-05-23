@@ -27,7 +27,7 @@ void Executor::execute(Client& client, std::string msg)
 			USER(client, cmds);
 		else // 그 외의 명령일 경우 연결 종료
 		{
-			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
+			client.addToSendBuf(ServerMsg::NOTREGISTERD(client.getNick()));
 			client.setQuitFlag(true);
 		}
 		// 클라이언트 오류시 연결 종료
@@ -36,7 +36,7 @@ void Executor::execute(Client& client, std::string msg)
 			
 		// 클라이언트 등록이 완료된 경우 완료 메시지 전송
 		if (client.isRegistered())
-			client.sendMsg(ServerMsg::PINGMSG(Server::getIP()));
+			client.addToSendBuf(ServerMsg::PINGMSG(Server::getIP()));
 	}
 	else if (!client.getConnectFlag())
 	{

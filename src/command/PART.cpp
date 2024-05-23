@@ -40,7 +40,7 @@ void Executor::PART(Client& client, std::vector<std::string>& cmds)
 	// 인자 부족
 	if (cmds.size() < 2)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 	
@@ -65,7 +65,7 @@ void Executor::PART(Client& client, std::vector<std::string>& cmds)
 		// 채널이 존재하지 않는경우
 		if (!Channel::isChannelInUse(room))
 		{
-			client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), room));
+			client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), room));
 			continue ;
 		}
 
@@ -73,17 +73,17 @@ void Executor::PART(Client& client, std::vector<std::string>& cmds)
 		Channel& channel = Channel::getChannel(room);
 		if (!channel.doesClientExist(client.getNick()))
 		{
-			client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
+			client.addToSendBuf(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
 			continue ;
 		}
 
 		if (cmds.size() == 2) // 메시지가 없는 경우
 		{
-			channel.sendToClients(ServerMsg::PART(client.getNick(), client.getHostName(), client.getServerName(), room, ""));
+			channel.addMsgToClientsSendBuf(ServerMsg::PART(client.getNick(), client.getHostName(), client.getServerName(), room, ""));
 		}
 		else // 메시지가 있는 경우
 		{
-			channel.sendToClients(ServerMsg::PART(client.getNick(), client.getHostName(), client.getServerName(), room, cmds[2]));
+			channel.addMsgToClientsSendBuf(ServerMsg::PART(client.getNick(), client.getHostName(), client.getServerName(), room, cmds[2]));
 		}
 		channel.removeNickInChannel(client);
 		client.removeJoinedChannels(&channel);

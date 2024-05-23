@@ -41,14 +41,14 @@ void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 	// 인자 부족
 	if (cmds.size() < 2)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 
 	// 없는 채널
 	if (!Channel::isChannelInUse(cmds[1]))
 	{
-		client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
 		return ;
 	}
 	
@@ -58,12 +58,12 @@ void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 	{
 		if (channel.getTopicFlag()) // topic이 있는 경우
 		{
-			client.sendMsg(ServerMsg::TOPIC(client.getNick(), cmds[1], channel.getTopic()));
-			client.sendMsg(ServerMsg::TOPICINFO(client.getNick(), cmds[1], channel.getTopicWriter(), channel.getTopicTime()));
+			client.addToSendBuf(ServerMsg::TOPIC(client.getNick(), cmds[1], channel.getTopic()));
+			client.addToSendBuf(ServerMsg::TOPICINFO(client.getNick(), cmds[1], channel.getTopicWriter(), channel.getTopicTime()));
 		}
 		else	// topic이 없는 경우
 		{
-			client.sendMsg(ServerMsg::NOTOPIC(client.getNick(), cmds[1]));
+			client.addToSendBuf(ServerMsg::NOTOPIC(client.getNick(), cmds[1]));
 		}
 		return ;
 	}
@@ -71,14 +71,14 @@ void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 	// 내가 그 채널에 없을 때
 	if (!channel.doesClientExist(client.getNick()))
 	{
-		client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOTONCHANNEL(client.getNick(), cmds[1]));
 		return ;
 	}
 
 	// 오퍼레이터가 아닐때 (권한 없을 때)
 	if (!channel.isOperator(client.getNick()) && channel.isTopicMode())
 	{
-		client.sendMsg(ServerMsg::CHANOPRIVSNEEDEDTOPICVERSION(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::CHANOPRIVSNEEDEDTOPICVERSION(client.getNick(), cmds[1]));
 		return ;
 	}
 
@@ -86,7 +86,7 @@ void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 	channel.setTopic(client.getNick(), cmds[2]);
 
 	// TOPIC 변경사항 전달
-	channel.sendToClients(ServerMsg::TOPICCHANGE(client.getNick(), client.getHostName(), client.getServerName(),
+	channel.addMsgToClientsSendBuf(ServerMsg::TOPICCHANGE(client.getNick(), client.getHostName(), client.getServerName(),
 												cmds[1], cmds[2]));
 }
 

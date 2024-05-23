@@ -39,14 +39,14 @@ void Executor::parsePONG(std::vector<std::string>& cmds, std::string& msg)
 void Executor::PONG(Client& client, std::vector<std::string>& cmds)
 {
 	if (cmds.size() == 1) // 인자 부족
-		client.sendMsg(ServerMsg::NOORIGIN(client.getNick()));
+		client.addToSendBuf(ServerMsg::NOORIGIN(client.getNick()));
 	else if (cmds[1] != Server::getIP()) // 서버 IP 답장이 틀림
-		client.sendMsg(ServerMsg::NOSUCHSERVER(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOSUCHSERVER(client.getNick(), cmds[1]));
 	else
 	{
 		// 연결 성공했으므로 welcome msg 전송
-		client.sendMsg(ServerMsg::WELCOME(client.getNick(), client.getHostName(), client.getServerName()));
-		client.sendMsg(ServerMsg::NOMOTD(client.getNick()));
+		client.addToSendBuf(ServerMsg::WELCOME(client.getNick(), client.getHostName(), client.getServerName()));
+		client.addToSendBuf(ServerMsg::NOMOTD(client.getNick()));
 		return ;
 	}
 	// PONG 메시지 오류시 연결 종료

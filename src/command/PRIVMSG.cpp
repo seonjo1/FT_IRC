@@ -41,7 +41,7 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 	// 리시버가 없는 경우
 	if (cmds.size() == 1)
 	{
-		client.sendMsg(ServerMsg::NORECIPIENT(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NORECIPIENT(client.getNick(), cmds[0]));
 		return ;
 	}
 
@@ -66,7 +66,7 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 		// 메시지가 없는 경우
 		if (cmds.size() == 2)
 		{
-			client.sendMsg(ServerMsg::NOTEXTTOSEND(client.getNick()));
+			client.addToSendBuf(ServerMsg::NOTEXTTOSEND(client.getNick()));
 			continue ;
 		}
 	
@@ -75,7 +75,7 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 			// 채널이 없는 경우
 			if (!Channel::isChannelInUse(receiver))
 			{
-				client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), receiver));
+				client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), receiver));
 				continue ;
 			}
 
@@ -83,12 +83,12 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 			Channel& channel = Channel::getChannel(receiver);
 			if (!channel.doesClientExist(client.getNick()))
 			{
-				client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
+				client.addToSendBuf(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
 				continue ;
 			}
 
 			// 메시지 전달
-			channel.sendToClients(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
+			channel.addMsgToClientsSendBuf(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
 													client.getServerName(), receiver, cmds[2]),
 									client);
 		}
@@ -97,13 +97,13 @@ void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 			// nick이 없는 경우
 			if (!Client::isNicknameInUse(receiver))
 			{
-				client.sendMsg(ServerMsg::NOSUCHNICK(client.getNick(), receiver));
+				client.addToSendBuf(ServerMsg::NOSUCHNICK(client.getNick(), receiver));
 				continue ;
 			}
 			
 			// 메시지 전달
 			Client& toClient = Client::getClient(receiver);
-			toClient.sendMsg(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
+			toClient.addToSendBuf(ServerMsg::PRIVMSG(client.getNick(), client.getHostName(),
 											client.getServerName(), receiver, cmds[2]));
 		}
 	}

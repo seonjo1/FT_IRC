@@ -15,7 +15,7 @@ void Executor::JOIN(Client& client, std::vector<std::string>& cmds)
 	// 매개변수가 부족한 경우
 	if (cmds.size() < 2)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 
@@ -47,7 +47,7 @@ void Executor::JOIN(Client& client, std::vector<std::string>& cmds)
 		// 잘못된 채널 이름인 경우
 		if (Channel::isInvalidChannelName(room))
 		{
-			client.sendMsg(ServerMsg::INVALIDCHANNEL(client.getNick(), room));
+			client.addToSendBuf(ServerMsg::INVALIDCHANNEL(client.getNick(), room));
 			continue;
 		}
 		// 이미 참여한 채널인 경우

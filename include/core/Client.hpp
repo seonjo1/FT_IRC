@@ -44,7 +44,8 @@ public:
 	void changeNick(std::string nick); // nickname 변경
 
 	// 메시지 전송 함수
-	void sendMsg(std::string msg);
+	void sendMsg();
+	void addToSendBuf(std::string msg);
 
 	// channel 함수
 	void addJoinedChannels(Channel* channel); // 클라이언트가 참여한 채널에 추가
@@ -62,6 +63,7 @@ public:
 	std::string getHostName(); // hostname 전달
 	std::string getServerName(); // servername 전달
 	std::string& getNick(); // nickname 전달
+	std::string& getSendBuf(); // sendBuf 전달
 	std::vector<Channel*>& getJoinedChannels();
 
 	// setter
@@ -83,6 +85,7 @@ public:
 private:
 	Message msg; // 클라이언트와 통신할때 사용할 객체
 	Data data; // 클라이언트 정보 모음
+	std::string sendBuf; // 전송 메시지 버퍼
 	std::string nickname; // nickname
 	std::vector<Channel*> joinedChannels; // client가 가입한 channel 모음
 	int fd; // 클라이언트와 연결된 소켓

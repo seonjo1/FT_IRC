@@ -16,7 +16,7 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// PASS 등록 안된 클라이언트
 		if (!client.getPassFlag())
 		{
-			client.sendMsg(ServerMsg::NOTREGISTERD(client.getNick()));
+			client.addToSendBuf(ServerMsg::NOTREGISTERD(client.getNick()));
 			client.setQuitFlag(true);
 			return ;
 		}
@@ -24,21 +24,21 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// nickname 인자가 주어지지 않은 경우
 		if (cmds.size() == 1)
 		{
-			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
+			client.addToSendBuf(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
 
 		// 유효하지 않은 nickname
 		if (Client::isInvalidNick(cmds[1]))
 		{
-			client.sendMsg(ServerMsg::ERRONEUSNICKNAME(client.getNick(), cmds[1]));
+			client.addToSendBuf(ServerMsg::ERRONEUSNICKNAME(client.getNick(), cmds[1]));
 			return ;
 		}
 
 		// 이미 존재하는 nickname
 		if (Client::isNicknameInUse(cmds[1]))
 		{
-			client.sendMsg(ServerMsg::NICKNAMEINUSE(cmds[1], cmds[1]));
+			client.addToSendBuf(ServerMsg::NICKNAMEINUSE(cmds[1], cmds[1]));
 			return ;
 		}
 
@@ -51,21 +51,21 @@ void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 		// 인자 개수가 다른 경우
 		if (cmds.size() == 1)
 		{
-			client.sendMsg(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
+			client.addToSendBuf(ServerMsg::NONICKNAMEGIVEN(client.getNick()));
 			return ;
 		}
 
 		// 유효하지 않은 nickname
 		if (Client::isInvalidNick(cmds[1]))
 		{
-			client.sendMsg(ServerMsg::ERRONEUSNICKNAME(client.getNick(),cmds[1]));
+			client.addToSendBuf(ServerMsg::ERRONEUSNICKNAME(client.getNick(),cmds[1]));
 			return ;
 		}
 
 		// 이미 존재하는 nickname
 		if (Client::isNicknameInUse(cmds[1]))
 		{
-			client.sendMsg(ServerMsg::NICKNAMEINUSE(client.getNick(),cmds[1]));
+			client.addToSendBuf(ServerMsg::NICKNAMEINUSE(client.getNick(),cmds[1]));
 			return ;
 		}
 

@@ -41,28 +41,28 @@ void Executor::KICK(Client& client, std::vector<std::string>& cmds)
 	// 인자 개수 오류
 	if (cmds.size() < 3)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 
 	// 없는 채널
 	if (!Channel::isChannelInUse(cmds[1]))
 	{
-		client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
 		return ;
 	}
 
 	// 없는 닉
 	if (!Client::isNicknameInUse(cmds[2]))
 	{
-		client.sendMsg(ServerMsg::NOSUCHNICK(client.getNick(), cmds[2]));
+		client.addToSendBuf(ServerMsg::NOSUCHNICK(client.getNick(), cmds[2]));
 		return ;
 	}
 
 	// 내가 채널에 없을때
 	if (!client.isClientMemberOfChannel(cmds[1]))
 	{ 
-		client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOTONCHANNEL(client.getNick(), cmds[1]));
 		return ;
 	}
 
@@ -70,26 +70,26 @@ void Executor::KICK(Client& client, std::vector<std::string>& cmds)
 	Channel& channel = Channel::getChannel(cmds[1]);
 	if (!channel.doesClientExist(cmds[2]))
 	{
-		client.sendMsg(ServerMsg::USERNOTINCHANNEL(client.getNick(), cmds[2], cmds[1]));
+		client.addToSendBuf(ServerMsg::USERNOTINCHANNEL(client.getNick(), cmds[2], cmds[1]));
 		return ;
 	}
 
 	// client가 operator 권한이 없을 때
 	if (!channel.isOperator(client.getNick()))
 	{
-		client.sendMsg(ServerMsg::CHANOPRIVSNEEDED(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::CHANOPRIVSNEEDED(client.getNick(), cmds[1]));
 		return ;
 	}
 
 	// kick! 메시지 전송
 	if (cmds.size() == 3)
 	{
-		channel.sendToClients(ServerMsg::KICK(client.getNick(), client.getHostName(), client.getServerName(),
+		channel.addMsgToClientsSendBuf(ServerMsg::KICK(client.getNick(), client.getHostName(), client.getServerName(),
 												channel.getName(), cmds[2], ""));
 	}
 	else
 	{
-		channel.sendToClients(ServerMsg::KICK(client.getNick(), client.getHostName(), client.getServerName(),
+		channel.addMsgToClientsSendBuf(ServerMsg::KICK(client.getNick(), client.getHostName(), client.getServerName(),
 												channel.getName(), cmds[2], cmds[3]));
 	}
 

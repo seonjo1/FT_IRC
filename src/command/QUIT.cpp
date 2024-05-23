@@ -30,24 +30,23 @@ void Executor::QUIT(Client& client, std::vector<std::string>& cmds)
 	
 	// 클라이언트가 참여한 모든 채널에 있는 사람에게 메시지 전달 (본인 빼고)
 	// 모든 채널에 있는 클라이언트들의 fd 수집
-	std::set<int> set;
+	std::set<Client*> set;
 	std::vector<Channel*> joinedChannels = client.getJoinedChannels();
 	for (int i = 0; i < static_cast<int>(joinedChannels.size()); i++)
-		joinedChannels[i]->fillSetWithFd(set);
-	set.erase(client.getFd()); // 본인 빼고
+		joinedChannels[i]->fillSet(set);
+	set.erase(&client); // 본인 빼고
 
 	// 메시지 만들기
-	std::string str = ServerMsg::QUITMSGTOCHANNEL(client.getNick(), client.getHostName(),
+	std::string msg = ServerMsg::QUITMSGTOCHANNEL(client.getNick(), client.getHostName(),
 											 client.getServerName(), cmds[1]);
-	const char *msg = str.c_str();
 	
-	// 메시지 전달
-	std::set<int>::iterator iter;
+	// 메시지 저장
+	std::set<Client*>::iterator iter;
 	for (iter = set.begin(); iter != set.end(); iter++)
-		send(*iter, msg, str.size(), 0);
+		(*iter)->addToSendBuf(msg);
 
-	// 나가는 클라이언트에게 메시지전달
-	client.sendMsg(ServerMsg::QUITCHANNEL(client.getHostName(), client.getServerName(), cmds[1]));
+	// 나가는 클라이언트에게 메시지저장
+	client.addToSendBuf(ServerMsg::QUITCHANNEL(client.getHostName(), client.getServerName(), cmds[1]));
 
 	// 연결 종료 플래그 on
 	client.setQuitFlag(true);

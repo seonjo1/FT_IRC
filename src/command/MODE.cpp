@@ -76,7 +76,7 @@ void keyMode(Client& client, Channel& channel, char sign, std::string param,
 	// 모드에 따른 추가 인자 부족
 	if (param.size() == 0)
 	{
-		client.sendMsg(ServerMsg::KEYMODENOPARAM(client.getNick(), channel.getName()));
+		client.addToSendBuf(ServerMsg::KEYMODENOPARAM(client.getNick(), channel.getName()));
 		return ;
 	}
 	
@@ -86,7 +86,7 @@ void keyMode(Client& client, Channel& channel, char sign, std::string param,
 		// key parameter 유효성 검사
 		if (Channel::isInvalidKey(param))
 		{
-			client.sendMsg(ServerMsg::UNKNOWNMODEKEY(client.getNick()));
+			client.addToSendBuf(ServerMsg::UNKNOWNMODEKEY(client.getNick()));
 			return ;
 		}
 
@@ -129,14 +129,14 @@ void limitMode(Client& client, Channel& channel, char sign, std::string param,
 		// 모드에 따른 추가 인자 부족
 		if (param.size() == 0)
 		{
-			client.sendMsg(ServerMsg::LIMITMODENOPARAM(client.getNick(), channel.getName()));
+			client.addToSendBuf(ServerMsg::LIMITMODENOPARAM(client.getNick(), channel.getName()));
 			return ;
 		}
 
 		// limit param 유효성 검사
 		if (Channel::isInvalidLimit(param))
 		{
-			client.sendMsg(ServerMsg::UNKNOWNMODELIMIT(client.getNick()));
+			client.addToSendBuf(ServerMsg::UNKNOWNMODELIMIT(client.getNick()));
 			return ;
 		}
 
@@ -175,14 +175,14 @@ void operatorMode(Client& client, Channel& channel, char sign, std::string param
 	// 모드에 따른 추가 인자 부족
 	if (param.size() == 0)
 	{
-		client.sendMsg(ServerMsg::OPMODENOPARAM(client.getNick(), channel.getName()));
+		client.addToSendBuf(ServerMsg::OPMODENOPARAM(client.getNick(), channel.getName()));
 		return ;
 	}
 
 	// 없는 nick
 	if (!Client::isNicknameInUse(param))
 	{
-		client.sendMsg(ServerMsg::NOSUCHNICK(client.getNick(), param));
+		client.addToSendBuf(ServerMsg::NOSUCHNICK(client.getNick(), param));
 		return ;
 	}
 
@@ -225,7 +225,7 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 	// 인자 부족
 	if (cmds.size() < 2)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 
@@ -238,7 +238,7 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 	// 없는 채널
 	if (!Channel::isChannelInUse(cmds[1]))
 	{
-		client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
+		client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[1]));
 		return ;
 	}
 
@@ -246,8 +246,8 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 	Channel& channel = Channel::getChannel(cmds[1]);
 	if (cmds.size() == 2)
 	{
-		client.sendMsg(ServerMsg::CHANNELMODEIS(client.getNick(), channel.getName(), channel.getModeInfo(client.getNick())));
-		client.sendMsg(ServerMsg::CHANNELINFO(client.getNick(), channel.getName(), channel.getCreatedTime()));
+		client.addToSendBuf(ServerMsg::CHANNELMODEIS(client.getNick(), channel.getName(), channel.getModeInfo(client.getNick())));
+		client.addToSendBuf(ServerMsg::CHANNELINFO(client.getNick(), channel.getName(), channel.getCreatedTime()));
 		return ;
 	}
 
@@ -295,14 +295,14 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 		if (mode[1] != 'i' && mode[1] != 't' && mode[1] != 'k' &&
 			mode[1] != 'o' && mode[1] != 'l')
 		{
-			client.sendMsg(ServerMsg::UNKNOWNMODE(client.getNick(), mode[1]));
+			client.addToSendBuf(ServerMsg::UNKNOWNMODE(client.getNick(), mode[1]));
 			continue ;
 		}
 
 		// op 권한
 		if (!channel.isOperator(client.getNick()))
 		{
-			client.sendMsg(ServerMsg::CHANOPRIVSNEEDEDMODEVERSION(client.getNick(), cmds[1], mode[1]));
+			client.addToSendBuf(ServerMsg::CHANOPRIVSNEEDEDMODEVERSION(client.getNick(), cmds[1], mode[1]));
 			continue ;
 		}
 
@@ -330,7 +330,7 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 		std::string modeInfo(msgVector[0]);
 		for (int i = 1; i < size; i++)
 			modeInfo += " " + msgVector[i];
-		channel.sendToClients(ServerMsg::MODE(client.getNick(), client.getHostName(), client.getServerName(),
+		channel.addMsgToClientsSendBuf(ServerMsg::MODE(client.getNick(), client.getHostName(), client.getServerName(),
 												channel.getName(), modeInfo));
 	}
 }

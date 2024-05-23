@@ -154,20 +154,19 @@ void Client::changeNick(std::string nick)
 
 
 	// 같은 채널에 있는 nickname의 fd 들을 set에 저장
-	std::set<int> set;
-	set.insert(fd);
+	std::set<Client*> set;
+	set.insert(this);
 	std::vector<Channel*>::iterator channelIter = joinedChannels.begin();
 	for (; channelIter != joinedChannels.end(); channelIter++)
 		(*channelIter)->changeNickInChannel(*this, nick, set);
 	
 	// nickname 변경 메시지 만들기
-	std::string msgStr = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick);
-	const char *msg = msgStr.c_str();
-	
+	std::string msg = ServerMsg::NICKCHANGE(nickname, data.hostname, data.servername, nick);
+
 	// set에 있는 같은 채널에 있는 client들의 fd에 메시지 전송
-	std::set<int>::iterator setIter = set.begin();
+	std::set<Client*>::iterator setIter = set.begin();
 	for (; setIter != set.end(); setIter++)
-		send(*setIter, msg, msgStr.size(), 0);
+		(*setIter)->addToSendBuf(msg);
 
 	// nickname 변경
 	nickname = nick;
@@ -175,13 +174,17 @@ void Client::changeNick(std::string nick)
 
 // 메시지 보내는 함수
 
-void Client::sendMsg(std::string msg)
+void Client::sendMsg()
 {
 	// 보낸 메시지 확인용
 	// std::cout << "send to client : " << msg;
-	send(fd, msg.c_str(), msg.size(), 0);
+	if (sendBuf.size() > 0)
+	{
+		const char *msg = sendBuf.c_str();
+		send(fd, msg, sendBuf.size(), 0);
+		sendBuf = "";
+	}
 }
-
 
 // channel 함수
 bool Client::isClientMemberOfChannel(std::string& channel)
@@ -238,11 +241,6 @@ bool Client::getUserFlag()
 	return (userFlag);
 }
 
-std::string& Client::getNick()
-{
-	return (nickname);
-}
-
 int Client::getFd()
 {
 	return (fd);
@@ -251,6 +249,16 @@ int Client::getFd()
 std::string Client::getHostName()
 {
 	return (data.hostname);
+}
+
+std::string& Client::getNick()
+{
+	return (nickname);
+}
+
+std::string& Client::getSendBuf()
+{
+	return (sendBuf);
 }
 
 std::string Client::getServerName()
@@ -326,6 +334,10 @@ void Client::setConnectFlag(bool sign)
 	connectFlag = sign;
 }
 
+void Client::addToSendBuf(std::string msg)
+{
+	sendBuf += msg;
+}
 
 // 연산자
 

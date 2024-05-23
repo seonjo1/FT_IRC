@@ -17,21 +17,21 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		// key 모드인데 key가 틀린경우
 		if (channel.isKeyMode() && channel.getKey() != param)
 		{
-			client.sendMsg(ServerMsg::BADCHANNELKEY(client.getNick(), channel.getName()));
+			client.addToSendBuf(ServerMsg::BADCHANNELKEY(client.getNick(), channel.getName()));
 			return ;
 		}
 
 		// invite 여부 확인
 		if (channel.isInviteMode() && !channel.isInvitedClient(client.getNick()))
 		{
-			client.sendMsg(ServerMsg::INVITEONLYCHAN(client.getNick(), channel.getName()));
+			client.addToSendBuf(ServerMsg::INVITEONLYCHAN(client.getNick(), channel.getName()));
 			return ;
 		}
 
 		// 풀방 확인
 		if (channel.isLimitMode() && irc_atoi(channel.getLimit()) <= channel.getSize())
 		{
-			client.sendMsg(ServerMsg::CHANNELISFULL(client.getNick(), channel.getName()));
+			client.addToSendBuf(ServerMsg::CHANNELISFULL(client.getNick(), channel.getName()));
 			return ;
 		}
 
@@ -39,20 +39,20 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		channel.addNickInChannel(client);
 
 		// 채널에 모든이들에게 join 메시지전송
-		channel.sendToClients(ServerMsg::JOIN(client.getNick(), client.getHostName(),
+		channel.addMsgToClientsSendBuf(ServerMsg::JOIN(client.getNick(), client.getHostName(),
 											client.getServerName(), channel.getName()));
 		
 		// 토픽확인하고 참가자에게 토픽 메시지 전송
 		if (channel.doesTopicExist())
 		{
-			client.sendMsg(ServerMsg::TOPIC(client.getNick(), channel.getName(), channel.getTopic()));
-			client.sendMsg(ServerMsg::TOPICINFO(client.getNick(), channel.getName(),
+			client.addToSendBuf(ServerMsg::TOPIC(client.getNick(), channel.getName(), channel.getTopic()));
+			client.addToSendBuf(ServerMsg::TOPICINFO(client.getNick(), channel.getName(),
 												channel.getTopicWriter(), channel.getTopicTime()));
 		}
 
 		// 참가자 리스트 전송
-		client.sendMsg(ServerMsg::NAMREPLY(client.getNick(), channel));
-		client.sendMsg(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
+		client.addToSendBuf(ServerMsg::NAMREPLY(client.getNick(), channel));
+		client.addToSendBuf(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
 	}
 	else // 채널이 없어서 만들어야하는 경우
 	{
@@ -62,12 +62,12 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 		channel.addNickInChannel(client);
 
 		// join 메시지전송
-		client.sendMsg(ServerMsg::JOIN(client.getNick(), client.getHostName(),
+		client.addToSendBuf(ServerMsg::JOIN(client.getNick(), client.getHostName(),
 									 client.getServerName(), channel.getName()));
 
 		// 참가자 리스트 전송
-		client.sendMsg(ServerMsg::NAMREPLY(client.getNick(), channel));
-		client.sendMsg(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
+		client.addToSendBuf(ServerMsg::NAMREPLY(client.getNick(), channel));
+		client.addToSendBuf(ServerMsg::ENDOFNAMES(client.getNick(), channel.getName()));
 	}
 }
 
@@ -141,10 +141,10 @@ void Channel::removeNickInChannel(Client& client)
 }
 
 // channel nick 변경
-void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set<int>& set)
+void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set<Client*>& set)
 {
 	// joinList와 opList에 있는 클라이언트들의 fd 수집
-	fillSetWithFd(set);
+	fillSet(set);
 
 	// inviteList에 있는 nick 변경
 	std::vector<std::string>::iterator inviteIter = find(inviteList.begin(), inviteList.end(), client.getNick());
@@ -153,42 +153,42 @@ void Channel::changeNickInChannel(Client& client, std::string& newNick, std::set
 }
 
 // 채널에 있는 클라이언트들의 fd 수집
-void Channel::fillSetWithFd(std::set<int>& set)
+void Channel::fillSet(std::set<Client*>& set)
 {
 	std::vector<Client*>::iterator iter;
 
 	for (iter = joinList.begin(); iter != joinList.end(); iter++)
-		set.insert((*iter)->getFd());
+		set.insert(*iter);
 	for (iter = opList.begin(); iter != opList.end(); iter++)
-		set.insert((*iter)->getFd());
+		set.insert(*iter);
 }
 
 
 // 채널에 메시지 전송
-void Channel::sendToClients(std::string msg)
+void Channel::addMsgToClientsSendBuf(std::string msg)
 {
 	std::vector<Client*>::iterator iter = opList.begin();
 	for (; iter != opList.end(); iter++)
-		(*iter)->sendMsg(msg);
+		(*iter)->addToSendBuf(msg);
 	iter = joinList.begin();
 	for (; iter != joinList.end(); iter++)
-		(*iter)->sendMsg(msg);
+		(*iter)->addToSendBuf(msg);
 }
 
 // 채널에 메시지 전송
-void Channel::sendToClients(std::string msg, Client& client)
+void Channel::addMsgToClientsSendBuf(std::string msg, Client& client)
 {
 	std::vector<Client*>::iterator iter = opList.begin();
 	for (; iter != opList.end(); iter++)
 	{
 		if ((*iter)->getNick() != client.getNick())
-			(*iter)->sendMsg(msg);
+			(*iter)->addToSendBuf(msg);
 	}
 	iter = joinList.begin();
 	for (; iter != joinList.end(); iter++)
 	{
 		if ((*iter)->getNick() != client.getNick())
-			(*iter)->sendMsg(msg);
+			(*iter)->addToSendBuf(msg);
 	}
 }
 

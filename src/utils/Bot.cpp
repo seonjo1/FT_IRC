@@ -42,14 +42,14 @@ void Bot::BOT(Client& client, std::vector<std::string>& cmds)
 	// 인자 부족
 	if (cmds.size() < 3)
 	{
-		client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+		client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 		return ;
 	}
 
 	// 없는 채널
 	if (!Channel::isChannelInUse(cmds[2]))
 	{
-		client.sendMsg(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[2]));
+		client.addToSendBuf(ServerMsg::NOSUCHCHANNEL(client.getNick(), cmds[2]));
 		return ;
 	}
 
@@ -57,7 +57,7 @@ void Bot::BOT(Client& client, std::vector<std::string>& cmds)
 	Channel& channel = Channel::getChannel(cmds[2]);
 	if (!channel.doesClientExist(client.getNick()))
 	{
-		client.sendMsg(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
+		client.addToSendBuf(ServerMsg::NOTONCHANNEL(client.getNick(), channel.getName()));
 		return ;
 	}
 
@@ -72,14 +72,14 @@ void Bot::BOT(Client& client, std::vector<std::string>& cmds)
 		// nick 인자 부족
 		if (cmds.size() < 4)
 		{
-			client.sendMsg(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
+			client.addToSendBuf(ServerMsg::NEEDMOREPARAMS(client.getNick(), cmds[0]));
 			return ;
 		}
 		
 		// invalid nick
 		if (Client::isInvalidNick(cmds[3]))
 		{
-			client.sendMsg(ServerMsg::ERRONEUSNICKNAME(client.getNick(), cmds[5]));
+			client.addToSendBuf(ServerMsg::ERRONEUSNICKNAME(client.getNick(), cmds[5]));
 			return ;
 		}
 		
@@ -97,7 +97,7 @@ std::string Bot::getName()
 void Bot::changeName(std::string name, Channel& channel)
 {
 	this->name = name;
-	channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My name is " + title[level] + name));
+	channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My name is " + title[level] + name));
 }
 
 void Bot::reinforceBot(Channel& channel)
@@ -105,7 +105,7 @@ void Bot::reinforceBot(Channel& channel)
 	// 이미 만랩인 경우
 	if (level == 10)
 	{
-		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My level is already the maximum"));
+		channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My level is already the maximum"));
 		return ;
 	}
 
@@ -116,17 +116,17 @@ void Bot::reinforceBot(Channel& channel)
 	if (randomNumber == 0)
 	{
 		level = 0;
-		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "1% fail GG!"));
+		channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "1% fail GG!"));
 	}
 	else if (randomNumber <= probablity[level]) //success
 	{
 		level++;
-		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Thank you for success in reinforcing me!"));
+		channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Thank you for success in reinforcing me!"));
 	}
 	else //fail
 	{
 		if (level != 0)
 			level--;
-		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Reinforcement failed, please try one more time!"));
+		channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Reinforcement failed, please try one more time!"));
 	}
 }
