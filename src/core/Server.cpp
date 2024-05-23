@@ -138,7 +138,7 @@ void Server::receiveClientRequest(int fd)
 		while (client.isCmdComplete()) // 완성된 명령어가 있으면 실행
 		{
 			executor.execute(client, client.getCmd());
-			print_result();
+			// print_result();
 			if (client.getQuitFlag())
 				break;
 		}
