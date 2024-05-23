@@ -9,32 +9,24 @@ void Message::fillMsg()
 	int readNum;
 	char tmp[BUFFER_SIZE];
 
-	while (1)
+	if (buf.size() > MAX_BUFFER_SIZE)
+		return ;
+	// 메시지 수신
+	readNum = recv(fd, &tmp, BUFFER_SIZE, 0);
+	if (readNum == -1)
 	{
-		if (buf.size() > MAX_BUFFER_SIZE)
-			break ;
-		// 메시지 수신
-		readNum = recv(fd, &tmp, BUFFER_SIZE, 0);
-		if (readNum == -1)
-		{
-			// errno 가 EAGAIN 이나 EWOULDBLOCK 인 경우 recv() 에러가 아닌
-			// 비동기 소켓이 읽을 내용이 없어서 block 되지 않고 -1 반환 (따라서 오류가 아님)
-			if (errno == EAGAIN || errno == EWOULDBLOCK)
-				break;
-
-			// 위 if 문에 걸리지 않는 경우는 recv() 에러
-			errFlag = true;
-			break;
-		}
-		else if (readNum == 0)
-		{
-			// 클라이언트와 연결 종료 (eof)
-			endFlag = true;
-			break;
-		}
-		// 버퍼에 메시지 추가
-		buf += std::string(tmp, readNum);
+		// recv() 에러
+		errFlag = true;
+		return ;
 	}
+	else if (readNum == 0)
+	{
+		// 클라이언트와 연결 종료 (eof)
+		endFlag = true;
+		return ;
+	}
+	// 버퍼에 메시지 추가
+	buf += std::string(tmp, readNum);
 }
 
 

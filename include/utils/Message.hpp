@@ -1,7 +1,6 @@
 #ifndef MESSAGE_HPP
 # define MESSAGE_HPP
 
-# include <cerrno>
 # include <string>
 # include <sys/socket.h>
 
