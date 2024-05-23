@@ -10,6 +10,7 @@ int main(int argc, char **argv)
 		try
 		{
 			std::cout << "<copy>\n/connect -nocap localhost " << argv[1] << " " << argv[2] << "\n";
+			srand(static_cast<unsigned int>(time(0)));
 			Server server(argv[1], argv[2]);
 			server.run();
 			return (0);
