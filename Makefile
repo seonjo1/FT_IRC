@@ -1,6 +1,6 @@
 NAME		:=	ircserv
 CPP			:=	c++
-WFLAG		:=	-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+WFLAG		:=	-Wall -Wextra -Werror -std=c++98
 
 COREDIR			:=	./src/core/
 COREBASE		:=	main Server Client Executor Channel
