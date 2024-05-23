@@ -177,7 +177,8 @@ void Client::changeNick(std::string nick)
 
 void Client::sendMsg(std::string msg)
 {
-	std::cout << "send to client : " << msg;
+	// 보낸 메시지 확인용
+	// std::cout << "send to client : " << msg;
 	send(fd, msg.c_str(), msg.size(), 0);
 }
 
