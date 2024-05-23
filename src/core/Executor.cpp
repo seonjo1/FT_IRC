@@ -9,7 +9,7 @@ Executor::~Executor() {};
 void Executor::execute(Client& client, std::string msg)
 {
 	// 명령어 확인용
-	std::cout << "receive from client : " << msg << "\n";
+	// std::cout << "receive from client : " << msg << "\n";
 	std::vector<std::string> cmds = parseMsg(msg);
 
 	// parsing 된 명령어 확인용

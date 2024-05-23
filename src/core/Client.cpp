@@ -176,10 +176,10 @@ void Client::changeNick(std::string nick)
 
 void Client::sendMsg()
 {
-	// 보낸 메시지 확인용
-	// std::cout << "send to client : " << msg;
 	if (sendBuf.size() > 0)
 	{
+		// 보낸 메시지 확인용
+		// std::cout << "send to client : " << sendBuf;
 		const char *msg = sendBuf.c_str();
 		send(fd, msg, sendBuf.size(), 0);
 		sendBuf = "";
