@@ -57,11 +57,14 @@ bool Message::isComplete()
 		// '\n' 위치 찾기
 		NL = buf.find("\n");
 		// '\n'이 발견되지 않았으면 명령어 완성 x
-		if (NL == std::string::npos)
+		if (NL == std::string::npos || NL >= 512)
 		{
 			// 만약 512 길이에도 '\n'이 없다면 앞의 512 제거
 			if (buf.size() > 512)
+			{
 				buf = buf.substr(512);
+				continue ;
+			}
 			return (false);
 		}
 		// '\n'이 발견됐어도 앞에 '\r'가 없으면 올바른 명령어 형식이 아니므로 삭제하고 무시
