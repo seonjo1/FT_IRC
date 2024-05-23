@@ -8,9 +8,10 @@ void Executor::parseMODE(std::vector<std::string>& cmds, std::string& msg)
 	while (ss >> cmd)
 		cmds.push_back(cmd);
 	
+	int size = cmds.size();
 	// 마지막 인자에 ':'가 있으면 제거
-	if (cmds.back()[0] == ':')
-		cmds.back() = cmds.back().substr(1);
+	if (cmds[size - 1][0] == ':')
+		cmds[size - 1] = cmds[size - 1].substr(1);
 }
 
 void inviteMode(Channel& channel, char sign, std::vector<std::string>& msgVector, char& plus)
