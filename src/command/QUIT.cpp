@@ -44,10 +44,7 @@ void Executor::QUIT(Client& client, std::vector<std::string>& cmds)
 	// 메시지 전달
 	std::set<int>::iterator iter;
 	for (iter = set.begin(); iter != set.end(); iter++)
-	{
-		if (send(*iter, msg, str.size(), 0) == -1)
-			std::cout << "send fail\n";
-	}
+		send(*iter, msg, str.size(), 0);
 
 	// 나가는 클라이언트에게 메시지전달
 	client.sendMsg(ServerMsg::QUITCHANNEL(client.getHostName(), client.getServerName(), cmds[1]));
