@@ -169,10 +169,7 @@ void Channel::sendToClients(std::string msg)
 {
 	std::vector<Client*>::iterator iter = opList.begin();
 	for (; iter != opList.end(); iter++)
-	{
-		std::cout << "member : " << (*iter)->getNick() << "\n";
 		(*iter)->sendMsg(msg);
-	}
 	iter = joinList.begin();
 	for (; iter != joinList.end(); iter++)
 		(*iter)->sendMsg(msg);
@@ -185,19 +182,13 @@ void Channel::sendToClients(std::string msg, Client& client)
 	for (; iter != opList.end(); iter++)
 	{
 		if ((*iter)->getNick() != client.getNick())
-		{
-			std::cout << "member : " << (*iter)->getNick() << "\n";
 			(*iter)->sendMsg(msg);
-		}
 	}
 	iter = joinList.begin();
 	for (; iter != joinList.end(); iter++)
 	{
 		if ((*iter)->getNick() != client.getNick())
-		{
-			std::cout << "member : " << (*iter)->getNick() << "\n";
 			(*iter)->sendMsg(msg);
-		}
 	}
 }
 
