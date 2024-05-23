@@ -8,11 +8,13 @@ Executor::~Executor() {};
 
 void Executor::execute(Client& client, std::string msg)
 {
+	// 명령어 확인용
 	std::cout << "receive from client : " << msg << "\n";
 	std::vector<std::string> cmds = parseMsg(msg);
 
-	for (std::vector<std::string>::iterator iter = cmds.begin(); iter != cmds.end(); iter++)
-		std::cout << *iter << "\n";
+	// parsing 된 명령어 확인용
+	// for (std::vector<std::string>::iterator iter = cmds.begin(); iter != cmds.end(); iter++)
+	// 	std::cout << *iter << "\n";
 
 	// 클라이언트 등록이 안 되있는 경우
 	if (!client.isRegistered())
