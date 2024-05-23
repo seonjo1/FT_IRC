@@ -26,8 +26,7 @@ void Socket::makeServerSocket(char *port)
 		throw std::runtime_error("listen() error");
 
 	// 소켓 비동기화
-	int flag = fcntl(servSocket, F_GETFL);
-	fcntl(servSocket, F_SETFL, flag | O_NONBLOCK);
+	fcntl(servSocket, F_SETFL, O_NONBLOCK);
 
 	// kq에 등록
 	Kqueue& kq = Server::getKq();
@@ -42,8 +41,7 @@ int Socket::makeClientSocket()
 		throw std::runtime_error("accept() error");
 
 	// 소켓 비동기화
-	int flag = fcntl(clientSocket, F_GETFL);
-	fcntl(clientSocket, F_SETFL, flag | O_NONBLOCK);
+	fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 
 	// kq에 등록
 	Kqueue& kq = Server::getKq();
