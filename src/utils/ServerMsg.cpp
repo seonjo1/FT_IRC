@@ -422,13 +422,6 @@ std::string ServerMsg::MODE(std::string nick, std::string hostname, std::string 
 	return (msg);
 }
 
-std::string ServerMsg::BOTNICKCHANGE(std::string oldNick, std::string newNick)
-{
-	std::string msg;
-	msg = ":" + oldNick + " NICK :" + newNick + "\r\n";
-	return (msg);
-}
-
 std::string ServerMsg::BOTPRIVMSG(std::string name, std::string channel, std::string message)
 {
 	std::string msg;

@@ -75,7 +75,6 @@ public:
 	static std::string MODE(std::string nick, std::string hostname, std::string servername,
 							std::string channel, std::string modeInfo);
 	static std::string BOTPRIVMSG(std::string name, std::string channel, std::string message);
-	static std::string BOTNICKCHANGE(std::string oldNick, std::string newNick);
 
 };
 
