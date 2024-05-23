@@ -73,7 +73,7 @@ void Channel::joinChannel(Client& client, std::string& channelName, std::string 
 
 
  // channel 이름 유효성 검사
-bool Channel::isInvalidChannelName(std::string& channel)
+bool Channel::isInvalidChannelName(std::string channel)
 {
 	// 규칙 1. 맨 앞의 char는 '#' or '&'
 	if (channel[0] != '#' && channel[0] != '&')
@@ -91,7 +91,7 @@ bool Channel::isInvalidChannelName(std::string& channel)
 }
 
 // channel이 존재하는지 확인
-bool Channel::isChannelInUse(std::string& channel)
+bool Channel::isChannelInUse(std::string channel)
 {
 	std::map<std::string, Channel>& channelList = Server::getChannelList();
 	for (int i = 0; i < static_cast<int>(channel.size()); i++)
@@ -448,6 +448,8 @@ std::string Channel::getModeInfo(std::string nick)
 			modeInfo += " " + v[i];
 	}
 
+	if (modeInfo.size() == 1)
+		return ("");
 	// modeInfo를 반환
 	return (modeInfo);
 }

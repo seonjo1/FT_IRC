@@ -15,8 +15,8 @@ public:
 
 	// 채널 관리
 	static void joinChannel(Client& client, std::string& channelName, std::string param); // 채널에 참가
-	static bool isChannelInUse(std::string& channel); // channel 이 존재하는지
-	static bool isInvalidChannelName(std::string& channel); // channel 이름 유효성 검사
+	static bool isChannelInUse(std::string channel); // channel 이 존재하는지
+	static bool isInvalidChannelName(std::string channel); // channel 이름 유효성 검사
 	static void removeChannel(std::string channel);  // 채널 삭제
 	static Channel& addChannel(std::string& channel); // 채널 추가
 	void fillSet(std::set<Client*>& set); // 채널 참여자의 fd들을 set에 추가
