@@ -96,7 +96,6 @@ std::string Bot::getName()
 
 void Bot::changeName(std::string name, Channel& channel)
 {
-	channel.sendToClients(ServerMsg::BOTNICKCHANGE(this->name, title[level] + name));
 	this->name = name;
 	channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My name is " + title[level] + name));
 }
@@ -116,24 +115,18 @@ void Bot::reinforceBot(Channel& channel)
 	// 랜덤 값과 확률을 비교해 결과 반환
 	if (randomNumber == 0)
 	{
-		if (level != 0)
-			channel.sendToClients(ServerMsg::BOTNICKCHANGE(title[level] + name, title[0] + name));
 		level = 0;
 		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "1% fail GG!"));
 	}
 	else if (randomNumber <= probablity[level]) //success
 	{
-		channel.sendToClients(ServerMsg::BOTNICKCHANGE(title[level] + name, title[level + 1] + name));
 		level++;
 		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Thank you for success in reinforcing me!"));
 	}
 	else //fail
 	{
 		if (level != 0)
-		{
-			channel.sendToClients(ServerMsg::BOTNICKCHANGE(title[level] + name, title[level - 1] + name));
 			level--;
-		}
 		channel.sendToClients(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "Reinforcement failed, please try one more time!"));
 	}
 }
