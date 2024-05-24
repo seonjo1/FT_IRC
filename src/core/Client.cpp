@@ -2,7 +2,7 @@
 #include "../../include/core/Server.hpp"
 #include "../../include/core/Channel.hpp"
 
-#include <iostream>
+// #include <iostream>
 
 Client::Client(int fd)
 	: msg(fd), fd(fd), origin(false), passFlag(false), nickFlag(false),
