@@ -27,18 +27,20 @@ public:
 	Bot();
 	~Bot();
 	
-	void changeName(std::string name, Channel& channel);
-	void reinforceBot(Channel& channel);
-	std::string getName();
-
-	static void parseBOT(std::vector<std::string>& cmds, std::string& msg);
-	static void BOT(Client& client, std::vector<std::string>& cmds);
+	static void parseBOT(std::vector<std::string>& cmds, std::string& msg); // BOT 파싱
+	static void BOT(Client& client, std::vector<std::string>& cmds); // BOT 명령 실행
+	std::string getName(); // bot 이름 반환
 
 private:
-	std::string name;
-	int level;
-	int probablity[10];
-	std::string title[11];
+	// 멤버 변수
+	std::string name; // bot 이름
+	int level; // bot 레벨
+	int probablity[10]; // 강화 확률
+	std::string title[11]; // 레벨에 따른 타이틀
+
+	// 멤버 변수
+	void changeName(std::string name, Channel& channel); // bot 이름 변경
+	void reinforceBot(Channel& channel); // bot 강화
 };
 
 #endif

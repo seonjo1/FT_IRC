@@ -1,10 +1,12 @@
 #include "../../include/utils/Socket.hpp"
 #include "../../include/core/Server.hpp"
 
+// static 변수 정의
 int Socket::servSocket = 0;
 struct sockaddr_in Socket::addr;
 socklen_t Socket::addrLen = sizeof(addr);
 
+// 서버 소켓 생성
 void Socket::makeServerSocket(char *port)
 {
 	// 서버 소켓 생성 (IPv4, TCP/IP)
@@ -33,6 +35,7 @@ void Socket::makeServerSocket(char *port)
 	kq.addSocket(servSocket);
 }
 
+// 클라이언트와 통신할 소켓 생성
 int Socket::makeClientSocket()
 {
 	// 클라이언트와 통신을 위한 소켓 생성

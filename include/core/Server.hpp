@@ -24,7 +24,7 @@ public:
 private:
 	Executor executor; // 명령어 실행기
 
-	void print_result();
+	void print_result(); // 디버깅 함수
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
 	void sendMsgToClients(std::map<int, Client>& clientList); // 클라이언트들에게 sendBuf에 있는 메시지 전송
 };

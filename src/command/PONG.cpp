@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// PONG 파싱
 void Executor::parsePONG(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -36,6 +37,7 @@ void Executor::parsePONG(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(msg.substr(i));
 }
 
+// PONG 실행
 void Executor::PONG(Client& client, std::vector<std::string>& cmds)
 {
 	if (cmds.size() == 1) // 인자 부족

@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// MODE 파싱
 void Executor::parseMODE(std::vector<std::string>& cmds, std::string& msg)
 {
 	std::stringstream ss(msg);
@@ -14,6 +15,7 @@ void Executor::parseMODE(std::vector<std::string>& cmds, std::string& msg)
 		cmds[size - 1] = cmds[size - 1].substr(1);
 }
 
+// invite mode 변경
 void inviteMode(Channel& channel, char sign, std::vector<std::string>& msgVector, char& plus)
 {
 	if (sign == '+') // +i
@@ -41,8 +43,8 @@ void inviteMode(Channel& channel, char sign, std::vector<std::string>& msgVector
 	plus = sign;
 }
 
-
-void tokenMode(Channel& channel, char sign, std::vector<std::string>& msgVector, char& plus)
+// topic mode 변경
+void topicMode(Channel& channel, char sign, std::vector<std::string>& msgVector, char& plus)
 {
 	if (sign == '+') // +t
 	{
@@ -69,7 +71,7 @@ void tokenMode(Channel& channel, char sign, std::vector<std::string>& msgVector,
 	plus = sign;
 }
 
-
+// key mode 변경
 void keyMode(Client& client, Channel& channel, char sign, std::string param,
 				std::vector<std::string>& msgVector, char& plus)
 {
@@ -120,7 +122,7 @@ void keyMode(Client& client, Channel& channel, char sign, std::string param,
 	msgVector.push_back(param);
 }
 
-
+// limit mode 변경
 void limitMode(Client& client, Channel& channel, char sign, std::string param,
 				std::vector<std::string>& msgVector, char& plus)
 {
@@ -168,7 +170,7 @@ void limitMode(Client& client, Channel& channel, char sign, std::string param,
 	plus = sign;
 }
 
-
+// op mode 변경
 void operatorMode(Client& client, Channel& channel, char sign, std::string param,
 					std::vector<std::string>& msgVector, char& plus)
 {
@@ -220,6 +222,7 @@ void operatorMode(Client& client, Channel& channel, char sign, std::string param
 	msgVector.push_back(param);
 }
 
+// MODE 실행
 void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 부족
@@ -311,7 +314,7 @@ void Executor::MODE(Client& client, std::vector<std::string>& cmds)
 		if (mode[1] == 'i') // invite mode
 			inviteMode(channel, mode[0], msgVector, plus);
 		else if (mode[1] == 't') // token mode
-			tokenMode(channel, mode[0], msgVector, plus);
+			topicMode(channel, mode[0], msgVector, plus);
 		else if (mode[1] == 'k') // key mode
 			keyMode(client, channel, mode[0], param, msgVector, plus);
 		else if (mode[1] == 'l') // limit mode

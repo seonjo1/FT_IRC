@@ -1,11 +1,14 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// 생성자
 Executor::Executor(char *password)
 	: password(password) {};
 
+// 소멸자
 Executor::~Executor() {};
 
+// 명령어 실행
 void Executor::execute(Client& client, std::string msg)
 {
 	// 명령어 확인용
@@ -77,6 +80,7 @@ void Executor::execute(Client& client, std::string msg)
 	}
 }
 
+// 명령어 파싱
 std::vector<std::string> Executor::parseMsg(std::string &msg)
 {
 	std::vector<std::string> cmds;

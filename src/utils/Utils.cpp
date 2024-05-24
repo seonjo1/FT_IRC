@@ -20,7 +20,7 @@ int	socket_atoi(char *str)
 	return (num);
 }
 
-// 1000 까지만 가능
+// 0 ~ 1000 까지 범위만 반환하는 atoi (방 최대인원 제한은 1000명까지 가능)
 int	irc_atoi(std::string str)
 {
 	int	i = 0;

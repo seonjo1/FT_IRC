@@ -1,9 +1,12 @@
 #include "../../include/utils/Message.hpp"
 
+// 생성자
 Message::Message(int fd) : fd(fd), endFlag(false), errFlag(false) {};
 
+// 소멸자
 Message::~Message() {};
 
+// 클라이언트로부터 받은 메시지로 buffer를 채움
 void Message::fillMsg()
 {
 	int readNum;
@@ -29,19 +32,21 @@ void Message::fillMsg()
 	buf += std::string(tmp, readNum);
 }
 
-
+// 클라이언트로부터 메시지를 받는 동안 recv()의 오류가 발생했는지 확인
 bool Message::getErrFlag()
 {
 	// recv 함수 에러 여부를 나타내는 플래그 반환
 	return (errFlag);
 }
 
+// 클라이언트로 부터 eof를 받았는지 여부 확인
 bool Message::getEndFlag()
 {
 	// 연결이 끊겼는지 나타내는 플래그 반환
 	return (endFlag);
 }
 
+// buffer에 있는 메시지에 완성된 명령어가 있는지 확인
 bool Message::isComplete()
 {
 	while (1)
@@ -67,6 +72,7 @@ bool Message::isComplete()
 	}
 }
 
+// 버퍼에 있는 명령어 잘라서 반환
 std::string Message::getCmd()
 {
 	// 명령어 처음부터 "\r\n" 전까지로 저장

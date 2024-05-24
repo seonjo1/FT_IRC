@@ -35,7 +35,7 @@ public:
 	static std::string CHANNELISFULL(std::string nick, std::string channel);
 	static std::string JOIN(std::string nick, std::string hostname,
 							std::string servername, std::string channel);
-	static std::string PING(std::string cmd1, std::string cmd2);
+	static std::string PONG(std::string cmd1, std::string cmd2);
 	static std::string NOSUCHCHANNEL(std::string nick, std::string channel);
 	static std::string NOTONCHANNEL(std::string nick, std::string channel);
 	static std::string PART(std::string nick, std::string hostname, std::string servername,

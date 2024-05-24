@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// USER 파싱
 void Executor::parseUSER(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -37,6 +38,7 @@ void Executor::parseUSER(std::vector<std::string>& cmds, std::string& msg)
 
 }
 
+// USER 실행
 void Executor::USER(Client& client, std::vector<std::string>& cmds)
 {
 	// PASS 등록 안된 클라이언트

@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// INVITE 파싱
 void Executor::parseINVITE(std::vector<std::string>& cmds, std::string& msg)
 {
 	std::stringstream ss(msg);
@@ -9,6 +10,7 @@ void Executor::parseINVITE(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(cmd);
 }
 
+// INVITE 실행
 void Executor::INVITE(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 검사

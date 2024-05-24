@@ -1,6 +1,7 @@
 #include "../../include/utils/Bot.hpp"
 #include "../../include/core/Channel.hpp"
 
+// 생성자
 Bot::Bot() : name("Cardet"), level(0)
 {
 	title[0] = LV0;
@@ -27,8 +28,10 @@ Bot::Bot() : name("Cardet"), level(0)
 	probablity[9] = 10;
 };
 
+// 소멸자
 Bot::~Bot() {};
 
+// BOT 명령어 파싱
 void Bot::parseBOT(std::vector<std::string>& cmds, std::string& msg)
 {
 	std::stringstream ss(msg);
@@ -37,6 +40,7 @@ void Bot::parseBOT(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(cmd);
 }
 
+// BOT 명령어 실행
 void Bot::BOT(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 부족
@@ -89,17 +93,20 @@ void Bot::BOT(Client& client, std::vector<std::string>& cmds)
 	}
 }
 
+// BOT 이름 반환
 std::string Bot::getName()
 {
 	return (title[level] + name);
 }
 
+// BOT 이름 변경
 void Bot::changeName(std::string name, Channel& channel)
 {
 	this->name = name;
 	channel.addMsgToClientsSendBuf(ServerMsg::BOTPRIVMSG(title[level] + name, channel.getName(), "My name is " + title[level] + name));
 }
 
+// BOT 강화
 void Bot::reinforceBot(Channel& channel)
 {
 	// 이미 만랩인 경우

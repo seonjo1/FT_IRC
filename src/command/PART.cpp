@@ -1,5 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
+
+// PART 파싱
 void Executor::parsePART(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -35,6 +37,7 @@ void Executor::parsePART(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(msg.substr(i));
 }
 
+// PART 실행
 void Executor::PART(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 부족

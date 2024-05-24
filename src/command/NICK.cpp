@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// NICK 파싱
 void Executor::parseNICK(std::vector<std::string>& cmds, std::string& msg)
 {
 	std::stringstream ss(msg);
@@ -9,6 +10,7 @@ void Executor::parseNICK(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(cmd);
 }
 
+// NICK 실행
 void Executor::NICK(Client& client, std::vector<std::string>& cmds)
 {
 	if (!client.getNickFlag())

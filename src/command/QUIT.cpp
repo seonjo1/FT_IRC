@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// QUIT 파싱
 void Executor::parseQUIT(std::vector<std::string>& cmds, std::string& msg)
 {
 	cmds.push_back("QUIT");
@@ -22,6 +23,7 @@ void Executor::parseQUIT(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back("");
 }
 
+// QUIT 실행
 void Executor::QUIT(Client& client, std::vector<std::string>& cmds)
 {
 	// message가 없으면 default message인 nick으로 message 추가

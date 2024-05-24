@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// PRIVMSG 파싱
 void Executor::parsePRIVMSG(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -36,6 +37,7 @@ void Executor::parsePRIVMSG(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(msg.substr(i));
 }
 
+// PRIVMSG 실행
 void Executor::PRIVMSG(Client& client, std::vector<std::string>& cmds)
 {
 	// 리시버가 없는 경우

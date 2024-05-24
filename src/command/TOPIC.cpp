@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// TOPIC 파싱
 void Executor::parseTOPIC(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -36,6 +37,7 @@ void Executor::parseTOPIC(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(msg.substr(i));
 }
 
+// TOPIC 실행
 void Executor::TOPIC(Client& client, std::vector<std::string>& cmds)
 {
 	// 인자 부족

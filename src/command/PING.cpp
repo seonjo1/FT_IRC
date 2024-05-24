@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// PING 파싱
 void Executor::parsePING(std::vector<std::string>& cmds, std::string& msg)
 {
 	int size = msg.size();
@@ -36,6 +37,7 @@ void Executor::parsePING(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(msg.substr(i));
 }	
 
+// PING 실행
 void Executor::PING(Client& client, std::vector<std::string>& cmds)
 {
 	if (cmds.size() == 1)
@@ -44,11 +46,11 @@ void Executor::PING(Client& client, std::vector<std::string>& cmds)
 	}
 	else if (cmds.size() == 2)
 	{
-		client.addToSendBuf(ServerMsg::PING(cmds[1], ""));
+		client.addToSendBuf(ServerMsg::PONG(cmds[1], ""));
 	}
 	else
 	{
-		client.addToSendBuf(ServerMsg::PING(cmds[1], cmds[2]));
+		client.addToSendBuf(ServerMsg::PONG(cmds[1], cmds[2]));
 	}
 }
 

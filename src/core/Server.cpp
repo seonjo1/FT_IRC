@@ -2,6 +2,7 @@
 
 // #include <iostream>
 
+// 생성자
 Server::Server(char *port, char *password)
 	: executor(password)
 {
@@ -9,6 +10,7 @@ Server::Server(char *port, char *password)
 	Socket::makeServerSocket(port);
 }
 
+// 소멸자
 Server::~Server() {};
 
 // kqueue 관리 객체
@@ -66,6 +68,7 @@ std::string Server::getIP()
 	return (IP);
 }
 
+// 클라이언트 sendbuf에 있는 메시지 전송하는 함수
 void Server::sendMsgToClients(std::map<int, Client>& clientList)
 {
 	std::map<int, Client>::iterator iter;
@@ -73,6 +76,7 @@ void Server::sendMsgToClients(std::map<int, Client>& clientList)
 		iter->second.sendMsg();
 }
 
+// 클라이언트에게 온 메시지를 받는 함수
 void Server::receiveClientRequest(int fd)
 {
 	std::map<int, Client>& clientList = getClientList();
@@ -102,6 +106,7 @@ void Server::receiveClientRequest(int fd)
 	}
 }
 
+// 서버 실행
 void Server::run()
 {
 	Kqueue& kq = getKq();

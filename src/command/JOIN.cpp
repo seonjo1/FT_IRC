@@ -1,6 +1,7 @@
 #include "../../include/core/Executor.hpp"
 #include "../../include/core/Server.hpp"
 
+// JOIN 파싱
 void Executor::parseJOIN(std::vector<std::string>& cmds, std::string& msg)
 {
 	std::stringstream ss(msg);
@@ -9,6 +10,7 @@ void Executor::parseJOIN(std::vector<std::string>& cmds, std::string& msg)
 		cmds.push_back(cmd);
 }
 
+// JOIN 실행
 void Executor::JOIN(Client& client, std::vector<std::string>& cmds)
 {
 

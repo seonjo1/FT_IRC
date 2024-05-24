@@ -4,10 +4,12 @@
 
 // #include <iostream>
 
+// 생성자
 Client::Client(int fd)
 	: msg(fd), fd(fd), origin(false), passFlag(false), nickFlag(false),
 		userFlag(false), quitFlag(false), connectFlag(false), registerFlag(false) {};
 
+// 소멸자
 Client::~Client()
 {
 	if (origin)
@@ -23,6 +25,9 @@ Client::~Client()
 	}
 }
 
+/* 서버에서 소켓 메시지 받을때 사용하는 함수들 */
+
+// 클라이언트가 보낸 데이터를 받음
 void Client::receiveMsg()
 {
 	// 메시지에 클라이언트가 보낸 내용을 저장
@@ -32,6 +37,7 @@ void Client::receiveMsg()
 		throw std::runtime_error("recv() error");
 }
 
+// 클라이언트와 연결 여부 확인
 bool Client::isDisconnected()
 {
 	// 연결이 끊겼는지 확인
@@ -40,6 +46,7 @@ bool Client::isDisconnected()
 	return (false);
 }
 
+// 버퍼에 있는 명령어 완성 여부 확인
 bool Client::isCmdComplete()
 {
 	// 메시지 버퍼에 있는 명령어가 완성됐는지 확인
@@ -48,19 +55,24 @@ bool Client::isCmdComplete()
 	return (false);
 }
 
+// 버퍼에 있는 명령어 반환
 std::string Client::getCmd()
 {
 	// 메시지 반환
 	return (msg.getCmd());
 }
 
+/* 플래그 반환 함수 */
+
+// 등록 여부 확인
 bool Client::isRegistered()
 {
 	return (registerFlag);
 }
 
-// <nickname 함수들>
-// nick이 유효한 nickname인지 확인
+/* <nickname 함수들> */
+
+// 유효한 nickname인지 확인
 bool Client::isInvalidNick(std::string& nick)
 {
 	int size = nick.size();
@@ -77,6 +89,7 @@ bool Client::isInvalidNick(std::string& nick)
 	return (false);
 }
 
+// 이미 사용중인 nickname인지 확인
 bool Client::isNicknameInUse(std::string& nick)
 {
 	std::vector<std::string>& nickList = Server::getNickList();
@@ -92,6 +105,7 @@ bool Client::isNicknameInUse(std::string& nick)
 	return (false);
 }
 
+// nickname NickList에 추가하고 클라이언트 nickname 수정
 void Client::addNick(std::string nick)
 {
 	std::vector<std::string>& nickList = Server::getNickList();
@@ -110,6 +124,7 @@ void Client::addNick(std::string nick)
 	nickList.push_back(lowercase);
 }
 
+// NickList과 ChannelList에서 닉네임 삭제 
 void Client::removeNick()
 {
 	int size = nickname.size();
@@ -134,6 +149,7 @@ void Client::removeNick()
 	}
 }
 
+// NickList와 참여한 채널들에 nickname 변경
 void Client::changeNick(std::string nick)
 {	
 	std::vector<std::string>& nickList = Server::getNickList();
@@ -172,8 +188,10 @@ void Client::changeNick(std::string nick)
 	nickname = nick;
 }
 
-// 메시지 보내는 함수
 
+/* 클라이언트에게 보낼 sendBuf 관리 함수 */
+
+// sendBuf에 있는 내용 클라이언트에게 전달하고 sendBuf 초기화
 void Client::sendMsg()
 {
 	if (sendBuf.size() > 0)
@@ -186,7 +204,28 @@ void Client::sendMsg()
 	}
 }
 
-// channel 함수
+// sendBuf에 메시지 추가
+void Client::addToSendBuf(std::string msg)
+{
+	sendBuf += msg;
+}
+
+
+/* channel 관련 함수 */
+
+// 클라이언트가 참여한 채널리스트에 해당 채널 추가 
+void Client::addJoinedChannels(Channel* channel)
+{
+	joinedChannels.push_back(channel);
+}
+
+// 클라이언트가 참여한 채널리스트에 해당 채널 삭제
+void Client::removeJoinedChannels(Channel* channel)
+{
+	joinedChannels.erase(find(joinedChannels.begin(), joinedChannels.end(), channel));
+}
+
+// 클라이언트가 해당 채널에 참여했는지 확인
 bool Client::isClientMemberOfChannel(std::string& channel)
 {
 	// channelList의 nick 변경
@@ -199,19 +238,9 @@ bool Client::isClientMemberOfChannel(std::string& channel)
 	return (false);
 }
 
-void Client::addJoinedChannels(Channel* channel)
-{
-	joinedChannels.push_back(channel);
-}
+/* getter */
 
-void Client::removeJoinedChannels(Channel* channel)
-{
-	joinedChannels.erase(find(joinedChannels.begin(), joinedChannels.end(), channel));
-}
-
-
-// getter
-
+// nick과 일치하는 Client 반환
 Client& Client::getClient(std::string& nick)
 {
 	std::map<int, Client>& clientList = Server::getClientList();
@@ -225,65 +254,70 @@ Client& Client::getClient(std::string& nick)
 	return (iter->second);
 }
 
-
-bool Client::getPassFlag()
-{
-	return (passFlag);
-}
-
-bool Client::getNickFlag()
-{
-	return (nickFlag);
-}
-
-bool Client::getUserFlag()
-{
-	return (userFlag);
-}
-
+// 클라이언트 fd 반환
 int Client::getFd()
 {
 	return (fd);
 }
 
-std::string Client::getHostName()
+// 클라이언트 PassFlag 전달
+bool Client::getPassFlag()
 {
-	return (data.hostname);
+	return (passFlag);
 }
 
-std::string& Client::getNick()
+// 클라이언트 NickFlag 전달
+bool Client::getNickFlag()
 {
-	return (nickname);
+	return (nickFlag);
 }
 
-std::string& Client::getSendBuf()
+// 클라이언트 UserFlag 전달
+bool Client::getUserFlag()
 {
-	return (sendBuf);
+	return (userFlag);
 }
 
-std::string Client::getServerName()
-{
-	return (data.servername);
-}
-
+// 클라이언트 QuitFlag 전달
 bool Client::getQuitFlag()
 {
 	return (quitFlag);
 }
 
+// 클라이언트 ConnectFlag 전달
 bool Client::getConnectFlag()
 {
 	return (connectFlag);
 }
 
+// 클라이언트 hostname 전달
+std::string Client::getHostName()
+{
+	return (data.hostname);
+}
+
+// 클라이언트 servername 전달
+std::string Client::getServerName()
+{
+	return (data.servername);
+}
+
+// 클라이언트 nickname 전달
+std::string& Client::getNick()
+{
+	return (nickname);
+}
+
+// 클라이언트 joinedChannels 전달
 std::vector<Channel*>& Client::getJoinedChannels()
 {
 	return (joinedChannels);
 }
 
 
-// setter
+/* setter */
 
+// PassFlag 변경
 void Client::setPassFlag(bool sign)
 {
 	passFlag = sign;
@@ -291,6 +325,7 @@ void Client::setPassFlag(bool sign)
 		registerFlag = true;
 }
 
+// NickFlag 변경
 void Client::setNickFlag(bool sign)
 {
 	nickFlag = sign;
@@ -298,6 +333,7 @@ void Client::setNickFlag(bool sign)
 		registerFlag = true;
 }
 
+// UserFlag 변경
 void Client::setUserFlag(bool sign)
 {
 	userFlag = sign;
@@ -305,11 +341,31 @@ void Client::setUserFlag(bool sign)
 		registerFlag = true;
 }
 
+// Origin 변경
+void Client::setOrigin(bool sign)
+{
+	origin = sign;
+}
+
+// QuitFlag 변경
+void Client::setQuitFlag(bool sign)
+{
+	quitFlag = sign;
+}
+
+// connectFlag 변경
+void Client::setConnectFlag(bool sign)
+{
+	connectFlag = sign;
+}
+
+// nickname 변경
 void Client::setNick(std::string& newNick)
 {
 	nickname = newNick;
 }
 
+// data 변경
 void Client::setData(std::string& username, std::string& hostname,
 				 std::string& servername, std::string& realname)
 {
@@ -319,27 +375,7 @@ void Client::setData(std::string& username, std::string& hostname,
 	data.realname = realname;
 }
 
-void Client::setOrigin(bool sign)
-{
-	origin = sign;
-}
-
-void Client::setQuitFlag(bool sign)
-{
-	quitFlag = sign;
-}
-
-void Client::setConnectFlag(bool sign)
-{
-	connectFlag = sign;
-}
-
-void Client::addToSendBuf(std::string msg)
-{
-	sendBuf += msg;
-}
-
-// 연산자
+/* 연산자 오버로딩 */
 
 bool Client::operator==(const Client& rhs)
 {
