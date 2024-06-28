@@ -11,7 +11,10 @@ Server::Server(char *port, char *password)
 }
 
 // 소멸자
-Server::~Server() {};
+Server::~Server()
+{
+	close(Socket::servSocket);
+}
 
 // kqueue 관리 객체
 Kqueue& Server::getKq()
