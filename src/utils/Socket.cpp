@@ -21,11 +21,17 @@ void Socket::makeServerSocket(char *port)
 
 	// 소켓 바인드
 	if (bind(servSocket, reinterpret_cast<struct sockaddr *>(&servAddr), sizeof(servAddr)) == -1)
+	{
+		close(servSocket);
 		throw std::runtime_error("bind() error");
+	}
 
 	// 듣기 소켓으로 변경
 	if (listen(servSocket, 10) == -1)
+	{
+		close(servSocket);
 		throw std::runtime_error("listen() error");
+	}
 
 	// 소켓 비동기화
 	fcntl(servSocket, F_SETFL, O_NONBLOCK);
