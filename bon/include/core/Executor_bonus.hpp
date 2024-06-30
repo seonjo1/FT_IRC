@@ -1,11 +1,11 @@
-#ifndef EXECUTOR_HPP
-# define EXECUTOR_HPP
+#ifndef EXECUTOR_BONUS_HPP
+# define EXECUTOR_BONUS_HPP
 
 // # include <iostream>
 
-# include "Client.hpp"
-# include "../utils/Kqueue.hpp"
-# include "../utils/Bot.hpp"
+# include "Client_bonus.hpp"
+# include "../utils/Kqueue_bonus.hpp"
+# include "../utils/Bot_bonus.hpp"
 
 class Executor
 {

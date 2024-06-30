@@ -1,5 +1,5 @@
-#ifndef BOT_HPP
-# define BOT_HPP
+#ifndef BOT_BONUS_HPP
+# define BOT_BONUS_HPP
 
 # include <string>
 # include <vector>

@@ -295,11 +295,14 @@ std::string ServerMsg::NAMREPLY(std::string nick, Channel& channel)
 	std::vector<Client*>& joinList = channel.getJoinList();
 	int joinSize = joinList.size();
 	for (int i = 0; i < joinSize; i++)
-		msg += joinList[i]->getNick() + " ";
+	{
+		msg += joinList[i]->getNick();
+		if (i == joinSize - 1)
+			msg += "\r\n";
+		else
+			msg += " ";
+	}
 	
-	// 마지막 공백 제거하고 CRLF 추가
-	Bot& bot = channel.getBot();
-	msg += bot.getName() + "\r\n";
 	return (msg);
 }
 
@@ -474,13 +477,5 @@ std::string ServerMsg::MODE(std::string nick, std::string hostname, std::string 
 {
 	std::string msg;
 	msg = ":" + nick + "!" + hostname + "@" + servername + " MODE " + channel + " " + modeInfo + "\r\n";
-	return (msg);
-}
-
-// chat bot이 채널에 메시지 전달
-std::string ServerMsg::BOTPRIVMSG(std::string name, std::string channel, std::string message)
-{
-	std::string msg;
-	msg = ":" + name + " PRIVMSG " + channel + " :" + message + "\r\n";
 	return (msg);
 }

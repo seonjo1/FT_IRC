@@ -391,12 +391,6 @@ bool Channel::getTopicFlag()
 	return (topicFlag);
 }
 
-// Bot 반환
-Bot& Channel::getBot()
-{
-	return (bot);
-}
-
 // key 반환
 std::string Channel::getKey()
 {

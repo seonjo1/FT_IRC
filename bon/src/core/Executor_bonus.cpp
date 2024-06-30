@@ -1,5 +1,5 @@
-#include "../../include/core/Executor.hpp"
-#include "../../include/core/Server.hpp"
+#include "../../include/core/Executor_bonus.hpp"
+#include "../../include/core/Server_bonus.hpp"
 
 // 생성자
 Executor::Executor(char *password)

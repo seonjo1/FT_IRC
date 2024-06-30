@@ -1,11 +1,11 @@
-#ifndef CHANNEL_HPP
-# define CHANNEL_HPP
+#ifndef CHANNEL_BONUS_HPP
+# define CHANNEL_BONUS_HPP
 
 # include <ctime>
 
-# include "Client.hpp"
-# include "../utils/Utils.hpp"
-# include "../utils/Bot.hpp"
+# include "Client_bonus.hpp"
+# include "../utils/Utils_bonus.hpp"
+# include "../utils/Bot_bonus.hpp"
 
 class Channel
 {

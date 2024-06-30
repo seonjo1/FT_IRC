@@ -1,5 +1,5 @@
-#include "../../include/utils/Bot.hpp"
-#include "../../include/core/Channel.hpp"
+#include "../../include/utils/Bot_bonus.hpp"
+#include "../../include/core/Channel_bonus.hpp"
 
 // 생성자
 Bot::Bot() : name("Cardet"), level(0)
