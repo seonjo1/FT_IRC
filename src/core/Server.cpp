@@ -72,11 +72,18 @@ std::string Server::getIP()
 }
 
 // 클라이언트 sendbuf에 있는 메시지 전송하는 함수
-void Server::sendMsgToClients(std::map<int, Client>& clientList)
+void Server::sendMsgToClients()
 {
-	std::map<int, Client>::iterator iter;
-	for (iter = clientList.begin(); iter != clientList.end(); iter++)
+	std::map<int, Client>& clientList = getClientList();
+	std::map<int, Client>::iterator iter = clientList.begin();
+	while (iter != clientList.end())
+	{
 		iter->second.sendMsg();
+		if ((iter->second).isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
+			iter = clientList.erase(iter); // 클라이언트 배열에서 제거
+		else
+			iter++;
+	}
 }
 
 // 클라이언트에게 온 메시지를 받는 함수
@@ -103,9 +110,6 @@ void Server::receiveClientRequest(int fd)
 			if (client.getQuitFlag())
 				break;
 		}
-		sendMsgToClients(clientList);
-		if (client.isDisconnected()) // eof가 들어온 경우 소켓 연결 종료
-			clientList.erase(fd); // 클라이언트 배열에서 제거
 	}
 }
 
@@ -127,6 +131,8 @@ void Server::run()
 			else
 				throw std::runtime_error("kevent() EV_ERROR flag"); // 예외 던지기
 		}
+		// 버퍼에 쌓인 메시지 보내기
+		sendMsgToClients();
 	}
 
 // void Server::print_result()

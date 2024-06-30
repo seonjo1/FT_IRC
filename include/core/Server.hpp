@@ -26,7 +26,7 @@ private:
 
 	// void print_result(); // 디버깅 함수
 	void receiveClientRequest(int fd); // 클라이언트 요청 받는 함수
-	void sendMsgToClients(std::map<int, Client>& clientList); // 클라이언트들에게 sendBuf에 있는 메시지 전송
+	void sendMsgToClients(); // 클라이언트들에게 sendBuf에 있는 메시지 전송
 };
 
 #endif
