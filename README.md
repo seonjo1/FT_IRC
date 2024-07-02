@@ -1,83 +1,111 @@
-## Conventions
+# FT_IRC
+IRC 서버를 구현
 
-- 모든 작업내용은 Issue로 작성한 뒤, Fork된 Repository에서 Branch를 분리하여 작업하고, PR을 통해 상호간 Code-Review 이후 마지막에 Approve한 Reviewer가 Master Branch에 Merge 합니다.
-- 이 때, Issue와 PR은 Fork 이전의 원본 Repository에서 작성하여 Project에 연동될 수 있도록 하며, Branch의 경우는 자신이 Fork한 Repository 내에서 분기하여 작업합니다.
+## IRC 란?
+IRC (Internet Relay Chat) 란 실시간 텍스트 기반 통신 프로토콜로, 사용자들이 채팅 채널에 접속하여 대화할 수 있도록 하는 프로그램이다.
 
----
+## 사용법
 
-### Commit Rule
+### 서버 실행하는 법
 ```
-__Action__ __FileName__ : __Description__
+./ircserv <port> <password>
 ```
-- Action 은 다음과 같이 세가지 종류로 구분됩니다.
-    - Added : 새로운 파일을 추가한 경우
-    - Update : 특정 파일을 수정한 경우
-    - Remove : 특정 파일을 삭제한 경우
-- FileName 은 추가 혹은 수정한 파일의 이름을 의미합니다.
-    - Gradle, Gitignore과 같이 프로젝트 전역의 설정 파일을 수정하거나 패키지 혹은 라이브러리를 추가한 경우에는 ```Update Project```와 같이 작성합니다.
-- Description 은 Commit에서 변경된 내용을 한 문장으로 요약합니다.
+- <port> : 서버 소켓을 binding 할 포트
+- <password> : IRC 클라이언트가 PASS 인증할 때 사용할 password
 
-#### Commit Example
-```
-Added README.md
-```
-```
-Update MainActivity : Added Login Button on Base Component
-```
-```
-Update Project : Set Gradle Version to 7.3.1
-```
+### 클라이언트로 접속 하는 법
 
----
+- irssi 라는 클라이언트 프로그램 사용 (다른 클라이언트 프로그램도 가능)
+- irssi 를 실행하고 밑의 명령어 형식에 맞춰 irssi에 입력하면 서버와 연결 가능
+  ```
+  /connect -nocap <server_ip> <server_port> <password>
+  ```
+- 서버 실행시 출력되는 명령어는 localhost 기준으로 접속 가능한 명령어
 
-### Issue / PR Rule
+### 클라이언트로 irc 사용하는 법
+- 서버가 받는 IRC protocol 에 맞는 명령어와 클라이언트 프로그램에서 클라이언트가 입력하는 명령어의 형태가 같지 않음
+- 클라이언트의 명령어를 클라이언트 프로그램이 IRC protocol 에 맞게 변환해서 보내줌
+  
+  - 개인 메시지 보내는 법
+      ```
+      <서버가 받는 명령어>
+      PRIVMSG <receive nick> <contents>
 
-#### Title
-```
-[TYPE] TITLE
-```
-- TYPE 은 다음 중 하나를 선택합니다.
-    - DEV : 일반적인 개발 사항
-    - FIX : 기존에 개발된 내용을 수정하는 사항
-    - DOC : README 등 문서에 관련된 사항
+      <irssi 에 클라이언트가 입력하는 명령어>
+      /msg <receive nick> <contents
+      ```
+- 따라서 irssi 나 다른 클라이언트를 사용할 때, 필요한 명령어 형식을 GPT 에 물어보는 것을 추천
 
-####  Content
-```markdown
-## Summary
-Summary of Issue or PR
+## IRC 구현
 
-## Description
-Detail Description of Issue or PR
-```
-- Description 항목이 불필요한 경우에는 생략할 수 있습니다. 단, PR의 경우에는 생략 없이 최대한 상세히 적어주시기 바랍니다.
-- FIX Issue 혹은 UI에 관련된 PR의 경우는, Description에 스크린샷을 첨부해주시기 바랍니다.
-- Issue 작성 시, Assignee와 Label을 지정하고, 생성한 Branch를 Development 항목에 지정해줍니다.
-- PR 작성 시, Assignee와 Label을 지정하고, Reviewer에 해당하는 인원을 지정하며, 해당하는 Issue를 Development 항목에 지정해줍니다.
+### 소켓 프로그래밍
+- TCP/IP(v4) 프로토콜 사용
+- I/O Multiplexing
+  - kqueue 를 이용해 구현
+  - 스레드와 프로세스 1 개만 사용
+- 최적화를 위해 1 번의 event 발생시 소켓별로 출력을 버퍼에 모아놨다가 마지막에 한 번에 전송
 
-[Issue Example 1](https://github.com/yymin1022/Wa_API/issues/59) /
-[Issue Example 2](https://github.com/yymin1022/TaxiMeter/issues/1)
+### 참고한 IRC Protocol
+- RFC 1495 IRC Protocol
+  - https://datatracker.ietf.org/doc/html/rfc1459
+  - 초기의 IRC protocol 로 대부분의 내용을 참고함
+  - 서버 간의 통신은 구현 x
 
-[PR Example 1](https://github.com/DefCon-Apps/Military_License/pull/21) /
-[PR Example 2](https://github.com/DefCon-Apps/Military_License/pull/22) /
-[PR Example 3](https://github.com/DefCon-Apps/Military_License/pull/24)
+### irssi 자체 명령어
 
----
+- **window go N**
+    - N 번째 windwo로 이동하는 명령어
 
-### Branch Rule
-```
-TYPE/BRANCH_NAME
-```
-- 기본적으로 Branch의 이름은 Issue의 이름을 따릅니다.
-- TYPE은 다음 중 하나를 해당하는 Issue의 Type과 동일하게 선택합니다.
-    - DEV : 일반적인 개발 사항
-    - FIX : 기존에 개발된 내용을 수정하는 사항
-    - DOC : README 등 문서에 관련된 사항
-- BRANCH_NAME은 해당하는 Issue의 Title을 적절히 변형합니다.
+### 구현 명령어 (mandatory)
 
-#### Branch Example
-```
-DEV/base-activity
-```
-```
-DOC/readme-base
-```
+**인증 명령어**
+irssi 에서 서버와 연결시 자동으로 보내주는 명령어
+
+- **PASS**
+  - 서버에 접속하기 위한 password 인증 명령어
+    
+- **NICK**
+  - nickname 을 설정하는 명령어
+  - irssi 가 자동으로 보내주는 명령어에서 hostname 을 nick 으로 설정
+  - 인증 후 사용하면 nickname 변경 가능
+  - irssi 명령어
+  
+    ```
+    /nick <new_nickname>
+    ```
+
+- **USER**
+  - user 의 기본 정보를 입력하는 명령어
+    - 기본 정보
+      - username
+      - hostname
+      - servername
+      - realname
+
+**기본 명령어**
+- **JOIN**
+  - 채널에 참가하는 명령어
+  - irssi 명령어
+
+    ```
+    /join <channel>
+    ```
+  
+- **PART**
+  - 채널을 나가는 명령어
+    ```
+    /part <channel>
+    ```
+    
+- **PRIVMSG**
+  - 채널에 
+- **INVITE**
+- **KICK**
+- **TOPIC**
+- **QUIT**
+- **MODE**
+
+### 구현 명령어 (bonus)
+
+
+
